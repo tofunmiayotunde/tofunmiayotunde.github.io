@@ -252,53 +252,147 @@
     </div>
   </div>
 
-  <!-- CASE STUDIES (STATIC HIGHLIGHTS) -->
-  <div id="case-studies" class="bg-slate-800/30 border-y border-slate-800 py-32 mb-32">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+  <!-- CASE STUDIES -->
+  <div id="case-studies" class="bg-slate-900/50 border-y border-slate-800 py-32 mb-32 relative">
+    <!-- Subtle glow behind the section -->
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent pointer-events-none"></div>
+    
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
         <div class="max-w-2xl">
           <span class="text-purple-400 font-bold tracking-widest uppercase text-sm mb-4 block">Portfolio Work</span>
-          <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Featured Projects</h2>
+          <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Selected Projects</h2>
           <p class="text-lg text-slate-400">A selection of recent tracking, ETL automation, and data modeling implementations.</p>
         </div>
-        <!-- Link to the dedicated portfolio page -->
-        <a href="portfolio.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-white bg-slate-700 hover:bg-slate-600 transition-colors shrink-0 border border-slate-600">
-          View All Projects
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-        </a>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        <!-- Case Study 1 -->
-        <div class="glass-card rounded-3xl p-8 flex flex-col glow-border">
+        <!-- Case Study 1: GA4 / GTM -->
+        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300">
           <div class="flex gap-2 mb-6">
             <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">GA4</span>
             <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">GTM</span>
           </div>
-          <h3 class="text-2xl font-bold text-white mb-4">GA4 & GTM Event Architecture Optimization</h3>
-          <div class="space-y-4 mb-8 text-slate-400 flex-grow">
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">GA4 & GTM Event Architecture</h3>
+          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
             <p><strong class="text-slate-200">Problem:</strong> Default pageview tracking left high-value lead generation actions and funnel drop-offs entirely invisible.</p>
             <p><strong class="text-slate-200">Solution:</strong> Engineered a custom GTM pipeline with strict event taxonomy to capture precise lead-gen interactions and abandonment.</p>
           </div>
-          <a href="ga4-gtm-custom-event-tracking.html" class="text-accentCyan font-bold hover:text-white transition-colors inline-flex items-center gap-2 mt-auto uppercase tracking-wider text-sm">
-            Read Case Study <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          
+          <ul class="space-y-2 mb-8 text-slate-400">
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Strict Event Taxonomy
+             </li>
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Precision GTM Triggers
+             </li>
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Custom Parameter Enrichment
+             </li>
+          </ul>
+
+          <a href="ga4-gtm-custom-event-tracking.html" class="inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-white hover:bg-slate-200 transition-colors mt-auto">
+            Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
           </a>
         </div>
 
-        <!-- Case Study 2 -->
-        <div class="glass-card rounded-3xl p-8 flex flex-col glow-border">
+        <!-- Case Study 2: Power Query -->
+        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300">
           <div class="flex gap-2 mb-6">
             <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Power Query</span>
             <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">ETL</span>
           </div>
-          <h3 class="text-2xl font-bold text-white mb-4">Power Query Automated ETL Pipeline</h3>
-          <div class="space-y-4 mb-8 text-slate-400 flex-grow">
-            <p><strong class="text-slate-200">Problem:</strong> Fragmented ad-platform datasets contained overlapping channels, conflicting dates, and unusable financial formats.</p>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Power Query Automated ETL Pipeline</h3>
+          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
+            <p><strong class="text-slate-200">Problem:</strong> Fragmented ad-platform datasets contained overlapping channels, conflicting date structures, and unusable financial formats.</p>
             <p><strong class="text-slate-200">Solution:</strong> Engineered a fully automated, refreshable Power Query pipeline using custom M Code to permanently eliminate manual Excel cleanup.</p>
           </div>
-          <a href="#" class="text-accentCyan font-bold hover:text-white transition-colors inline-flex items-center gap-2 mt-auto uppercase tracking-wider text-sm">
-            Read Case Study <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          
+          <ul class="space-y-2 mb-8 text-slate-400">
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Custom M Code Programming
+             </li>
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Automated ETL Workflows
+             </li>
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Power BI Data Modeling
+             </li>
+          </ul>
+
+          <a href="power-query-ecommerce-cleanup.html" class="inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-white hover:bg-slate-200 transition-colors mt-auto">
+            Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </a>
+        </div>
+
+        <!-- Case Study 3: SQL Business Questions -->
+        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300">
+          <div class="flex gap-2 mb-6">
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">SQL</span>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Modeling</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">SQL Business Questions Analysis</h3>
+          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
+            <p><strong class="text-slate-200">Problem:</strong> Ad platforms claimed high returns, but isolated data silos hid the reality of shrinking actual profit margins.</p>
+            <p><strong class="text-slate-200">Solution:</strong> Architected a normalized SQL database to eliminate manual spreadsheet merges and calculate true financial ROAS.</p>
+          </div>
+          
+          <ul class="space-y-2 mb-8 text-slate-400">
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Relational Data Modeling
+             </li>
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Cohort Analysis & LTV
+             </li>
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                ROAS Engineering
+             </li>
+          </ul>
+
+          <a href="sql-business-insights.html" class="inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-white hover:bg-slate-200 transition-colors mt-auto">
+            Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </a>
+        </div>
+
+        <!-- Case Study 4: Last-Click Attribution -->
+        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300">
+          <div class="flex gap-2 mb-6">
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Attribution</span>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">SQL</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Last-Click Attribution Analysis</h3>
+          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
+            <p><strong class="text-slate-200">Problem:</strong> Default last-click reporting credited $0 to every paid social channel.</p>
+            <p><strong class="text-slate-200">Solution:</strong> Built a custom SQL attribution engine directly within the data warehouse, exposing a $412K misattribution error.</p>
+          </div>
+          
+          <ul class="space-y-2 mb-8 text-slate-400">
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                SQL & Recursive CTEs
+             </li>
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Multi-Touch Attribution
+             </li>
+             <li class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Executive Misattribution Report
+             </li>
+          </ul>
+
+          <a href="last-click-attribution-analysis.html" class="inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-white hover:bg-slate-200 transition-colors mt-auto">
+            Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
           </a>
         </div>
 
