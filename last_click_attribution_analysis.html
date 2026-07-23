@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Last-Click Attribution Analysis - Tofunmi Ayotunde</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js for visualizations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins', 'sans-serif'] },
+          colors: { 
+            bgDark: '#0b1120', 
+            accentCyan: '#22d3ee' 
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Glassmorphism utility classes */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Code styling in text */
+    code {
+      background-color: rgba(30, 41, 59, 1);
+      color: #38bdf8;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+    }
+
+    /* ── SQL CUSTOM CODE BLOCKS ── */
+    .sql-dropdown {
+      margin: 24px 0;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      background-color: rgba(15, 23, 42, 0.8);
+      overflow: hidden;
+    }
+    .sql-dropdown summary {
+      padding: 16px 24px;
+      background-color: rgba(30, 41, 59, 0.8);
+      color: #38bdf8;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      outline: none;
+      border-bottom: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+    .sql-dropdown summary:hover { background-color: rgba(30, 41, 59, 1); }
+    .sql-dropdown[open] summary { border-bottom: 1px solid #334155; }
+    .sql-dropdown pre.sql-code-block {
+      margin: 0;
+      padding: 24px;
+      color: #f8fafc;
+      background-color: transparent;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Auto-highlighting colors for SQL */
+    .sql-kw { color: #c678dd; font-weight: bold; } /* Keywords: Purple */
+    .sql-fn { color: #61afef; } /* Functions: Blue */
+    .sql-str { color: #98c379; } /* Strings: Green */
+    .sql-num { color: #d19a66; } /* Numbers: Orange */
+  </style>
+</head>
+
+<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark">
+
+  <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 w-full flex-grow">
+    
+    <!-- Back Navigation -->
+    <a href="portfolio.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-10 font-semibold group">
+      <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Back to Portfolio
+    </a>
+
+    <!-- Hero Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start mb-16">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/30 border border-cyan-800 rounded-full text-xs font-bold text-accentCyan mb-6 uppercase tracking-wider">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l7 4v10l-7 4-7-4V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+          Case Study
+        </div>
+        
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+          Last-Click Attribution Analysis
+        </h1>
+        
+        <p class="text-lg md:text-xl text-slate-400 leading-relaxed mb-8">
+          How I exposed a $412K misattribution error in default reporting — and built a multi-touch model to show what the data actually says about paid social spend.
+        </p>
+        
+        <div class="flex flex-wrap gap-2">
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">SQL & MySQL</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Recursive CTEs</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Multi-Touch Attribution</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Data Storytelling</span>
+        </div>
+      </div>
+
+      <!-- Quick Snapshot Sidebar -->
+      <div class="glass-card p-8 rounded-3xl border border-slate-700/50 shadow-2xl">
+        <div class="text-xs font-bold tracking-[0.1em] uppercase text-slate-500 mb-6">Quick Snapshot</div>
+        
+        <div class="space-y-6">
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Client Type</div>
+            <div class="text-lg font-semibold text-white">Growth-Stage DTC Brand</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Main Goal</div>
+            <div class="text-lg font-semibold text-white">Expose systemic flaw in default attribution reporting.</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Output</div>
+            <div class="text-lg font-semibold text-white">Multi-touch attribution model & executive misattribution report.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Executive KPI Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
+      <div class="glass-card p-6 rounded-2xl border border-slate-700/50">
+        <div class="text-3xl font-bold text-accentCyan mb-2">5,000</div>
+        <div class="text-sm font-medium text-slate-300 mb-1">Customer journeys analysed</div>
+        <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">Q2 Dataset</div>
+      </div>
+      <div class="glass-card p-6 rounded-2xl border border-slate-700/50">
+        <div class="text-3xl font-bold text-emerald-400 mb-2">621</div>
+        <div class="text-sm font-medium text-slate-300 mb-1">Completed conversions</div>
+        <div class="text-xs text-emerald-500 font-bold uppercase tracking-wider">12.4% Conv. Rate</div>
+      </div>
+      <div class="glass-card p-6 rounded-2xl border border-slate-700/50">
+        <div class="text-3xl font-bold text-accentCyan mb-2">$713K</div>
+        <div class="text-sm font-medium text-slate-300 mb-1">Total verified Q2 revenue</div>
+        <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">Backend Confirmed</div>
+      </div>
+      <div class="glass-card p-6 rounded-2xl border border-red-900/50 bg-red-900/10">
+        <div class="text-3xl font-bold text-red-400 mb-2">$0</div>
+        <div class="text-sm font-medium text-red-200 mb-1">Paid social credit under last-click</div>
+        <div class="text-xs text-red-500 font-bold uppercase tracking-wider">The Lie</div>
+      </div>
+    </div>
+
+    <!-- Before / After Section -->
+    <div class="mb-24">
+      <div class="text-center mb-10">
+        <div class="text-sm font-bold tracking-widest uppercase text-purple-400 mb-2">Transformation</div>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-white">The Measurement Evolution</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Before -->
+        <div class="bg-red-900/10 border border-red-900/50 rounded-3xl p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-red-900/50 text-red-400 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-red-200">Before</h3>
+          </div>
+          <ul class="space-y-4 text-slate-300">
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Last-click model reported TikTok, Facebook & YouTube drove $0 in Q2 revenue.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Budget decisions were made on platform-level reports, not verified backend journey data.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Raw path data had mixed separators (<code>&gt;</code>, <code>-></code> and <code>|</code>), making analysis impossible without normalization.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> No visibility into which channels were opening vs. closing the funnel.</li>
+          </ul>
+        </div>
+
+        <!-- After -->
+        <div class="bg-emerald-900/10 border border-emerald-900/50 rounded-3xl p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-emerald-900/50 text-emerald-400 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-emerald-200">After</h3>
+          </div>
+          <ul class="space-y-4 text-slate-300">
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Linear attribution model correctly credited $286K to paid social channels across 5,000 journeys.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> SQL pipeline with nested string normalization resolved the mixed-separator data quality issue.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Three attribution models (last-click, first-click, linear) run in parallel for a complete picture.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Clear channel roles identified: TikTok opens, Direct closes — both are necessary, both deserve budget.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Article Content -->
+    <div class="max-w-4xl mx-auto space-y-6 text-lg text-slate-300 leading-relaxed">
+      
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">The Business Problem: Attribution Crisis Inside the Dashboard</h2>
+      
+      <p>A growth-stage DTC brand was running active paid social campaigns across TikTok, Facebook, and YouTube. Their Q2 performance report — pulled from their default analytics setup — showed all three channels delivering <strong>$0 in attributed revenue</strong>.</p>
+      <p>The obvious next move: cut the budget. Why fund channels that aren't producing?</p>
+      <p>The problem is that the report wasn't lying about the data — it was lying about what the data meant. <strong>Last-click attribution</strong>, the default model in most analytics platforms, assigns <strong>100% of conversion credit to the final touchpoint</strong> before a purchase.</p>
+      <p>If a customer clicked a TikTok ad, then a retargeting ad, then typed the URL directly — Direct Traffic gets the full credit. TikTok gets nothing.</p>
+      <p>In a world where customers touch <strong>3–4 channels before converting</strong>, this isn't a minor rounding error. It's a misreading of the structure of how revenue is actually generated.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">My Approach: Engineering the Attribution Workflow</h2>
+      <p>To correctly credit revenue across the full customer journey, I bypassed platform-level reports entirely. I built a custom SQL attribution engine directly within the data warehouse, creating a single source of truth that ad platform reporting incentives couldn't manipulate.</p>
+      <p>Here is the step-by-step build process:</p>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 0 · Creating Tables</div>
+      
+      <p>Before any analysis could begin, I needed a structured schema to hold the raw CSV data. This ensures strict data types and prevents formatting errors during the transformation process.</p>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/raw_messy_csv-1024x625.webp" alt="Raw Messy CSV" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Create Raw Journeys Table
+        </summary>
+<pre class="sql-code-block">CREATE TABLE q2_customer_journeys (
+    customer_id VARCHAR(50) NOT NULL,
+    path VARCHAR(255) NOT NULL,
+    revenue NUMERIC(10, 2) DEFAULT 0.00,
+    purchase_status VARCHAR(50),
+    PRIMARY KEY (customer_id, path)
+);</pre>
+      </details>
+
+      <div class="bg-slate-800/30 border-l-4 border-purple-500 p-6 rounded-r-2xl my-8">
+        <h5 class="text-purple-400 font-bold uppercase tracking-widest text-xs mb-2">Architecture Note: Why SQL over Python?</h5>
+        <p class="text-slate-300 text-base m-0">While this logic can easily be written in Pandas—or handled downstream using Power Query in Excel and Power BI—building the attribution model purely in SQL via Recursive CTEs pushes the heavy computation upstream to the data warehouse (e.g., Snowflake, BigQuery). This creates a scalable, automated pipeline that feeds clean, pre-calculated multi-touch data directly into your BI tools without bottlenecking their performance.</p>
+      </div>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 1 · Data Cleaning</div>
+      
+      <h3 class="text-xl font-semibold text-white mt-4 mb-4">Building the Foundation: Normalizing Messy Journey Data</h3>
+      <p>Before any attribution model could run, the raw CSV required normalization. The dataset used three different path separators across records — a common real-world data quality issue that would silently corrupt touchpoint counts if not resolved first.</p>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-6 mb-2">1. Path Separator Normalization</h4>
+      <p class="italic text-slate-400">Problem: The path column mixed " &gt; ", " -> " and " | " as separators across rows, treating the same channel combinations as different paths.</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Normalize Paths
+        </summary>
+<pre class="sql-code-block">CREATE OR REPLACE VIEW completed_journeys AS
+SELECT
+    customer_id,
+    -- Normalizes all separator variations (' | ', '|', ' -> ', '->') into a clean ' > '
+    REPLACE(REPLACE(REPLACE(REPLACE(path, ' | ', ' > '), '|', ' > '), ' -> ', ' > '), '->', ' > ') AS path_clean,
+    revenue,
+    purchase_status
+FROM q2_customer_journeys
+WHERE purchase_status = 'Completed'
+  AND revenue > 0;</pre>
+      </details>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/Normalizing-Path-Separators-output-1024x647.webp" alt="Normalizing Path Separators" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <div class="bg-slate-800/30 border-l-4 border-accentCyan p-6 rounded-r-2xl my-8">
+        <h5 class="text-accentCyan font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0">The raw data had <strong>three conflicting separator formats</strong> — mixing <code>&gt;</code>, <code>-></code> and <code>|</code> in the same column. Without this normalization step, touchpoints would have been miscounted and every model downstream would have produced incorrect results. Real-world data is always messier than the brief suggests.</p>
+      </div>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-8 mb-2">2. Unpacking Paths via Recursive CTE</h4>
+      <p>Most CRMs log touchpoints as a single, messy text string. To lay the foundation for the multi-touch attribution model, I use a recursive query to unpack these strings into individual, trackable rows systematically.</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Explode Paths
+        </summary>
+<pre class="sql-code-block">CREATE OR REPLACE VIEW touchpoint_credits AS
+WITH RECURSIVE path_splitter AS (
+    SELECT
+        customer_id, revenue, CAST(path_clean AS CHAR(1000)) AS path_clean,
+        CAST(TRIM(SUBSTRING_INDEX(path_clean, ' > ', 1)) AS CHAR(255)) AS touchpoint,
+        CAST(IF(LOCATE(' > ', path_clean) > 0, TRIM(SUBSTRING(path_clean, LOCATE(' > ', path_clean) + 3)), NULL) AS CHAR(1000)) AS remainder, 
+        1 AS touch_position,
+        CAST((LENGTH(path_clean) - LENGTH(REPLACE(path_clean, ' > ', ''))) / 3 + 1 AS SIGNED) AS total_touches
+    FROM completed_journeys
+    UNION ALL
+    SELECT
+        customer_id, revenue, path_clean,
+        CAST(TRIM(SUBSTRING_INDEX(remainder, ' > ', 1)) AS CHAR(255)) AS touchpoint,
+        CAST(IF(LOCATE(' > ', remainder) > 0, TRIM(SUBSTRING(remainder, LOCATE(' > ', remainder) + 3)), NULL) AS CHAR(1000)) AS remainder,
+        touch_position + 1, total_touches
+    FROM path_splitter
+    WHERE remainder IS NOT NULL
+),
+cleaned AS (
+    SELECT
+        customer_id, revenue, total_touches, touch_position,
+        CASE
+            WHEN touchpoint IN ('Direct', 'Direct_Traffic') THEN 'Direct'
+            WHEN touchpoint = 'Google_Brand_Search' THEN 'Brand Search'
+            ELSE REPLACE(touchpoint, '_', ' ')
+        END AS channel,
+        CASE WHEN touch_position = 1 THEN 1 ELSE 0 END AS is_first,
+        CASE WHEN touch_position = total_touches THEN 1 ELSE 0 END AS is_last,
+        revenue / total_touches AS linear_credit
+    FROM path_splitter
+    WHERE touchpoint IS NOT NULL AND CHAR_LENGTH(TRIM(touchpoint)) > 0
+)
+SELECT * FROM cleaned;</pre>
+      </details>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/Explode-Paths-via-Recursive-CTE-1024x647.webp" alt="Explode Paths via Recursive CTE" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 2 · Path Length Analysis</div>
+      
+      <h3 class="text-xl font-semibold text-white mt-4 mb-4">Proving That Multi-Touch Journeys Drive Conversions</h3>
+      <p>Before building attribution models, I needed to establish a behavioral baseline: do customers who convert actually touch multiple channels, or is the single-touch assumption defensible?</p>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-6 mb-2">3. Converter vs. Bouncer Path Length Comparison</h4>
+      <p class="italic text-slate-400">Question: Do converting customers actually interact with more channels than those who bounce?</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Path Length
+        </summary>
+<pre class="sql-code-block">SELECT
+    purchase_status,
+    ROUND(AVG(
+        LENGTH(REPLACE(REPLACE(path, '|', '>'), '->', '>')) 
+        - LENGTH(REPLACE(REPLACE(REPLACE(path, '|', '>'), '->', '>'), '>', '')) 
+        + 1
+    ), 2) AS avg_path_length
+FROM q2_customer_journeys
+GROUP BY purchase_status;</pre>
+      </details>
+
+      <div class="glass-card p-6 rounded-2xl border border-slate-700/50 my-10">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-6">Fig. 1 — Path length: Converters vs Bouncers</div>
+        <canvas id="pathChart" height="220"></canvas>
+      </div>
+
+      <div class="bg-slate-800/30 border-l-4 border-accentCyan p-6 rounded-r-2xl my-8">
+        <h5 class="text-accentCyan font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0">Customers who converted averaged <strong>3.37 touchpoints</strong> before purchasing. Those who bounced averaged <strong>2.49</strong>. The data directly disproves the single-touch assumption that last-click attribution is built on. Longer journeys correlate with higher purchase intent — not channel confusion.</p>
+      </div>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 3 · Attribution Modelling</div>
+      
+      <h3 class="text-xl font-semibold text-white mt-4 mb-4">Running Three Attribution Models Against the Same Revenue</h3>
+      <p>With the data cleaned and the multi-touch behavior confirmed, I applied three attribution models to the same 621 converting journeys. Each model answers the same question differently.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-10">
+        <div class="glass-card p-6 rounded-2xl border-t-4 border-t-red-500">
+          <h4 class="font-bold text-white mb-4 border-b border-slate-700 pb-2">Last Click</h4>
+          <ul class="space-y-3 text-sm text-slate-400">
+            <li>• 100% credit to final touchpoint</li>
+            <li>• Default in most CRMs & GA4</li>
+            <li>• Structurally rewards closing channels only</li>
+          </ul>
+        </div>
+        <div class="glass-card p-6 rounded-2xl border-t-4 border-t-amber-500">
+          <h4 class="font-bold text-white mb-4 border-b border-slate-700 pb-2">First Click</h4>
+          <ul class="space-y-3 text-sm text-slate-400">
+            <li>• 100% credit to initial touchpoint</li>
+            <li>• Exposes TOFU discovery engines</li>
+            <li>• Structurally rewards acquisition</li>
+          </ul>
+        </div>
+        <div class="glass-card p-6 rounded-2xl border-t-4 border-t-emerald-500">
+          <h4 class="font-bold text-white mb-4 border-b border-slate-700 pb-2">Linear (Multi-Touch)</h4>
+          <ul class="space-y-3 text-sm text-slate-400">
+            <li>• Revenue split across every touchpoint</li>
+            <li>• Conservative multi-touch baseline</li>
+            <li>• Credits the full path</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-8 mb-2">4. Building the Last-Click Model</h4>
+      <p class="italic text-slate-400">Question: What does revenue attribution look like when only the final touchpoint is credited?</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Last-Click
+        </summary>
+<pre class="sql-code-block">SELECT
+    channel,
+    ROUND(SUM(revenue), 0) AS last_click_revenue,
+    COUNT(DISTINCT customer_id) AS conversions
+FROM touchpoint_credits
+WHERE is_last = 1
+GROUP BY channel
+ORDER BY last_click_revenue DESC;</pre>
+      </details>
+
+      <div class="bg-slate-800/30 border-l-4 border-red-500 p-6 rounded-r-2xl my-8">
+        <h5 class="text-red-400 font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0">Under last-click attribution, <strong>Direct Traffic and Brand Search received 100% of Q2 revenue credit</strong> — a combined $713,554. Every paid social channel returned $0. This is the exact report a CMO would receive from a default GA4 setup.</p>
+      </div>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-8 mb-2">5. Building the First-Click Model</h4>
+      <p>Next, I flipped the attribution logic entirely. To find out where these converting journeys actually began, I built a First-Click model to see which channels were driving initial discovery.</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: First-Click
+        </summary>
+<pre class="sql-code-block">SELECT
+    channel,
+    ROUND(SUM(revenue), 0) AS first_click_revenue,
+    COUNT(DISTINCT customer_id) AS conversions
+FROM touchpoint_credits
+WHERE is_first = 1
+GROUP BY channel
+ORDER BY first_click_revenue DESC;</pre>
+      </details>
+
+      <div class="bg-slate-800/30 border-l-4 border-amber-500 p-6 rounded-r-2xl my-8">
+        <h5 class="text-amber-400 font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0">By shifting 100% of the credit to the first touchpoint, the true origin of the pipeline is exposed. <strong>TikTok, Facebook, and YouTube initiated over 80% ($574,357)</strong> of all Q2 converted revenue. This proves Paid Social is doing exactly what it was designed to do: feed the top of the funnel (TOFU). The default last-click model creates a dangerous blind spot by completely ignoring these critical discovery engines.</p>
+      </div>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-8 mb-2">6. Building the Linear (Multi-Touch) Model</h4>
+      <p class="italic text-slate-400">Question: What does revenue attribution look like when every channel in a converting path receives equal credit?</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Linear Model
+        </summary>
+<pre class="sql-code-block">SELECT
+    channel,
+    ROUND(SUM(linear_credit), 0) AS linear_revenue
+FROM touchpoint_credits
+GROUP BY channel
+ORDER BY linear_revenue DESC;</pre>
+      </details>
+
+      <div class="glass-card p-6 rounded-2xl border border-slate-700/50 my-10">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-6">Fig. 2 — Revenue per channel: Last Click vs Linear vs First Click</div>
+        <canvas id="attrChart" height="320"></canvas>
+      </div>
+
+      <div class="bg-slate-800/30 border-l-4 border-emerald-500 p-6 rounded-r-2xl my-8">
+        <h5 class="text-emerald-400 font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0">When credit is distributed across the full journey, <strong>TikTok, Facebook, and YouTube collectively account for $285,995</strong> — representing <strong>40.1% of total Q2 revenue</strong>. Under standard last-click reporting, that number was exactly $0. Meanwhile, Direct Traffic drops from $491,638 down to a still-substantial $206,614, properly reflecting its genuine role as a final closing channel rather than a top-of-funnel discovery engine.</p>
+      </div>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 4 · Misattribution Analysis</div>
+      
+      <h3 class="text-xl font-semibold text-white mt-4 mb-4">Quantifying the Budget Decision Error</h3>
+      
+      <h4 class="text-lg font-medium text-accentCyan mt-6 mb-2">7. Channel-Level Misattribution Delta</h4>
+      <p class="italic text-slate-400">Question: For each channel, what is the gap between what last-click reported and what multi-touch modeling shows?</p>
+      <p>This is the core business finding. By combining the last-click and linear outputs, I isolated the exact financial gap and identified which channels were structurally undervalued by default reporting.</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Calculate Delta
+        </summary>
+<pre class="sql-code-block">WITH last_click AS (
+    SELECT channel, ROUND(SUM(revenue), 0) AS lc_revenue
+    FROM touchpoint_credits WHERE is_last = 1 GROUP BY channel
+),
+linear_model AS (
+    SELECT channel, ROUND(SUM(linear_credit), 0) AS ln_revenue
+    FROM touchpoint_credits GROUP BY channel
+),
+all_channels AS (
+    SELECT channel FROM last_click
+    UNION
+    SELECT channel FROM linear_model
+)
+SELECT
+    a.channel, COALESCE(lc.lc_revenue, 0) AS last_click_revenue,
+    COALESCE(ln.ln_revenue, 0) AS linear_revenue,
+    COALESCE(ln.ln_revenue, 0) - COALESCE(lc.lc_revenue, 0) AS delta,
+    CASE
+        WHEN COALESCE(ln.ln_revenue, 0) - COALESCE(lc.lc_revenue, 0) > 0  THEN 'Undervalued'
+        WHEN COALESCE(ln.ln_revenue, 0) - COALESCE(lc.lc_revenue, 0) < 0  THEN 'Over-credited'
+        ELSE 'Neutral'
+    END AS attribution_status
+FROM all_channels a
+LEFT JOIN last_click lc ON a.channel = lc.channel
+LEFT JOIN linear_model ln ON a.channel = ln.channel
+ORDER BY delta DESC;</pre>
+      </details>
+
+      <div class="overflow-x-auto bg-slate-800/50 rounded-2xl border border-slate-700 my-10">
+        <table class="w-full text-left border-collapse text-sm md:text-base">
+          <thead>
+            <tr class="bg-slate-800 border-b border-slate-700">
+              <th class="p-4 text-white font-semibold">Channel</th>
+              <th class="p-4 text-white font-semibold text-right">Last Click</th>
+              <th class="p-4 text-white font-semibold text-right">Linear</th>
+              <th class="p-4 text-white font-semibold text-right">Delta</th>
+              <th class="p-4 text-white font-semibold text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700">
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">TikTok Ad</td><td class="p-4 text-right font-mono text-slate-400">$0</td><td class="p-4 text-right font-mono text-emerald-400">$99,997</td><td class="p-4 text-right font-mono text-emerald-400">+$99,997</td><td class="p-4 text-center font-bold text-emerald-400 text-xs tracking-wider uppercase">Undervalued</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">Facebook Ad</td><td class="p-4 text-right font-mono text-slate-400">$0</td><td class="p-4 text-right font-mono text-emerald-400">$93,164</td><td class="p-4 text-right font-mono text-emerald-400">+$93,164</td><td class="p-4 text-center font-bold text-emerald-400 text-xs tracking-wider uppercase">Undervalued</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">YouTube Ad</td><td class="p-4 text-right font-mono text-slate-400">$0</td><td class="p-4 text-right font-mono text-emerald-400">$92,834</td><td class="p-4 text-right font-mono text-emerald-400">+$92,834</td><td class="p-4 text-center font-bold text-emerald-400 text-xs tracking-wider uppercase">Undervalued</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">Email Promo</td><td class="p-4 text-right font-mono text-slate-400">$0</td><td class="p-4 text-right font-mono text-emerald-400">$46,243</td><td class="p-4 text-right font-mono text-emerald-400">+$46,243</td><td class="p-4 text-center font-bold text-emerald-400 text-xs tracking-wider uppercase">Undervalued</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">Retargeting</td><td class="p-4 text-right font-mono text-slate-400">$0</td><td class="p-4 text-right font-mono text-emerald-400">$40,859</td><td class="p-4 text-right font-mono text-emerald-400">+$40,859</td><td class="p-4 text-center font-bold text-emerald-400 text-xs tracking-wider uppercase">Undervalued</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">Blog Post</td><td class="p-4 text-right font-mono text-slate-400">$0</td><td class="p-4 text-right font-mono text-emerald-400">$38,464</td><td class="p-4 text-right font-mono text-emerald-400">+$38,464</td><td class="p-4 text-center font-bold text-emerald-400 text-xs tracking-wider uppercase">Undervalued</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">Direct</td><td class="p-4 text-right font-mono text-slate-400">$491,638</td><td class="p-4 text-right font-mono text-slate-300">$206,614</td><td class="p-4 text-right font-mono text-red-400">−$285,024</td><td class="p-4 text-center font-bold text-red-400 text-xs tracking-wider uppercase">Over-credited</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">Brand Search</td><td class="p-4 text-right font-mono text-slate-400">$221,916</td><td class="p-4 text-right font-mono text-slate-300">$95,378</td><td class="p-4 text-right font-mono text-red-400">−$126,538</td><td class="p-4 text-center font-bold text-red-400 text-xs tracking-wider uppercase">Over-credited</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-slate-800/30 border-l-4 border-accentCyan p-6 rounded-r-2xl my-8">
+        <h5 class="text-accentCyan font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0"><strong>Six channels received $0 credit from last-click attribution</strong> despite participating in 37.6% of Q2 converting journeys. Direct and Brand Search are genuine closing channels — but they are receiving credit for work done by paid social upstream. The misattribution delta is not noise; it is <strong>structurally baked into how the default model works</strong>.</p>
+      </div>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-8 mb-2">8. Top Converting Path Sequences</h4>
+      <p class="italic text-slate-400">Question: What are the actual multi-step paths that generate the most revenue — and do they confirm the channel role hypothesis?</p>
+      <p>Analyzing the most frequent multi-step sequences proved that paid social channels were initiating the journeys, but direct traffic was getting all the credit for closing them.</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Top Paths
+        </summary>
+<pre class="sql-code-block">SELECT
+    REPLACE(REPLACE(REPLACE(path_clean, 'Direct_Traffic', 'Direct'), 'Google_Brand_Search', 
+    'Brand Search'), '_', ' ') AS customer_path,
+    COUNT(*) AS conversions,
+    ROUND(SUM(revenue), 0) AS total_revenue
+FROM completed_journeys
+GROUP BY customer_path
+HAVING COUNT(*) >= 2
+ORDER BY total_revenue DESC
+LIMIT 10;</pre>
+      </details>
+
+      <div class="overflow-x-auto bg-slate-800/50 rounded-2xl border border-slate-700 my-10">
+        <table class="w-full text-left border-collapse text-sm md:text-base">
+          <thead>
+            <tr class="bg-slate-800 border-b border-slate-700">
+              <th class="p-4 text-white font-semibold">Full Customer Path</th>
+              <th class="p-4 text-white font-semibold text-right">Conversions</th>
+              <th class="p-4 text-white font-semibold text-right">Revenue</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700">
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">Direct</td><td class="p-4 text-right text-slate-400">78</td><td class="p-4 text-right font-mono text-emerald-400">$91,921</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">Brand Search</td><td class="p-4 text-right text-slate-400">42</td><td class="p-4 text-right font-mono text-emerald-400">$47,276</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">YouTube Ad → Direct</td><td class="p-4 text-right text-slate-400">19</td><td class="p-4 text-right font-mono text-emerald-400">$22,689</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">Facebook Ad → Direct</td><td class="p-4 text-right text-slate-400">17</td><td class="p-4 text-right font-mono text-emerald-400">$21,358</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">TikTok Ad → Direct</td><td class="p-4 text-right text-slate-400">16</td><td class="p-4 text-right font-mono text-emerald-400">$16,839</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">TikTok Ad → Facebook Ad → Direct</td><td class="p-4 text-right text-slate-400">7</td><td class="p-4 text-right font-mono text-emerald-400">$8,510</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">YouTube Ad → Brand Search</td><td class="p-4 text-right text-slate-400">7</td><td class="p-4 text-right font-mono text-emerald-400">$8,125</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">YouTube Ad → Facebook Ad → Direct</td><td class="p-4 text-right text-slate-400">7</td><td class="p-4 text-right font-mono text-emerald-400">$7,740</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">TikTok Ad → Brand Search</td><td class="p-4 text-right text-slate-400">6</td><td class="p-4 text-right font-mono text-emerald-400">$7,598</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 font-mono text-slate-300">Facebook Ad → Retargeting → Direct</td><td class="p-4 text-right text-slate-400">6</td><td class="p-4 text-right font-mono text-emerald-400">$6,330</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-indigo-900/40 border border-indigo-500/50 p-8 rounded-2xl my-12 shadow-[0_0_20px_rgba(99,102,241,0.15)]">
+        <h4 class="text-indigo-400 font-bold uppercase tracking-widest text-xs mb-3">Strategic Takeaway</h4>
+        <p class="text-indigo-100 text-lg leading-relaxed m-0">Last-click attribution is not wrong about which channel closes the sale. It is wrong about which channels <strong>make the sale possible</strong>. Paid social initiated the majority of high-value converting journeys in Q2. Direct and Brand Search closed them. Both roles are essential — but the default model only funds the closer. If paid social budget is cut based on this report, the pipeline feeding Direct and Brand Search shrinks, and revenue falls 30–60 days later with no obvious cause.</p>
+      </div>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">Business Impact & Recommendations</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <div class="glass-card p-6 rounded-2xl border border-slate-700/50">
+          <div class="font-bold text-white mb-2">Attribution Clarity</div>
+          <div class="text-slate-400 text-sm">Revealed <strong>$286K in paid social revenue</strong> that the default model reported as $0, enabling accurate channel valuation.</div>
+        </div>
+        <div class="glass-card p-6 rounded-2xl border border-slate-700/50">
+          <div class="font-bold text-white mb-2">Waste Prevention</div>
+          <div class="text-slate-400 text-sm">Prevented the misallocation of paid social budget based on a <strong>structurally incorrect attribution model</strong>.</div>
+        </div>
+      </div>
+
+      <div class="bg-emerald-900/20 border border-emerald-500/30 p-6 rounded-2xl my-8">
+        <h4 class="text-emerald-400 font-bold uppercase tracking-widest text-xs mb-3">Immediate Action: Protect the Discovery Engines</h4>
+        <p class="text-emerald-100 text-base leading-relaxed m-0"><strong>Do not reduce paid social budgets based on standard last-click data.</strong> TikTok, Facebook, and YouTube are top-of-funnel initiators, not underperformers. Cutting their spend removes the customers who eventually arrive at Direct and Brand Search—the channels that actually close. Because B2B sales cycles are long, these budget cuts will show up as an unexplained revenue decline 30–60 days later, making the attribution error very difficult to trace.</p>
+      </div>
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">Short-Term: Shift the Reporting Baseline</h3>
+      <p>Switch from last-click to a linear or position-based model in your primary reporting layer. Most standard analytics platforms support this without requiring additional data engineering. Run both models in parallel for 60 days to build historical confidence before presenting the new baseline to leadership.</p>
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">Medium-Term: Transition to Algorithmic Attribution</h3>
+      <p>Commission a <strong>Markov chain attribution model.</strong> Unlike heuristic, rule-based models (last-click, linear, first-click), Markov chains calculate the actual incremental contribution of each channel by modeling how the overall conversion probability changes when a specific channel is removed from the path. This is the current industry standard for rigorous, defensible attribution.</p>
+
+      <div class="border-t border-slate-800 pt-8 mt-16">
+        <p class="italic text-sm text-slate-500">
+          <strong>Data Privacy & Governance Disclosure:</strong> To strictly adhere to client confidentiality, the dataset used in this case study is a structured Q2 journey log. Specific customer identifiers and financial values have been anonymized. The SQL attribution logic and strategic analysis represent authentic methodologies deployed in production environments.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="max-w-5xl mx-auto px-6 w-full mb-20">
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-3xl p-10 md:p-14 text-center shadow-2xl relative overflow-hidden">
+      <!-- Decorative glow -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-accentCyan/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+      
+      <div class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 relative z-10">Next Step</div>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Need help with attribution, tracking, or pipeline engineering?</h2>
+      <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 relative z-10">
+        If you need support with multi-touch attribution modelling, GA4/sGTM setup, SQL-based data analysis, or executive BI dashboard builds, send me a message to discuss your data architecture.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+        <a href="contact.html" class="px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+          Contact Me
+        </a>
+        <a href="portfolio.html" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors">
+          Back to Portfolio
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Premium Dark Theme Colors
+    const BLUE   = '#38bdf8'; // sky-400
+    const GREEN  = '#34d399'; // emerald-400
+    const RED    = '#f87171'; // red-400
+    const AMBER  = '#fbbf24'; // amber-400
+    const BORDER = '#334155'; // slate-700
+    const BG2    = '#1e293b'; // slate-800
+    const INK3   = '#94a3b8'; // slate-400
+
+    Chart.defaults.color = INK3;
+
+    // Fig 1 — Path length
+    if(document.getElementById('pathChart')) {
+      new Chart(document.getElementById('pathChart'), {
+        type: 'bar',
+        data: {
+          labels: ['1 touch', '2 touches', '3 touches', '4 touches', '5 touches', '6+ touches'],
+          datasets: [
+            { label: 'Converted', data: [120, 69, 106, 200, 90, 36], backgroundColor: GREEN, borderRadius: 4 },
+            { label: 'Bounced',   data: [850, 1100, 980, 900, 430, 119], backgroundColor: BORDER, borderRadius: 4 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } },
+          scales: {
+            x: { grid: { display: false } },
+            y: { grid: { color: BORDER } }
+          }
+        }
+      });
+    }
+
+  // Fig 2 — Attribution comparison
+    if(document.getElementById('attrChart')) {
+      new Chart(document.getElementById('attrChart'), {
+        type: 'bar',
+        data: {
+          labels: ['TikTok Ad','Facebook Ad','YouTube Ad','Email Promo','Blog Post','Retargeting','Direct','Brand Search'],
+          datasets: [
+            { label: 'Last Click',    data: [0, 0, 0, 0, 0, 0, 491638, 221916], backgroundColor: RED,    borderRadius: 3 },
+            { label: 'Linear (Fair)', data: [99997, 93164, 92834, 46243, 38464, 40859, 206614, 95378], backgroundColor: GREEN, borderRadius: 3 },
+            { label: 'First Click', data: [208977, 188151, 177229, 0, 0, 0, 91921, 47276], backgroundColor: AMBER, borderRadius: 3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString()}` } }
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: { grid: { color: BORDER }, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } }
+          }
+        }
+      });
+    }
+
+    // Custom SQL Syntax Highlighter (Dark Theme Optimized)
+    (function highlightMultipleSQL() {
+      const codeElements = document.querySelectorAll('.sql-code-block');
+      const keywords = ['WITH', 'RECURSIVE', 'SELECT', 'FROM', 'LEFT JOIN', 'JOIN', 'ON', 'AND', 'GROUP BY', 'ORDER BY', 'DESC', 'ASC', 'WHERE', 'AS', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END', 'UNION ALL', 'UNION', 'CREATE OR REPLACE VIEW', 'CREATE TABLE', 'PRIMARY KEY', 'DEFAULT', 'NOT NULL', 'HAVING', 'LIMIT'];
+      const functions = ['ROUND', 'SUM', 'NULLIF', 'CONCAT', 'COUNT', 'DATE_FORMAT', 'AVG', 'CAST', 'TRIM', 'SUBSTRING_INDEX', 'LOCATE', 'SUBSTRING', 'LENGTH', 'REPLACE', 'COALESCE', 'CHAR_LENGTH', 'MIN', 'MAX'];
+
+      codeElements.forEach(codeElement => {
+        let code = codeElement.innerHTML;
+
+        // 1. Highlight Strings
+        code = code.replace(/('[^']*')/g, `<span class="sql-str">$1</span>`);
+        // 2. Highlight Numbers
+        code = code.replace(/\b(\d+(\.\d+)?)\b/g, `<span class="sql-num">$1</span>`);
+        // 3. Highlight Keywords
+        keywords.forEach(kw => {
+          const reg = new RegExp('\\b' + kw + '\\b(?=(?:[^\']*\'[^\']*\')*[^\']*$)', 'gi');
+          code = code.replace(reg, `<span class="sql-kw">${kw}</span>`);
+        });
+        // 4. Highlight Functions
+        functions.forEach(fn => {
+          const reg = new RegExp('\\b' + fn + '\\b(?=(?:[^\']*\'[^\']*\')*[^\']*$)', 'gi');
+          code = code.replace(reg, `<span class="sql-fn">${fn}</span>`);
+        });
+
+        codeElement.innerHTML = code;
+      });
+    })();
+
+  });
+  </script>
+</body>
+</html>
