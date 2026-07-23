@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: GA4 & GTM Event Architecture - Tofunmi Ayotunde</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins', 'sans-serif'] },
+          colors: { 
+            bgDark: '#0b1120', 
+            accentCyan: '#22d3ee' 
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Glassmorphism */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* 3D Flip Card Styles */
+    .ux-grid {
+      perspective: 1500px;
+    }
+    .ux-card {
+      height: 250px;
+      position: relative;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .ux-card.active {
+      transform: rotateY(180deg);
+    }
+    .ux-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 1.5rem; /* rounded-2xl */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    .ux-back {
+      transform: rotateY(180deg);
+    }
+    
+    /* Code styling in table */
+    code {
+      background-color: rgba(30, 41, 59, 1);
+      color: #38bdf8; /* sky-400 */
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+    }
+  </style>
+</head>
+
+<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark">
+
+  <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 w-full flex-grow">
+    
+    <!-- Back Navigation -->
+    <a href="portfolio.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-10 font-semibold group">
+      <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Back to Portfolio
+    </a>
+
+    <!-- Hero Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start mb-16">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/30 border border-cyan-800 rounded-full text-xs font-bold text-accentCyan mb-6 uppercase tracking-wider">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l7 4v10l-7 4-7-4V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+          Case Study
+        </div>
+        
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+          How I Built a Custom GA4 & GTM Event Architecture for Lead Gen
+        </h1>
+        
+        <p class="text-lg md:text-xl text-slate-400 leading-relaxed mb-8">
+          This project transformed a B2B website from tracking basic, opaque pageviews into a highly structured, action-based conversion pipeline.
+        </p>
+        
+        <div class="flex flex-wrap gap-2">
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Google Analytics 4</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Google Tag Manager</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Event Taxonomy</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Data Layer</span>
+        </div>
+      </div>
+
+      <!-- Quick Snapshot Sidebar -->
+      <div class="glass-card p-8 rounded-3xl border border-slate-700/50 shadow-2xl">
+        <div class="text-xs font-bold tracking-[0.1em] uppercase text-slate-500 mb-6">Quick Snapshot</div>
+        
+        <div class="space-y-6">
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Client</div>
+            <div class="text-lg font-semibold text-white">B2B Service Provider</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Main Goal</div>
+            <div class="text-lg font-semibold text-white">Move beyond default reporting to action-based conversion tracking.</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Output</div>
+            <div class="text-lg font-semibold text-white">A comprehensive event map, precise triggers, & validated GA4 stream.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          The Problem
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">The website lacked visibility into the high-value actions that actually generate leads.</div>
+      </div>
+      
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Tech Stack
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">WordPress, GA4, Google Tag Manager, and Custom Event Taxonomy.</div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          The Output
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">A custom event tracking architecture and fully validated GA4 data stream.</div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          Business ROI
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">Clear visibility into funnel drop-offs and true lead-generation performance.</div>
+      </div>
+    </div>
+
+    <!-- Before / After Section -->
+    <div class="mb-24">
+      <div class="text-center mb-10">
+        <div class="text-sm font-bold tracking-widest uppercase text-purple-400 mb-2">Transformation</div>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-white">The Measurement Evolution</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Before -->
+        <div class="bg-red-900/10 border border-red-900/50 rounded-3xl p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-red-900/50 text-red-400 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-red-200">Before</h3>
+          </div>
+          <ul class="space-y-4 text-slate-300">
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> The website recorded aggregate pageviews, but key actions tied to lead generation were invisible.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Form interactions and abandonment rates were entirely unmeasurable.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> High-intent actions like CTA clicks and solution-page engagement were missing from reporting.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> The business could see traffic arriving, but couldn't measure the actions most likely to drive revenue.</li>
+          </ul>
+        </div>
+
+        <!-- After -->
+        <div class="bg-emerald-900/10 border border-emerald-900/50 rounded-3xl p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-emerald-900/50 text-emerald-400 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-emerald-200">After</h3>
+          </div>
+          <ul class="space-y-4 text-slate-300">
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> A strategic event map successfully defined and standardized critical conversion touchpoints.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> GTM configured with pinpoint accuracy for custom form, scroll, click, and download triggers.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> GA4 DebugView fully validated the pipeline, ensuring zero duplicate events.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Marketing teams can now pinpoint exactly which CTAs and pages drive the highest intent and inquiry volume.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Article Content -->
+    <div class="max-w-4xl mx-auto space-y-6 text-lg text-slate-300 leading-relaxed">
+      
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">The Business Problem</h2>
+      <p>Many businesses install GA4 but stop at the <strong class="text-white">base pageview setup</strong>.</p>
+      <p>For this lead-generation site, relying on default <strong class="text-white">out-of-the-box measurement</strong> created a massive <strong class="text-white">reporting gap</strong>.</p>
+      <p>Users could visit the <strong class="text-white">solution page</strong>, click various <strong class="text-white">CTA buttons</strong>, and start or complete forms—but none of these actions were reliably measured.</p>
+      <p>Because of this, stakeholders could not answer <strong class="text-white">critical business questions</strong> like:</p>
+      <ul class="list-disc pl-6 space-y-2 mt-4 mb-6">
+        <li>Which specific CTA button drives the most engagement?</li>
+        <li>How many visitors start the contact form but abandon it before finishing?</li>
+        <li>Which pages support stronger commercial intent before a conversion happens?</li>
+      </ul>
+      <p>The objective wasn't just to <strong class="text-white">install a tracking pixel</strong>, but to move beyond default reporting and build a robust <strong class="text-white">tracking architecture</strong> that <strong class="text-white">measured the actions</strong> most closely tied to lead generation.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">My Approach: Engineering a Custom Measurement Architecture</h2>
+      <p>To ensure the client had a granular, highly actionable dataset, I bypassed default enhanced measurement and engineered a fully customized event pipeline using <strong class="text-white">Google Tag Manager</strong>.</p>
+      <p>Here is the technical breakdown of how I executed the tracking architecture:</p>
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">1. Discovery & Event Taxonomy Design</h3>
+      <p>Before opening GTM, I audited the <strong class="text-white">website’s DOM structure</strong> and mapped specific <strong class="text-white">business KPIs</strong> (Lead Gen, Engagement, Intent) to trackable user interactions.</p>
+      <p>I developed a strict, standardized event taxonomy using <strong class="text-white">snake_case naming conventions</strong> (e.g., <code>generate_lead</code>, <code>form_start</code>).</p>
+      <p>This ensured the raw data would be <strong class="text-white">clean</strong>, <strong class="text-white">predictable</strong>, and immediately ready for <strong class="text-white">modeling</strong> in downstream visualization tools like <strong class="text-white">Looker Studio</strong> or <strong class="text-white">Power BI</strong> without requiring heavy transformations.</p>
+      
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/Excel-Event-Mapping-1024x594.png" alt="Excel Event Mapping" class="rounded-2xl border border-slate-700 shadow-xl my-10 w-full object-cover bg-slate-800 p-1">
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">2. Precision Trigger Engineering in GTM</h3>
+      <p>I enabled built-in <strong class="text-white">GTM variables</strong> (Click Classes, Form IDs, Page Path) and configured highly specific triggers to capture user intent without misfires:</p>
+      
+      <h4 class="text-lg font-medium text-white mt-6 mb-2 flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> CSS Selectors & Click Variables:</h4>
+      <p>For the Hero CTA (<code>cta_click</code>), I utilized specific <strong class="text-white">CSS class selectors</strong> and <strong class="text-white">Click Text variables</strong> to isolate the exact button, preventing false positives from generic site clicks.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/GTM-Trigger-Configuration-screen-cta-click-1024x526.png" alt="GTM Trigger Configuration" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <h4 class="text-lg font-medium text-white mt-6 mb-2 flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Path Rules for Intent:</h4>
+      <p>I applied <strong class="text-white">path matching</strong> to accurately fire the <code>solutions_view</code> event whenever a user navigated to the core services page, isolating high-intent commercial traffic.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/page-path-trigger-1024x526.png" alt="Page path trigger" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <h4 class="text-lg font-medium text-white mt-6 mb-2 flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Funnel Drop-off Tracking:</h4>
+      <p>To measure form abandonment, I implemented a <code>form_start</code> event triggered by the very first field interaction.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/form-start-event-tracking-1024x448.png" alt="Form start tracking" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>I then paired this with a <code>generate_lead</code> trigger that fired only when the confirmation state was successful, enabling precise drop-off calculations.</p>
+
+      <h4 class="text-lg font-medium text-white mt-6 mb-2 flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Engagement Listeners:</h4>
+      <p>I deployed scroll depth triggers (<code>scroll_90</code>) to measure reading behavior, outbound link clicks (<code>outbound_click</code>) to track partner referrals, and file download listeners (<code>file_download</code> targeting .pdf extensions) to prove content marketing ROI.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/all-triggers-1024x381.png" alt="All triggers" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">3. Data Enrichment via Custom Parameters</h3>
+      <p>An event count alone lacks context. So, I enriched every custom event by passing dynamic Event Parameters into GA4.</p>
+      <p>For example, when a user triggered <code>form_start</code>, the GTM tag dynamically pulled the <code>form_id</code> and <code>page_path</code> and passed them as parameters.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/GTM-GA4-Event-Tag-configuration-1024x411.png" alt="GA4 tag config" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>This allows the business to <strong class="text-white">pivot the data</strong> and identify exactly <em>which</em> form on <em>which</em> landing page causes the highest friction.</p>
+      <p>Finally, I registered all custom parameters as <strong class="text-white">Custom Dimensions</strong> within the GA4 property settings, ensuring the data was unblocked for executive dashboards.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">The Event Architecture Deliverable</h2>
+      <p class="mb-8">This standardized tracking framework now dictates the data flow from the website into GA4, powering the entire reporting capability:</p>
+      
+      <div class="overflow-x-auto bg-slate-800/50 rounded-2xl border border-slate-700 mb-12">
+        <table class="w-full text-left border-collapse text-sm md:text-base">
+          <thead>
+            <tr class="bg-slate-800 border-b border-slate-700">
+              <th class="p-4 text-accentCyan font-semibold">Business Goal</th>
+              <th class="p-4 text-accentCyan font-semibold">User Action</th>
+              <th class="p-4 text-accentCyan font-semibold">GA4 Event Name</th>
+              <th class="p-4 text-accentCyan font-semibold">Trigger Condition</th>
+              <th class="p-4 text-accentCyan font-semibold">Custom Parameters</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700">
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-4 font-semibold text-white">Lead Gen</td>
+              <td class="p-4">Submits contact form</td>
+              <td class="p-4"><code>generate_lead</code></td>
+              <td class="p-4">Thank-you page view/success state</td>
+              <td class="p-4"><code>form_id</code>, <code>page_path</code></td>
+            </tr>
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-4 font-semibold text-white">Engagement</td>
+              <td class="p-4">Clicks Hero CTA</td>
+              <td class="p-4"><code>cta_click</code></td>
+              <td class="p-4">Click text equals CTA text</td>
+              <td class="p-4"><code>click_text</code>, <code>page_path</code></td>
+            </tr>
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-4 font-semibold text-white">Intent</td>
+              <td class="p-4">Views solution page</td>
+              <td class="p-4"><code>solutions_view</code></td>
+              <td class="p-4">Page path contains <code>/solutions</code></td>
+              <td class="p-4"><code>page_location</code></td>
+            </tr>
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-4 font-semibold text-white">Engagement</td>
+              <td class="p-4">Starts filling form</td>
+              <td class="p-4"><code>form_start</code></td>
+              <td class="p-4">First input field interaction</td>
+              <td class="p-4"><code>form_id</code>, <code>page_path</code></td>
+            </tr>
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-4 font-semibold text-white">Engagement</td>
+              <td class="p-4">Scrolls deeply</td>
+              <td class="p-4"><code>scroll_90</code></td>
+              <td class="p-4">Scroll depth reaches 90%</td>
+              <td class="p-4"><code>page_path</code></td>
+            </tr>
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-4 font-semibold text-white">Referral</td>
+              <td class="p-4">Clicks external link</td>
+              <td class="p-4"><code>outbound_click</code></td>
+              <td class="p-4">URL does not contain root domain</td>
+              <td class="p-4"><code>click_url</code></td>
+            </tr>
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-4 font-semibold text-white">Resource</td>
+              <td class="p-4">Downloads a file</td>
+              <td class="p-4"><code>file_download</code></td>
+              <td class="p-4">Click URL contains <code>.pdf</code></td>
+              <td class="p-4"><code>file_name</code>, <code>page_path</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">Validation & Quality Assurance</h2>
+      <p>Implementation is only half the job; validation is what makes the data trustworthy.</p>
+      <p>I ran the entire container through a rigorous <strong class="text-white">QA protocol</strong>.</p>
+      <p>Using GTM Preview Mode, I confirmed that the <strong class="text-white">CTA click event fired exactly once per click</strong>, solutions events triggered only on the correct URL, and outbound clicks successfully excluded internal links.</p>
+      <p>I then generated <strong class="text-white">controlled test interactions</strong> across the site and utilized <strong class="text-white">GA4 DebugView</strong> to verify the payload reached the analytics servers with all custom parameters intact.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/GA4-DebugView-1-1024x461.png" alt="GA4 DebugView" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>This ensured <strong class="text-white">zero data loss</strong> and prevented noisy, duplicated events from polluting the dataset.</p>
+      
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8">What a Business Owner Gains</h2>
+      <p class="mb-10">By moving from <strong class="text-white">basic traffic reporting</strong> to <strong class="text-white">action-based conversion tracking</strong>, a business owner gains:</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 ux-grid mb-16">
+        
+        <!-- Card 1 -->
+        <div class="ux-card" onclick="this.classList.toggle('active')">
+          <div class="ux-face glass-card border border-slate-700 hover:border-accentCyan/50 transition-colors">
+            <div class="w-16 h-16 rounded-2xl bg-cyan-900/30 text-accentCyan flex items-center justify-center mb-6">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-white m-0">Quantifiable ROI</h3>
+            <span class="absolute bottom-6 text-xs font-bold tracking-widest text-slate-500 uppercase">Click to Reveal</span>
+          </div>
+          <div class="ux-face ux-back bg-gradient-to-br from-cyan-600 to-blue-700 border border-cyan-400">
+            <p class="text-white text-lg font-medium m-0 leading-relaxed">An end to "black box" marketing; every critical user action is now quantifiable.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="ux-card" onclick="this.classList.toggle('active')">
+          <div class="ux-face glass-card border border-slate-700 hover:border-accentCyan/50 transition-colors">
+            <div class="w-16 h-16 rounded-2xl bg-cyan-900/30 text-accentCyan flex items-center justify-center mb-6">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-white m-0">Funnel Visibility</h3>
+            <span class="absolute bottom-6 text-xs font-bold tracking-widest text-slate-500 uppercase">Click to Reveal</span>
+          </div>
+          <div class="ux-face ux-back bg-gradient-to-br from-cyan-600 to-blue-700 border border-cyan-400">
+            <p class="text-white text-lg font-medium m-0 leading-relaxed">Clear visibility into where potential leads are abandoning the funnel before converting.</p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="ux-card" onclick="this.classList.toggle('active')">
+          <div class="ux-face glass-card border border-slate-700 hover:border-accentCyan/50 transition-colors">
+            <div class="w-16 h-16 rounded-2xl bg-cyan-900/30 text-accentCyan flex items-center justify-center mb-6">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-white m-0">True Attribution</h3>
+            <span class="absolute bottom-6 text-xs font-bold tracking-widest text-slate-500 uppercase">Click to Reveal</span>
+          </div>
+          <div class="ux-face ux-back bg-gradient-to-br from-cyan-600 to-blue-700 border border-cyan-400">
+            <p class="text-white text-lg font-medium m-0 leading-relaxed">The ability to directly compare CTA interaction versus actual form completion.</p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="ux-card" onclick="this.classList.toggle('active')">
+          <div class="ux-face glass-card border border-slate-700 hover:border-accentCyan/50 transition-colors">
+            <div class="w-16 h-16 rounded-2xl bg-cyan-900/30 text-accentCyan flex items-center justify-center mb-6">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-white m-0">Scalable Data</h3>
+            <span class="absolute bottom-6 text-xs font-bold tracking-widest text-slate-500 uppercase">Click to Reveal</span>
+          </div>
+          <div class="ux-face ux-back bg-gradient-to-br from-cyan-600 to-blue-700 border border-cyan-400">
+            <p class="text-white text-lg font-medium m-0 leading-relaxed">A clean, standardized foundation for future Looker Studio reporting and budget allocation.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bg-slate-800/30 border-l-4 border-accentCyan p-6 rounded-r-2xl my-12">
+        <p class="italic text-sm text-slate-400 m-0">
+          <strong class="text-slate-300">Note on Methodology:</strong> To prove the underlying data architecture, this case study utilizes a controlled, synthetic testing environment. By generating targeted, high-intent user sessions, I am able to definitively prove the GTM triggers, GA4 parameter mapping, and DebugView validation pipelines work flawlessly, preparing the architecture to handle live, scaled enterprise traffic without data loss.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="max-w-5xl mx-auto px-6 w-full mb-20">
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-3xl p-10 md:p-14 text-center shadow-2xl relative overflow-hidden">
+      <!-- Decorative glow -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-accentCyan/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+      
+      <div class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 relative z-10">Next Step</div>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Need help with tracking, reporting, or dashboard work?</h2>
+      <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 relative z-10">
+        If you need support with GA4/GTM setup, Data cleaning, Power BI dashboards, or SQL-based analysis, send me a message.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+        <a href="contact.html" class="px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+          Contact Me
+        </a>
+        <a href="portfolio.html" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors">
+          Back to Portfolio
+        </a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
