@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Ad Blocker Attribution Decay - Tofunmi Ayotunde</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js for visualizations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ['Poppins', 'sans-serif'],
+            mono: ['Consolas', 'Monaco', 'Courier New', 'monospace']
+          },
+          colors: { 
+            bgDark: '#0b1120', 
+            accentCyan: '#22d3ee' 
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Glassmorphism utility classes */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Code styling in text */
+    code.inline-code {
+      background-color: rgba(30, 41, 59, 1);
+      color: #38bdf8;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+      font-family: 'Consolas', 'Monaco', monospace;
+    }
+
+    /* ── SQL CUSTOM CODE BLOCKS ── */
+    .sql-dropdown {
+      margin: 24px 0;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      background-color: rgba(15, 23, 42, 0.8);
+      overflow: hidden;
+    }
+    .sql-dropdown summary {
+      padding: 16px 24px;
+      background-color: rgba(30, 41, 59, 0.8);
+      color: #38bdf8;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      outline: none;
+      border-bottom: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+    .sql-dropdown summary:hover { background-color: rgba(30, 41, 59, 1); }
+    .sql-dropdown[open] summary { border-bottom: 1px solid #334155; }
+    .sql-dropdown pre.sql-code-block {
+      margin: 0;
+      padding: 24px;
+      color: #f8fafc;
+      background-color: transparent;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Auto-highlighting colors for SQL */
+    .sql-kw { color: #c678dd; font-weight: bold; } /* Keywords: Purple */
+    .sql-fn { color: #61afef; } /* Functions: Blue */
+    .sql-str { color: #98c379; } /* Strings: Green */
+    .sql-num { color: #d19a66; } /* Numbers: Orange */
+  </style>
+</head>
+
+<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark">
+
+  <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 w-full flex-grow">
+    
+    <!-- Back Navigation -->
+    <a href="portfolio.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-10 font-semibold group">
+      <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Back to Portfolio
+    </a>
+
+    <!-- Hero Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start mb-16">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/30 border border-cyan-800 rounded-full text-xs font-bold text-accentCyan mb-6 uppercase tracking-wider">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l7 4v10l-7 4-7-4V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+          Technical Audit
+        </div>
+        
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+          I Reverse Engineered How Ad Blockers Are Skewing Conversion Data By Over 36%
+        </h1>
+        
+        <p class="text-lg md:text-xl text-slate-400 leading-relaxed mb-8">
+          How I reconciled 50,000 backend server logs against front-end analytics events to expose massive attribution decay—and the server-side architecture required to fix it.
+        </p>
+        
+        <div class="flex flex-wrap gap-2">
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Data Reconciliation</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Server-Side GTM</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Conversion APIs</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Client Hints Parsing</span>
+        </div>
+      </div>
+
+      <!-- Quick Snapshot Sidebar -->
+      <div class="glass-card p-8 rounded-3xl border border-slate-700/50 shadow-2xl">
+        <div class="text-xs font-bold tracking-[0.1em] uppercase text-slate-500 mb-6">Quick Snapshot</div>
+        
+        <div class="space-y-6">
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Deliverable</div>
+            <div class="text-lg font-semibold text-white">Comparative analysis report.</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">End Goal</div>
+            <div class="text-lg font-semibold text-white">Quantify client-side tracking data loss.</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Raw Data Needed</div>
+            <div class="text-lg font-semibold text-white">Client-side vs server-side logs (50k rows).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Article Content -->
+    <div class="max-w-4xl mx-auto space-y-6 text-lg text-slate-300 leading-relaxed">
+      
+      <p>If you are an e-commerce director, you probably check your Shopify or Google Analytics dashboard every morning, calculate your Return on Ad Spend (ROAS), and allocate your budget.</p>
+      
+      <p>But due to aggressive ad blockers and browser-level privacy protocols <strong>(like Safari's ITP and Brave's Shields)</strong>, client-side tracking is <strong>hemorrhaging data</strong>.</p>
+      
+      <p>To simulate a modern e-commerce attribution environment, I generated and reconciled <strong>50,000</strong> transaction records from <strong>backend server logs</strong> and <strong>browser-side analytics events</strong> to measure <strong>how much conversion data is lost before reaching analytics dashboards</strong>.</p>
+      
+      <p>The results?</p>
+      
+      <p>Up to <strong>36%</strong> of transactions were completed perfectly on the backend server but <strong>disappeared completely before reaching the front-end marketing dashboards.</strong></p>
+      
+      <p>These are <strong>Ghost Transactions</strong>.</p>
+      
+      <p>So I built a comparative architecture to hunt them down, tracking exactly how much revenue was slipping through the cracks.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">Methodology</h2>
+      
+      <p>To find the discrepancy, <strong>I pitted the backend database against the front-end tracking pixel data</strong>.</p>
+      
+      <p>By mapping the server's <code class="inline-code">transaction_id</code> to the client's <code class="inline-code">order_id</code> via a <strong>LEFT JOIN</strong>, I identified the payloads that were blocked by ad blockers.</p>
+      
+      <p>Finding the missing data was only the first step. I needed to prove exactly <em>what</em> was blocking it.</p>
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">User-Agent Spoofing</h3>
+      
+      <p>When diagnosing attribution loss, trying to segment the missing data by <strong>querying the <code class="inline-code">user_agent</code> string</strong> is a rookie mistake.</p>
+      
+      <p>Privacy-first browsers like Brave intentionally spoof their <strong>User-Agent strings</strong> to <strong>look identical</strong> to standard Google Chrome traffic. Relying on basic SQL filtering will simply show massive, unexplained drops in "Chrome" conversions, completely masking the real culprit.</p>
+      
+      <p>To accurately identify the <strong>ghost transactions</strong>, I had to dig deeper into the server logs and parse the <strong><code class="inline-code">sec-ch-ua</code></strong> (Client Hints) HTTP headers.</p>
+      
+      <p>This is one of the only reliable, deterministic ways to strip away the Chrome disguise on the backend and expose the actual browser environment.</p>
+      
+      <p>Here is the exact reconciliation logic I used to map the database truth against the decaying analytics payloads:</p>
+
+      <!-- SQL Query Dropdown -->
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View Full SQL Query
+        </summary>
+<pre class="sql-code-block">WITH DiscrepancyBase AS (
+    SELECT s.transaction_id, s.revenue, s.sec_ch_ua_header, s.user_agent,
+        CASE 
+    WHEN c.order_id IS NULL THEN 1 ELSE 0 END AS is_ghost_transaction
+    FROM server_logs s
+    LEFT JOIN client_events c ON s.transaction_id = c.order_id
+),
+BrowserAnalysis AS (
+    SELECT
+        CASE 
+            WHEN sec_ch_ua_header LIKE '%Brave%' THEN 'Brave (Shields Up)'
+            WHEN user_agent LIKE '%Safari%' AND user_agent NOT LIKE '%Chrome%' THEN 'Safari (ITP Impact)'
+            WHEN user_agent LIKE '%Firefox%' THEN 'Firefox (ETP)'
+            WHEN user_agent LIKE '%Chrome%' THEN 'Standard Chrome (uBlock/Adblock)'
+            ELSE 'Other/Unknown'
+        END AS browser_segment,
+        COUNT(*) AS total_server_transactions,
+        SUM(is_ghost_transaction) AS blocked_client_events,
+        ROUND((SUM(is_ghost_transaction) * 100.0) / COUNT(*), 2) AS data_loss_percentage,
+        ROUND(SUM(CASE WHEN is_ghost_transaction = 1 THEN revenue ELSE 0 END),2) AS untracked_revenue
+    FROM DiscrepancyBase
+    GROUP BY browser_segment
+)
+SELECT * FROM BrowserAnalysis 
+UNION ALL
+SELECT
+    'TOTAL',
+    SUM(total_server_transactions),
+    SUM(blocked_client_events),
+    ROUND((SUM(blocked_client_events) * 100.0) /SUM(total_server_transactions),2),
+    ROUND(SUM(untracked_revenue), 2)
+FROM BrowserAnalysis
+ORDER BY untracked_revenue DESC;</pre>
+      </details>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/the-ghost-transactions-tracking-query-1024x545.png" alt="The Ghost Transactions Tracking Query" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">Business Impact</h2>
+      
+      <p>When the reconciliation query completed, the discrepancy was impossible to ignore. Across the dataset, <strong>35.99% of completed purchases were recorded on the backend but never reached the analytics layer.</strong></p>
+
+      <!-- ENHANCED KPI COMPARISON WIDGET -->
+      <div class="glass-card rounded-2xl border border-slate-700 shadow-2xl mt-12 mb-16 overflow-hidden">
+        
+        <!-- Header -->
+        <div class="px-8 py-6 border-b border-slate-800 bg-gradient-to-r from-blue-900/20 to-rose-900/10">
+          <div class="inline-block px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold tracking-wider uppercase rounded-full mb-3">
+            Analytics Engineering Simulation
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-2">The 35.99% Attribution Gap</h3>
+          <p class="text-sm text-slate-400 max-w-2xl m-0">Comparative analysis between backend server-side transaction logs and client-side analytics events across 50,000 ecommerce purchases.</p>
+        </div>
+
+        <!-- KPI Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
+          
+          <!-- Backend Revenue -->
+          <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
+            <div class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3">Total Backend Revenue</div>
+            <div class="flex items-end justify-between flex-wrap gap-2 mb-3">
+              <div class="text-3xl font-bold text-white leading-none">$63.6M</div>
+              <div class="bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap">↗ +$23.0M</div>
+            </div>
+            <div class="flex justify-between items-center text-xs mt-4 pt-4 border-t border-slate-700/50">
+              <span class="text-slate-400">50,000 Server Txns</span>
+              <span class="text-emerald-400 font-bold">100% Captured</span>
+            </div>
+          </div>
+
+          <!-- Analytics Revenue -->
+          <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-slate-500"></div>
+            <div class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3">Analytics Platform Revenue</div>
+            <div class="flex items-end justify-between flex-wrap gap-2 mb-3">
+              <div class="text-3xl font-bold text-white leading-none">$40.6M</div>
+              <div class="bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap">↘ -$23.0M</div>
+            </div>
+            <div class="flex justify-between items-center text-xs mt-4 pt-4 border-t border-slate-700/50">
+              <span class="text-slate-400">32,007 Tracked Txns</span>
+              <span class="text-slate-300 font-bold">64.01% Attributed</span>
+            </div>
+          </div>
+
+          <!-- Ghost Revenue -->
+          <div class="bg-rose-900/10 border border-rose-500/20 rounded-xl p-6 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-rose-500"></div>
+            <div class="text-xs uppercase tracking-wider text-rose-400 font-bold mb-3">Ghost Revenue (Lost)</div>
+            <div class="flex items-end justify-between flex-wrap gap-2 mb-3">
+              <div class="text-3xl font-bold text-rose-500 leading-none">$23.0M</div>
+              <div class="bg-rose-500/10 text-rose-400 px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap">17,993 Lost Events</div>
+            </div>
+            <div class="flex justify-between items-center text-xs mt-4 pt-4 border-t border-rose-500/20">
+              <span class="text-rose-400">Browser Suppression</span>
+              <span class="text-rose-400 font-bold">35.99% Gap</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Insight Bar -->
+        <div class="mx-8 mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-sm text-slate-300 leading-relaxed">
+          <strong class="text-white">Key Finding:</strong> Brave users generated the highest analytics suppression rate at <span class="text-rose-400 font-bold">89.93%</span>, while Safari produced the second-largest unattributed revenue impact due to Intelligent Tracking Prevention (ITP).
+        </div>
+
+        <!-- Chart Section -->
+        <div class="px-8 pb-8">
+          <div class="bg-slate-900/50 p-6 rounded-xl border border-slate-700">
+            <div class="flex justify-between items-center flex-wrap gap-2 mb-6">
+              <div class="text-sm font-bold text-white">Transaction Status by Browser Segment</div>
+              <div class="text-xs text-slate-400">Server Transactions vs Client Events</div>
+            </div>
+            <div class="relative h-[300px] w-full">
+              <canvas id="ghostChartIsolated"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END KPI WIDGET -->
+
+      <!-- GHOST TRANSACTIONS V2.1 - 3D INTERACTIVE CARDS -->
+      <style>
+          .ghost-grid {
+              display: grid;
+              grid-template-columns: 1fr;
+              gap: 24px;
+              position: relative;
+              margin: 40px 0;
+          }
+          @media (min-width: 768px) {
+              .ghost-grid { grid-template-columns: repeat(2, 1fr); }
+          }
+          .ghost-card-wrapper {
+              position: relative;
+              aspect-ratio: 16 / 10;
+              min-height: 250px;
+              perspective: 1500px;
+              cursor: pointer;
+          }
+          .ghost-card-inner {
+              position: absolute;
+              inset: 0;
+              transform-style: preserve-3d;
+              transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+              border-radius: 20px;
+          }
+          /* Mouse Spotlight Effect */
+          .ghost-card-wrapper::before {
+              content: "";
+              position: absolute;
+              inset: -2px;
+              border-radius: 22px;
+              background: radial-gradient(
+                  800px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), 
+                  rgba(34, 211, 238, 0.15), 
+                  transparent 40%
+              );
+              opacity: 0;
+              transition: opacity 0.5s;
+              z-index: -1;
+          }
+          .ghost-grid:hover .ghost-card-wrapper::before { opacity: 1; }
+          .ghost-card-wrapper.is-flipped .ghost-card-inner {
+              transform: rotateY(180deg) scale(0.98);
+          }
+          .ghost-face {
+              position: absolute;
+              inset: 0;
+              backface-visibility: hidden;
+              border-radius: 20px;
+              padding: 32px;
+              display: flex;
+              flex-direction: column;
+              background: rgba(15, 23, 42, 0.7);
+              border: 1px solid rgba(255, 255, 255, 0.05);
+              backdrop-filter: blur(12px);
+              -webkit-backdrop-filter: blur(12px);
+              box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+              overflow: hidden;
+          }
+          .ghost-face.front {
+              justify-content: space-between;
+              background: linear-gradient(145deg, rgba(15,23,42,1) 0%, rgba(11,17,32,1) 100%);
+          }
+          .ghost-face.back {
+              transform: rotateY(180deg);
+              background: linear-gradient(145deg, rgba(11,17,32,1) 0%, rgba(2,6,23,1) 100%);
+              justify-content: center;
+          }
+          .ghost-tag {
+              font-size: 0.75rem;
+              font-weight: 700;
+              letter-spacing: 0.1em;
+              text-transform: uppercase;
+              color: #22d3ee; 
+              display: flex;
+              align-items: center;
+              gap: 8px;
+          }
+          .ghost-title {
+              font-size: 1.75rem;
+              font-weight: 800;
+              line-height: 1.15;
+              letter-spacing: -0.02em;
+              margin: auto 0;
+              text-transform: uppercase;
+          }
+          .card-1 .ghost-title { color: #f43f5e; } /* Rose */
+          .card-2 .ghost-title { color: #eab308; } /* Amber */
+          .card-3 .ghost-title { color: #10b981; } /* Emerald */
+          .card-4 .ghost-title { color: #f97316; } /* Orange */
+          .ghost-footer {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-end;
+          }
+          .ghost-icon {
+              width: 24px;
+              height: 24px;
+              stroke: #64748b;
+              transition: transform 0.3s ease, stroke 0.3s ease;
+          }
+          .ghost-card-wrapper:hover .ghost-icon {
+              transform: translateX(4px);
+              stroke: #f8fafc;
+          }
+          .ghost-back-title {
+              font-size: 0.85rem;
+              color: #64748b;
+              text-transform: uppercase;
+              letter-spacing: 0.08em;
+              margin-bottom: 12px;
+              font-weight: 700;
+          }
+          .ghost-back-desc {
+              font-size: 1rem;
+              line-height: 1.6;
+              color: #cbd5e1;
+          }
+      </style>
+
+      <div class="ghost-grid" id="ghostInteractiveGrid">
+          
+          <!-- CARD 1 -->
+          <div class="ghost-card-wrapper card-1" onclick="this.classList.toggle('is-flipped')">
+              <div class="ghost-card-inner">
+                  <div class="ghost-face front">
+                      <div class="ghost-tag">Operational Failure</div>
+                      <h2 class="ghost-title">Artificially<br>Inflated CAC</h2>
+                      <div class="ghost-footer">
+                          <span style="color: transparent;">.</span>
+                          <svg class="ghost-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                      </div>
+                  </div>
+                  <div class="ghost-face back">
+                      <div class="ghost-back-title">Operational Failure</div>
+                      <div class="ghost-back-desc">When 36% of conversions are invisible, customer acquisition costs appear substantially higher than reality. Teams begin optimizing against distorted efficiency metrics instead of actual business performance.</div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- CARD 2 -->
+          <div class="ghost-card-wrapper card-2" onclick="this.classList.toggle('is-flipped')">
+              <div class="ghost-card-inner">
+                  <div class="ghost-face front">
+                      <div class="ghost-tag">Algorithm Failure</div>
+                      <h2 class="ghost-title">Optimization<br>Degradation</h2>
+                      <div class="ghost-footer">
+                          <span style="color: transparent;">.</span>
+                          <svg class="ghost-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                      </div>
+                  </div>
+                  <div class="ghost-face back">
+                      <div class="ghost-back-title">Algorithm Failure</div>
+                      <div class="ghost-back-desc">Once conversion signals fall below learning thresholds, ad platform bid models become unstable. CPM efficiency deteriorates, and acquisition costs inflate non-linearly.</div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- CARD 3 -->
+          <div class="ghost-card-wrapper card-3" onclick="this.classList.toggle('is-flipped')">
+              <div class="ghost-card-inner">
+                  <div class="ghost-face front">
+                      <div class="ghost-tag">Strategy Failure</div>
+                      <h2 class="ghost-title">False Negative<br>Decisions</h2>
+                      <div class="ghost-footer">
+                          <span style="color: transparent;">.</span>
+                          <svg class="ghost-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                      </div>
+                  </div>
+                  <div class="ghost-face back">
+                      <div class="ghost-back-title">Strategy Failure</div>
+                      <div class="ghost-back-desc">High-intent users are disproportionately privacy-conscious. The most valuable customers never appear in attribution dashboards, causing growth teams to pause revenue-generating campaigns.</div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- CARD 4 -->
+          <div class="ghost-card-wrapper card-4" onclick="this.classList.toggle('is-flipped')">
+              <div class="ghost-card-inner">
+                  <div class="ghost-face front">
+                      <div class="ghost-tag">Governance Failure</div>
+                      <h2 class="ghost-title">Reporting<br>Misalignment</h2>
+                      <div class="ghost-footer">
+                          <span style="color: transparent;">.</span>
+                          <svg class="ghost-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                      </div>
+                  </div>
+                  <div class="ghost-face back">
+                      <div class="ghost-back-title">Governance Failure</div>
+                      <div class="ghost-back-desc">When backend revenue materially diverges from attribution platforms, finance, growth, and marketing teams begin operating from conflicting financial realities.</div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+
+      <script>
+          // Javascript for dynamic mouse tracking spotlight effect on cards
+          document.getElementById("ghostInteractiveGrid").onmousemove = e => {
+              for(const card of document.getElementsByClassName("ghost-card-wrapper")) {
+                  const rect = card.getBoundingClientRect(),
+                        x = e.clientX - rect.left,
+                        y = e.clientY - rect.top;
+
+                  card.style.setProperty("--mouse-x", `${x}px`);
+                  card.style.setProperty("--mouse-y", `${y}px`);
+              };
+          }
+      </script>
+      <!-- END 3D INTERACTIVE CARDS -->
+
+      <p>A growing percentage of attribution loss is not due to weaker campaign performance. It is a direct result of browser-enforced privacy restrictions executing <em>after</em> a successful checkout.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">What Most Analytics Teams Miss</h2>
+      
+      <p>Most analysts attempt to identify browser-level attribution loss solely using the <strong><code class="inline-code">user_agent</code></strong> field.</p>
+      
+      <p>The problem is that privacy-focused browsers like Brave intentionally spoof their User-Agent strings to appear identical to standard Chrome traffic.</p>
+      
+      <p>Without parsing <strong>deeper HTTP Client Hint headers</strong> such as <strong><code class="inline-code">sec-ch-ua</code></strong>, attribution loss becomes incorrectly categorized as generic Chrome suppression.</p>
+      
+      <p>This creates misleading browser segmentation, hides the true scale of privacy-related data loss, and causes teams to underestimate the extent to which modern browsers interfere with client-side measurement infrastructure.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">So What?</h2>
+      
+      <p>The era of relying exclusively on browser-side pixels is ending. Modern attribution systems must evolve toward <strong>server-side measurement architectures</strong> that can withstand browser privacy enforcement without violating user consent frameworks.</p>
+      
+      <p>To stop attribution decay, e-commerce data stacks require a shift to first-party event collection pipelines and direct server-to-server payload delivery:</p>
+
+      <!-- SERVER-SIDE ARCHITECTURE DIAGRAM -->
+      <div class="glass-card rounded-2xl border border-slate-700 shadow-2xl mt-12 mb-16 overflow-hidden">
+        
+        <!-- Header -->
+        <div class="px-8 py-8 border-b border-slate-800 text-center bg-slate-800/30">
+          <div class="inline-block px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold tracking-widest uppercase rounded-full mb-4">
+            Infrastructure Solution
+          </div>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Server-Side Measurement Architecture</h3>
+          <p class="text-slate-400 text-sm md:text-base max-w-2xl mx-auto m-0">Bypassing client-side volatility by routing e-commerce payloads through a secure, first-party cloud environment.</p>
+        </div>
+
+        <!-- Flow -->
+        <div class="p-8 relative">
+          
+          <!-- Connecting Line -->
+          <div class="hidden md:block absolute left-[54px] top-12 bottom-12 w-0.5 bg-slate-700 z-0"></div>
+
+          <!-- Step 1 -->
+          <div class="flex flex-col md:flex-row items-start mb-10 relative z-10">
+            <div class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-600 flex items-center justify-center font-bold text-slate-400 md:mr-6 mb-4 md:mb-0 shrink-0 shadow-lg">1</div>
+            <div class="flex-grow bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+              <h4 class="text-lg font-bold text-white mb-2">The Data Layer (Client-Side)</h4>
+              <p class="text-slate-400 text-sm leading-relaxed mb-4">User triggers an event (e.g., Purchase). Instead of broadcasting to 3rd-party ad networks, the web container pushes a single payload to a secure first-party endpoint.</p>
+              <div class="inline-block font-mono text-xs text-rose-400 bg-rose-900/10 border border-rose-500/20 px-3 py-2 rounded-lg">
+                Blocked by Brave/ITP if sent directly to google-analytics.com
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="flex flex-col md:flex-row items-start mb-10 relative z-10">
+            <div class="w-12 h-12 rounded-xl bg-blue-600 shadow-[0_0_20px_rgba(37,99,235,0.4)] flex items-center justify-center font-bold text-white md:mr-6 mb-4 md:mb-0 shrink-0">2</div>
+            <div class="flex-grow bg-blue-900/10 border border-blue-500/20 rounded-xl p-6">
+              <h4 class="text-lg font-bold text-blue-400 mb-2">First-Party Subdomain Endpoint</h4>
+              <p class="text-slate-400 text-sm leading-relaxed m-0">Payload is sent to <code class="bg-blue-500/10 text-blue-300 px-1.5 py-0.5 rounded border border-blue-500/20">metrics.yourbrand.com</code>. This bypasses ad-blocker blacklists because it is treated as essential first-party website infrastructure.</p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="flex flex-col md:flex-row items-start mb-10 relative z-10">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)] flex items-center justify-center font-bold text-white md:mr-6 mb-4 md:mb-0 shrink-0">3</div>
+            <div class="flex-grow bg-emerald-900/10 border border-emerald-500/20 rounded-xl p-6">
+              <h4 class="text-lg font-bold text-emerald-400 mb-2">Server-Side GTM (Cloud Environment)</h4>
+              <p class="text-slate-400 text-sm leading-relaxed m-0">The cloud server receives the raw payload, cleans it, enriches it with backend data (if applicable), and securely routes it. The user's browser IP address is completely shielded from third parties.</p>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="flex flex-col md:flex-row items-start relative z-10">
+            <div class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-600 flex items-center justify-center font-bold text-slate-400 md:mr-6 mb-4 md:mb-0 shrink-0 shadow-lg">4</div>
+            <div class="flex-grow bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+              <h4 class="text-lg font-bold text-white mb-2">Destination APIs & Data Warehouse</h4>
+              <p class="text-slate-400 text-sm leading-relaxed mb-4">The server securely dispatches the data directly to vendor endpoints via API, immune to browser interruptions.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs font-semibold bg-slate-900 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700">Meta Conversions API (CAPI)</span>
+                <span class="text-xs font-semibold bg-slate-900 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700">GA4 Measurement Protocol</span>
+                <span class="text-xs font-semibold bg-slate-900 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700">Google BigQuery</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- END ARCHITECTURE DIAGRAM -->
+
+      <p>By moving tag execution off the browser via <strong>Server-Side Google Tag Manager</strong> (sGTM) and pushing data through the <strong>Conversion APIs</strong> (Meta CAPI), you stop relying on the user's browser as the source of truth.</p>
+      
+      <p>The goal for growth teams is no longer perfect attribution. <strong>The goal is attribution resilience.</strong></p>
+      
+      <p>When your dashboards drift too far from your backend financial reality, you stop optimizing campaigns and start optimizing measurement errors.</p>
+      
+      <p>If your analytics platform reports one number and your database reports another, you have ghosts in your data.</p>
+      
+      <p class="text-xl font-bold text-white mt-8 mb-10 border-l-4 border-accentCyan pl-4">It is time to build a system that hunts them down.</p>
+
+    </div>
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="max-w-5xl mx-auto px-6 w-full mb-20">
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-3xl p-10 md:p-14 text-center shadow-2xl relative overflow-hidden">
+      <!-- Decorative glow -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-accentCyan/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+      
+      <div class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 relative z-10">Work With Me</div>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Stop optimizing for measurement errors.</h2>
+      <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 relative z-10">
+        If your tracking is bleeding data, your SQL pipelines are a mess, or your dashboards don't match your bank account, let's fix it. I build clean, resilient measurement architecture so you can actually trust your numbers.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+        <a href="contact.html" class="px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+          Let's Talk
+        </a>
+        <a href="portfolio.html" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors">
+          View More Projects
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // 1. Chart.js Initialization
+      const canvas = document.getElementById('ghostChartIsolated');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        Chart.defaults.color = '#94a3b8'; // text-slate-400
+        Chart.defaults.font.family = "'Poppins', 'Inter', sans-serif";
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Brave', 'Safari', 'Chrome', 'Firefox'],
+            datasets: [
+              {
+                label: 'Successfully Tracked',
+                data: [1001, 5115, 18755, 7136],
+                backgroundColor: '#3b82f6', // blue-500
+                borderRadius: 4,
+                borderSkipped: false,
+                stack: 'combined'
+              },
+              {
+                label: 'Ghost (Untracked)',
+                data: [8941, 7633, 1050, 369],
+                backgroundColor: '#f43f5e', // rose-500
+                borderRadius: 4,
+                borderSkipped: false,
+                stack: 'combined'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { weight: '600', size: 13 } }
+              },
+              tooltip: {
+                backgroundColor: '#0f172a',
+                titleColor: '#f8fafc',
+                bodyColor: '#cbd5e1',
+                borderColor: '#334155',
+                borderWidth: 1,
+                padding: 12,
+                callbacks: {
+                  label: function(context) {
+                    let label = context.dataset.label || '';
+                    if (label) { label += ': '; }
+                    if (context.parsed.y !== null) { label += context.parsed.y.toLocaleString(); }
+                    return label;
+                  },
+                  footer: function(items) {
+                    const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
+                    return 'Total Transactions: ' + total.toLocaleString();
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                stacked: true,
+                grid: { display: false, drawBorder: false },
+                ticks: { color: '#cbd5e1', font: { size: 12, weight: '600' } }
+              },
+              y: {
+                stacked: true,
+                grid: { color: '#334155', drawBorder: false },
+                ticks: { color: '#94a3b8', callback: function(value) { return value.toLocaleString(); } }
+              }
+            }
+          }
+        });
+      }
+
+      // 2. Custom SQL Syntax Highlighter (Dark Theme Optimized)
+      (function highlightMultipleSQL() {
+        const codeElements = document.querySelectorAll('.sql-code-block');
+        const keywords = ['WITH', 'SELECT', 'FROM', 'LEFT JOIN', 'JOIN', 'ON', 'AND', 'GROUP BY', 'ORDER BY', 'DESC', 'ASC', 'WHERE', 'AS', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END', 'UNION ALL'];
+        const functions = ['ROUND', 'SUM', 'NULLIF', 'CONCAT', 'COUNT', 'DATE_FORMAT', 'AVG'];
+
+        codeElements.forEach(codeElement => {
+          let code = codeElement.innerHTML;
+          // Highlight Strings
+          code = code.replace(/('[^']*')/g, `<span class="sql-str">$1</span>`);
+          // Highlight Numbers
+          code = code.replace(/\b(\d+(\.\d+)?)\b/g, `<span class="sql-num">$1</span>`);
+          // Highlight Keywords
+          keywords.forEach(kw => {
+            const reg = new RegExp('\\b' + kw + '\\b(?=(?:[^\']*\'[^\']*\')*[^\']*$)', 'gi');
+            code = code.replace(reg, `<span class="sql-kw">${kw}</span>`);
+          });
+          // Highlight Functions
+          functions.forEach(fn => {
+            const reg = new RegExp('\\b' + fn + '\\b(?=(?:[^\']*\'[^\']*\')*[^\']*$)', 'gi');
+            code = code.replace(reg, `<span class="sql-fn">${fn}</span>`);
+          });
+          codeElement.innerHTML = code;
+        });
+      })();
+    });
+  </script>
+</body>
+</html>
