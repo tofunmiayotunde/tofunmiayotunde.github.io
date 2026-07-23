@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All Projects & Case Studies - Tofunmi Ayotunde</title>
+  <title>Portfolio Archive - Tofunmi Ayotunde</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,6 @@
   </script>
 
   <style>
-    /* Subtle glassmorphism effect for the form card */
     .glass-card {
       background: rgba(15, 23, 42, 0.4);
       backdrop-filter: blur(12px);
@@ -39,7 +38,12 @@
   </style>
 </head>
 
-<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark">
+<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark relative">
+
+  <!-- Background glows -->
+  <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px]"></div>
+  </div>
 
   <div class="max-w-7xl mx-auto px-6 pt-16 pb-20 w-full flex-grow">
     
@@ -49,16 +53,18 @@
       Back to Home
     </a>
 
-    <!-- Page Header -->
+    <!-- Header -->
     <div class="mb-16">
-      <span class="text-purple-400 font-bold tracking-widest uppercase text-sm mb-4 block">Archive</span>
-      <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6">All Case Studies</h1>
-      <p class="text-xl text-slate-400 max-w-2xl">An evolving library of data architecture implementations, ETL automations, and reporting insights.</p>
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/30 border border-cyan-800 rounded-full text-xs font-bold text-accentCyan mb-4 uppercase tracking-wider">
+        Portfolio Archive
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6">All Case Studies</h1>
+      <p class="text-lg text-slate-400 max-w-2xl">A complete log of my technical audits, data pipelines, and marketing analytics engineering projects.</p>
     </div>
 
-    <!-- We use a 3-column grid here to fit more items on the screen since you will have 30+ -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      
+    <!-- Case Studies Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+
       <!-- Case Study 1: GA4 / GTM -->
       <div class="glass-card rounded-3xl p-8 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300">
         <div class="flex flex-wrap gap-2 mb-6">
@@ -80,7 +86,7 @@
           <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">ETL</span>
         </div>
         <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Power Query Automated ETL Pipeline</h3>
-        <p class="text-slate-400 mb-8 flex-grow text-sm">Engineered a fully automated, refreshable Power Query pipeline using custom M Code to permanently eliminate manual Excel cleanup.</p>
+        <p class="text-slate-400 mb-8 flex-grow text-sm">Engineered a fully automated, refreshable Power Query pipeline using custom M Code to eliminate manual Excel cleanup.</p>
         
         <a href="power-query-ecommerce-cleanup.html" class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto">
           Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -115,20 +121,57 @@
         </a>
       </div>
 
-      <!-- Case Study 5 (Placeholder for your 5th project!) -->
+      <!-- Case Study 5: Ghost Transactions -->
       <div class="glass-card rounded-3xl p-8 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300">
         <div class="flex flex-wrap gap-2 mb-6">
-          <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Power BI</span>
-          <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Dashboard</span>
+          <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Data Reconciliation</span>
+          <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">sGTM</span>
         </div>
-        <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Executive KPI Dashboard</h3>
-        <p class="text-slate-400 mb-8 flex-grow text-sm">Designed an interactive Power BI dashboard tracking real-time ad spend, lead velocity, and pipeline revenue.</p>
+        <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Ghost Transactions & Attribution Decay</h3>
+        <p class="text-slate-400 mb-8 flex-grow text-sm">Reconciled 50,000 backend logs vs front-end events to expose a 36% data loss from ad blockers, solved via server-side architecture.</p>
+        
+        <a href="ad-blocker-ghost-transactions.html" class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto">
+          Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </a>
+      </div>
+
+      <!-- Case Study 6 (Placeholder for next project!) -->
+      <div class="glass-card rounded-3xl p-8 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300">
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Python</span>
+          <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Data Alerting</span>
+        </div>
+        <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Automated Anomaly Detection</h3>
+        <p class="text-slate-400 mb-8 flex-grow text-sm">A Python script built to detect, isolate, and alert stakeholders of click fraud in Google Ads raw data.</p>
         
         <a href="#" class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-all mt-auto">
           Coming Soon
         </a>
       </div>
 
+    </div>
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="max-w-5xl mx-auto px-6 w-full mb-20">
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-3xl p-10 md:p-14 text-center shadow-2xl relative overflow-hidden">
+      <!-- Decorative glow -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-accentCyan/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+      
+      <div class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 relative z-10">Next Step</div>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Need help with tracking, reporting, or data architecture?</h2>
+      <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 relative z-10">
+        If you need support with GA4/sGTM setup, Power Query automation, SQL-based attribution, or BI dashboards, let's talk.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+        <a href="contact.html" class="px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+          Contact Me
+        </a>
+        <a href="index.html" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors">
+          Back to Home
+        </a>
+      </div>
     </div>
   </div>
 
