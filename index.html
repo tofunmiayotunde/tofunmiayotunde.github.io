@@ -4,6 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tofunmi Ayotunde | Marketing Data Analyst</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Tofunmi Ayotunde | Marketing Data & Growth Analyst. Specializing in GA4, SQL pipelines, server-side GTM, and multi-touch attribution architectures.">
+  <meta name="keywords" content="Marketing Data Analyst, Growth Analyst, RevOps, Data Engineering, GA4, Server-side GTM, SQL, BigQuery, Power BI, Marketing Attribution">
+  <meta name="author" content="Tofunmi Ayotunde">
+
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:title" content="Tofunmi Ayotunde | Marketing Data Analyst">
+  <meta property="og:description" content="Architecting Truth in Marketing Data. View my case studies on attribution, SQL pipelines, and tracking architecture.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tofunmiayotunde.github.io/">
+  
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Tofunmi Ayotunde",
+    "jobTitle": "Marketing Data Analyst",
+    "url": "https://tofunmiayotunde.github.io/",
+    "sameAs": [
+      "https://linkedin.com/in/tofunmi-ayotunde-860253356/"
+    ],
+    "knowsAbout": [
+      "Google Analytics 4", 
+      "Google Tag Manager",
+      "SQL", 
+      "Power Query", 
+      "Data Engineering", 
+      "Marketing Attribution", 
+      "Server-side GTM,"
+      "Snowflake"
+    ]
+  }
+  </script>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,6 +102,18 @@
       <a href="#services" class="hover:text-accentCyan transition-colors">Services</a>
       <a href="#case-studies" class="hover:text-accentCyan transition-colors">Case Studies</a>
       <a href="#tools" class="hover:text-accentCyan transition-colors">Tech Stack</a>
+      
+      <!-- LinkedIn Icon -->
+      <a href="https://linkedin.com/in/tofunmi-ayotunde-860253356/" target="_blank" rel="noopener noreferrer" class="hover:text-accentCyan transition-colors flex items-center gap-1" title="LinkedIn">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+      </a>
+      
+      <!-- Resume Download -->
+      <a href="Tofunmi_Ayotunde_CV.pdf" target="_blank" class="flex items-center gap-1 hover:text-accentCyan transition-colors">
+        Resume 
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+      </a>
+      
       <a href="contact.html" class="px-5 py-2.5 rounded-lg border border-slate-700 hover:border-accentCyan hover:text-white transition-all">Contact</a>
     </div>
   </nav>
@@ -96,6 +142,11 @@
         </div>
         
         <div class="flex flex-wrap gap-2">
+          <!-- Location Badge Added Here -->
+          <span class="px-4 py-2 bg-slate-800/80 border border-slate-700 rounded-full text-sm font-semibold text-slate-300 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            Lagos, NG (Open to Remote)
+          </span>
           <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Server-Side GTM</span>
           <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Data Cleaning & ETL</span>
           <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">BigQuery & SQL</span>
@@ -145,7 +196,6 @@
 
             function typeWriter() {
               if (lineIndex >= terminalLines.length) {
-                // Wait 4 seconds, clear, and loop
                 setTimeout(() => {
                   contentDiv.innerHTML = '';
                   lineIndex = 0;
@@ -164,18 +214,15 @@
                 if (charIndex < lineData.text.length) {
                   p.innerHTML += lineData.text.charAt(charIndex);
                   charIndex++;
-                  screenDiv.scrollTop = screenDiv.scrollHeight; // Auto-scroll to bottom
-                  // Randomize typing speed for realism
+                  screenDiv.scrollTop = screenDiv.scrollHeight;
                   setTimeout(typeChar, Math.random() * 30 + 15);
                 } else {
                   lineIndex++;
-                  // Pause between lines
                   setTimeout(typeWriter, 600);
                 }
               }
               typeChar();
             }
-            // Start the loop
             setTimeout(typeWriter, 1000);
           });
         </script>
@@ -228,79 +275,31 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
         
-        <!-- Case Study 1: GA4 / GTM -->
+        <!-- Case Study 1: Ghost Transactions -->
         <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300 relative z-10">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-accentCyan/5 rounded-full blur-2xl -z-10"></div>
+          <div class="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-2xl -z-10"></div>
           <div class="flex gap-2 mb-6">
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">GA4</span>
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">GTM</span>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Data Reconciliation</span>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">sGTM</span>
           </div>
-          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">GA4 & GTM Event Architecture</h3>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Ghost Transactions & Attribution Decay</h3>
           <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
-            <p><strong class="text-slate-200">Problem:</strong> Default pageview tracking left high-value lead generation actions and funnel drop-offs entirely invisible.</p>
-            <p><strong class="text-slate-200">Solution:</strong> Engineered a custom GTM pipeline with strict event taxonomy to capture precise lead-gen interactions and abandonment.</p>
+            <p><strong class="text-slate-200">Problem:</strong> Client-side tracking is bleeding data due to ad blockers, skewing executive dashboards.</p>
+            <p><strong class="text-slate-200">Solution:</strong> Reconciled 50,000 backend server logs against front-end events to expose a 36% data loss, solved via server-side architecture.</p>
           </div>
           
           <ul class="space-y-2 mb-8 text-slate-400">
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Strict Event Taxonomy</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Precision GTM Triggers</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Custom Parameter Enrichment</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Server-Side Architecture</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Client Hints Parsing</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Database Reconciliation</li>
           </ul>
 
-          <a href="ga4-gtm-custom-event-tracking.html" class="relative z-20 inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
+          <a href="ad-blocker-ghost-transactions.html" class="relative z-20 inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
             Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
           </a>
         </div>
 
-        <!-- Case Study 2: Power Query -->
-        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300 relative z-10">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl -z-10"></div>
-          <div class="flex gap-2 mb-6">
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Power Query</span>
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">ETL</span>
-          </div>
-          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Power Query Automated ETL Pipeline</h3>
-          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
-            <p><strong class="text-slate-200">Problem:</strong> Fragmented ad-platform datasets contained overlapping channels, conflicting date structures, and unusable financial formats.</p>
-            <p><strong class="text-slate-200">Solution:</strong> Engineered a fully automated, refreshable Power Query pipeline using custom M Code to permanently eliminate manual Excel cleanup.</p>
-          </div>
-          
-          <ul class="space-y-2 mb-8 text-slate-400">
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Custom M Code Programming</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Automated ETL Workflows</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Power BI Data Modeling</li>
-          </ul>
-
-          <a href="power-query-ecommerce-cleanup.html" class="relative z-20 inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
-            Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-          </a>
-        </div>
-
-        <!-- Case Study 3: SQL Business Questions -->
-        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300 relative z-10">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-2xl -z-10"></div>
-          <div class="flex gap-2 mb-6">
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">SQL</span>
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Modeling</span>
-          </div>
-          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">SQL Business Questions Analysis</h3>
-          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
-            <p><strong class="text-slate-200">Problem:</strong> Ad platforms claimed high returns, but isolated data silos hid the reality of shrinking actual profit margins.</p>
-            <p><strong class="text-slate-200">Solution:</strong> Architected a normalized SQL database to eliminate manual spreadsheet merges and calculate true financial ROAS.</p>
-          </div>
-          
-          <ul class="space-y-2 mb-8 text-slate-400">
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Relational Data Modeling</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Cohort Analysis & LTV</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> ROAS Engineering</li>
-          </ul>
-
-          <a href="sql-business-insights.html" class="relative z-20 inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
-            Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-          </a>
-        </div>
-
-        <!-- Case Study 4: Last-Click Attribution -->
+        <!-- Case Study 2: Last-Click Attribution -->
         <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300 relative z-10">
           <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -z-10"></div>
           <div class="flex gap-2 mb-6">
@@ -323,12 +322,60 @@
             Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
           </a>
         </div>
+
+        <!-- Case Study 3: Power Query -->
+        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300 relative z-10">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl -z-10"></div>
+          <div class="flex gap-2 mb-6">
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Power Query</span>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">ETL</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Power Query Automated ETL Pipeline</h3>
+          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
+            <p><strong class="text-slate-200">Problem:</strong> Fragmented ad-platform datasets contained overlapping channels, conflicting date structures, and unusable financial formats.</p>
+            <p><strong class="text-slate-200">Solution:</strong> Engineered a fully automated, refreshable Power Query pipeline using custom M Code to permanently eliminate manual Excel cleanup.</p>
+          </div>
+          
+          <ul class="space-y-2 mb-8 text-slate-400">
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Custom M Code Programming</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Automated ETL Workflows</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Clean Data Modeling</li>
+          </ul>
+
+          <a href="power-query-ecommerce-cleanup.html" class="relative z-20 inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
+            Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </a>
+        </div>
+
+        <!-- Case Study 4: SQL Business Questions -->
+        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300 relative z-10">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-2xl -z-10"></div>
+          <div class="flex gap-2 mb-6">
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">SQL</span>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Modeling</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">SQL Business Questions Analysis</h3>
+          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
+            <p><strong class="text-slate-200">Problem:</strong> Ad platforms claimed high returns, but isolated data silos hid the reality of shrinking actual profit margins.</p>
+            <p><strong class="text-slate-200">Solution:</strong> Architected a normalized SQL database to eliminate manual spreadsheet merges and calculate true financial ROAS.</p>
+          </div>
+          
+          <ul class="space-y-2 mb-8 text-slate-400">
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Relational Data Modeling</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Cohort Analysis & LTV</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> ROAS Engineering</li>
+          </ul>
+
+          <a href="sql-business-insights.html" class="relative z-20 inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
+            Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </a>
+        </div>
       </div>
 
       <!-- View All Portfolio Button -->
       <div class="text-center relative z-20">
-        <a href="portfolio.html" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors shadow-lg cursor-pointer">
-          View Full Portfolio Library (30+ Projects)
+        <a href="portfolio.html" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
+          View Full Portfolio Library
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
         </a>
       </div>
@@ -419,7 +466,7 @@
       <div class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 relative z-10">Get in Touch</div>
       <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Need help with tracking, data pipelines, or marketing analytics?</h2>
       <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 relative z-10">
-        If you need support with GA4/GTM setup, data cleaning, Power BI dashboards, or SQL-based analysis, send me a message.
+        If you need support with GA4/GTM setup, data cleaning, Power BI modeling, or SQL-based analysis, send me a message.
       </p>
 
       <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-20">
