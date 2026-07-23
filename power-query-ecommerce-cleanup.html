@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Power Query ETL Pipeline - Tofunmi Ayotunde</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins', 'sans-serif'] },
+          colors: { 
+            bgDark: '#0b1120', 
+            accentCyan: '#22d3ee' 
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Glassmorphism */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Code styling in text */
+    code {
+      background-color: rgba(30, 41, 59, 1);
+      color: #38bdf8;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+    }
+  </style>
+</head>
+
+<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark">
+
+  <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 w-full flex-grow">
+    
+    <!-- Back Navigation -->
+    <a href="portfolio.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-10 font-semibold group">
+      <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Back to Portfolio
+    </a>
+
+    <!-- Hero Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start mb-16">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/30 border border-cyan-800 rounded-full text-xs font-bold text-accentCyan mb-6 uppercase tracking-wider">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l7 4v10l-7 4-7-4V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+          Case Study
+        </div>
+        
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+          Power Query Automated ETL Pipeline
+        </h1>
+        
+        <p class="text-lg md:text-xl text-slate-400 leading-relaxed mb-8">
+          This project transformed a highly fragmented, messy dataset from multiple ad platforms into a standardized, fully automated data pipeline for the De-Estybee Ecom Store.
+        </p>
+        
+        <div class="flex flex-wrap gap-2">
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Power BI</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Power Query</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">M Code</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Data Automation</span>
+        </div>
+      </div>
+
+      <!-- Quick Snapshot Sidebar -->
+      <div class="glass-card p-8 rounded-3xl border border-slate-700/50 shadow-2xl">
+        <div class="text-xs font-bold tracking-[0.1em] uppercase text-slate-500 mb-6">Quick Snapshot</div>
+        
+        <div class="space-y-6">
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Client</div>
+            <div class="text-lg font-semibold text-white">De-Estybee Ecom Store</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Main Goal</div>
+            <div class="text-lg font-semibold text-white">Build a standardized, automated reporting workflow.</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Output</div>
+            <div class="text-lg font-semibold text-white">Refreshable pipeline & executive reporting tables.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          The Problem
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">Fragmented dataset with overlapping channels, formatting errors, and conflicting date structures.</div>
+      </div>
+      
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Tech Stack
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">Power BI, Power Query, and Custom M Code programming.</div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          The Output
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">A fully automated, refreshable data pipeline and dynamic executive reporting tables.</div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          Business ROI
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">Faster reporting, zero duplicate counting, and clear visibility into profitable ad scaling.</div>
+      </div>
+    </div>
+
+    <!-- Before / After Section -->
+    <div class="mb-24">
+      <div class="text-center mb-10">
+        <div class="text-sm font-bold tracking-widest uppercase text-purple-400 mb-2">Transformation</div>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-white">The Workflow Evolution</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Before -->
+        <div class="bg-red-900/10 border border-red-900/50 rounded-3xl p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-red-900/50 text-red-400 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-red-200">Before</h3>
+          </div>
+          <ul class="space-y-4 text-slate-300">
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Traffic sources were split across 12 overlapping, messy variations.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Date columns contained a chaotic mix of US, UK/Global, ISO, and text-month formats causing constant errors.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Financial columns were unusable due to a mix of numeric values, text strings, and currency symbols.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Duplicate transactions created inflated, unreliable revenue totals.</li>
+          </ul>
+        </div>
+
+        <!-- After -->
+        <div class="bg-emerald-900/10 border border-emerald-900/50 rounded-3xl p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-emerald-900/50 text-emerald-400 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-emerald-200">After</h3>
+          </div>
+          <ul class="space-y-4 text-slate-300">
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Power Query automatically consolidated the 12 sources into four clean categories.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> 100% of date rows dynamically evaluated and converted into a unified standard.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Spend and revenue data programmatically stripped of text and rounded for exact financial accuracy.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> The reporting process became a 1-click refreshable pipeline instead of a manual rebuild.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Article Content -->
+    <div class="max-w-4xl mx-auto space-y-6 text-lg text-slate-300 leading-relaxed">
+      
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">The Challenge</h2>
+      <p>De-Estybee Ecom Store handed over a <strong class="text-white">highly fragmented and messy dataset</strong> sourced from <strong class="text-white">multiple advertising platforms</strong>.</p>
+      
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/ecom-messy-data.png" alt="Messy ecommerce data" class="rounded-2xl border border-slate-700 shadow-xl my-10 w-full object-cover bg-slate-800 p-1">
+
+      <p>The objective wasn't just to clean the data for a one-off report, but to <strong class="text-white">build a standardized, automated workflow.</strong></p>
+      <p>The stakeholders had <strong class="text-white">5 strict requirements</strong>:</p>
+      
+      <ol class="list-decimal pl-6 space-y-3 mt-4 mb-10 text-slate-300">
+        <li><strong class="text-white">Standardized Channels:</strong> Consolidate 12 overlapping traffic sources into four clean categories (Facebook, Google, Instagram, TikTok).</li>
+        <li><strong class="text-white">Clean Numbers:</strong> Strip out all text, symbols ($, USD), and formatting errors from financial columns to allow for accurate aggregation.</li>
+        <li><strong class="text-white">Real Dates:</strong> Convert conflicting global date formats into a single, workable standard for month-over-month grouping.</li>
+        <li><strong class="text-white">No Duplicates:</strong> Ensure absolute accuracy by removing duplicate transactions via unique TXN IDs.</li>
+        <li><strong class="text-white">Calculated ROI:</strong> Engineer a custom metric to track Return on Ad Spend (ROAS) using the formula <code>(Sales_Revenue - Ad_Spend) / Ad_Spend</code>.</li>
+      </ol>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">How I Cleaned and Automated a Messy Ecommerce Reporting Workflow</h2>
+      <p>To ensure the client never had to clean this data manually again, I bypassed Excel and built a fully automated, <strong class="text-white">refreshable data pipeline using Power Query</strong>.</p>
+      <p>Here is how I tackled the core issues:</p>
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">1. Taming the Date Collision</h3>
+      <p>The source data featured a chaotic mix of <strong class="text-white">US</strong> (01/15/2023), <strong class="text-white">UK/Global</strong> (17-01-2023), <strong class="text-white">standard ISO</strong> (2023-01-16), and <strong class="text-white">text-month</strong> (Jan 19 2023) date formats living in the exact same column.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/messy-date-tab-1024x576.png" alt="Messy date tab" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>Standard conversion tools instantly returned errors.</p>
+      <p>To fix this, I wrote <strong class="text-white">custom M code</strong> using the <code>Date.From</code> function to dynamically evaluate and parse each row, successfully <strong class="text-white">converting 100% of the rows into a clean, unified Date format</strong>.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/cleaned-date-column-1024x576.png" alt="Cleaned date column" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">2. Channel Consolidation (1-Click Grouping)</h3>
+      <p>Before grouping, I <strong class="text-white">trimmed all invisible spaces</strong> and converted the <strong class="text-white">text to Proper Case</strong> to prevent matching errors.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/messy-marketing-channel-tab-1024x576.png" alt="Messy marketing channel tab" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>A quick <strong class="text-white">data profile</strong> revealed 12 messy variations of marketing channels.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/enabling-column-profile-for-marketing-channel-1024x576.png" alt="Enabling column profile" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>Instead of manually <strong class="text-white">mapping</strong> each variation, I built a highly efficient <strong class="text-white">conditional logic column.</strong></p>
+      <p>For example, <strong class="text-white"><code>IF</code> the channel started with "F",</strong> it was routed to <strong class="text-white">"Facebook"</strong>. But for specific outliers like AdWords, I used an <code>EXACT</code> match logic.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/conditional-formating-for-marketing-channel-column-1024x576.png" alt="Conditional formatting" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>This instantly consolidated the <strong class="text-white">messy data</strong> into the <strong class="text-white">four requested categories</strong>.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/cleaned-marketing-channel-tab-1024x576.png" alt="Cleaned marketing channel tab" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">3. Financial Data Extraction & Formatting</h3>
+      <p>The "Ad Spend" and "Sales Revenue" columns were unusable due to a mix of <strong class="text-white">numeric values, text strings, and currency symbols.</strong></p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/messy-ad-spend-column-1024x576.png" alt="Messy ad spend column" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>I resolved this data-type mismatch by deploying a simple but highly effective <code>Text.Select</code> logic.</p>
+      <p>This script <strong class="text-white">programmatically isolated only the numeric characters</strong>.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/fixed-ad-spend-and-sales-revenue-column-1024x576.png" alt="Fixed ad spend" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>To guarantee financial reporting accuracy, I implemented a <strong class="text-white">strict rounding protocol</strong>, formatting all spend and revenue data to exactly two decimal places.</p>
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">4. Deduplication</h3>
+      <p>To ensure we <strong class="text-white">weren't double-counting revenue</strong>, I targeted the TXN ID column, removing all duplicates so that each row represented a single, unique transaction.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/analyzing-the-column-distribution-1024x576.png" alt="Analyzing column distribution" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/fixing-duplicate-values-1024x576.png" alt="Fixing duplicates" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">5. Over-Delivering on ROI Logic</h3>
+      <p>The stakeholder requested a <strong class="text-white">standard ROAS calculation</strong>, but I took it a step further to make the dashboard actionable.</p>
+      <p>I created a <strong class="text-white">custom conditional column</strong> that calculated ROI and included specific error handling to <strong class="text-white">replace all null values with 0</strong>.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/adding-calculated-roas-column-1024x576.png" alt="Adding calculated roas" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>If Sales Revenue was 0 but Ad Spend was active, the system automatically returned <strong class="text-white">-100%</strong>.</p>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/power-bi-dashboard-1-e1778012056152-1024x686.png" alt="Power BI conditional formatting" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p>When visualized in Power BI, this serves as an immediate red flag for stakeholders, highlighting underperforming campaigns that need to be paused immediately.</p>
+      
+      <div class="bg-slate-800/30 border-l-4 border-slate-600 p-4 rounded-r-2xl my-6">
+        <p class="italic text-sm text-slate-400 m-0">
+          (Note: This logic bypassed Search campaigns, where zero spend with positive revenue is an expected organic outcome).
+        </p>
+      </div>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">The Results & Data Insights</h2>
+      <p>With the data successfully cleaned and modeled, I generated the final executive reporting tables and dashboard.</p>
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">Dashboard</h3>
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/dashboard-e1778006998445-1024x584.png" alt="Final Dashboard" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">Monthly Spend vs. Revenue</h3>
+      <div class="overflow-x-auto bg-slate-800/50 rounded-2xl border border-slate-700 mb-12">
+        <table class="w-full text-left border-collapse text-sm md:text-base">
+          <thead>
+            <tr class="bg-slate-800 border-b border-slate-700">
+              <th class="p-4 text-white font-semibold">Month</th>
+              <th class="p-4 text-white font-semibold">Ad Spend ($)</th>
+              <th class="p-4 text-white font-semibold">Sales Revenue ($)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700">
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">January 2023</td><td class="p-4 font-mono text-slate-300">49,018.75</td><td class="p-4 font-mono text-slate-300">109,626.53</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">February 2023</td><td class="p-4 font-mono text-slate-300">55,606.06</td><td class="p-4 font-mono text-slate-300">124,934.05</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">March 2023</td><td class="p-4 font-mono text-slate-300">45,675.34</td><td class="p-4 font-mono text-slate-300">102,699.73</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">April 2023</td><td class="p-4 font-mono text-slate-300">69,242.54</td><td class="p-4 font-mono text-slate-300">148,039.97</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">May 2023</td><td class="p-4 font-mono text-slate-300">66,987.69</td><td class="p-4 font-mono text-slate-300">139,657.07</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">June 2023</td><td class="p-4 font-mono text-slate-300">70,272.12</td><td class="p-4 font-mono text-slate-300">170,214.50</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">July 2023</td><td class="p-4 font-mono text-slate-300">54,980.25</td><td class="p-4 font-mono text-slate-300">124,906.28</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">August 2023</td><td class="p-4 font-mono text-slate-300">65,427.79</td><td class="p-4 font-mono text-slate-300">131,487.22</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">September 2023</td><td class="p-4 font-mono text-slate-300">51,958.64</td><td class="p-4 font-mono text-slate-300">120,612.68</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">October 2023</td><td class="p-4 font-mono text-slate-300">69,948.46</td><td class="p-4 font-mono text-slate-300">156,803.45</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">November 2023</td><td class="p-4 font-mono text-slate-300">53,718.00</td><td class="p-4 font-mono text-slate-300">121,543.10</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">December 2023</td><td class="p-4 font-mono text-slate-300">63,194.52</td><td class="p-4 font-mono text-slate-300">134,540.91</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-slate-300">January 2024</td><td class="p-4 font-mono text-slate-300">5,773.34</td><td class="p-4 font-mono text-slate-300">12,928.59</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">Performance Summary by Channel</h3>
+      <p>Facebook emerged as the top-performing channel by sheer volume, while TikTok and Facebook tied for the highest average ROI per transaction.</p>
+      
+      <div class="overflow-x-auto bg-slate-800/50 rounded-2xl border border-slate-700 mb-12 mt-6">
+        <table class="w-full text-left border-collapse text-sm md:text-base">
+          <thead>
+            <tr class="bg-slate-800 border-b border-slate-700">
+              <th class="p-4 text-white font-semibold">Channel</th>
+              <th class="p-4 text-white font-semibold">Total Spend ($)</th>
+              <th class="p-4 text-white font-semibold">Total Revenue ($)</th>
+              <th class="p-4 text-white font-semibold">Average ROI</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700">
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-white font-semibold">Facebook</td><td class="p-4 font-mono text-slate-300">207,058.10</td><td class="p-4 font-mono text-emerald-400">474,403.72</td><td class="p-4 font-mono text-accentCyan">109.73%</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-white font-semibold">TikTok</td><td class="p-4 font-mono text-slate-300">152,745.90</td><td class="p-4 font-mono text-emerald-400">358,605.15</td><td class="p-4 font-mono text-accentCyan">106.91%</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-white font-semibold">Instagram</td><td class="p-4 font-mono text-slate-300">158,987.99</td><td class="p-4 font-mono text-emerald-400">344,867.49</td><td class="p-4 font-mono text-accentCyan">105.78%</td></tr>
+            <tr class="hover:bg-slate-800/30 transition-colors"><td class="p-4 text-white font-semibold">Google</td><td class="p-4 font-mono text-slate-300">203,011.51</td><td class="p-4 font-mono text-emerald-400">420,117.72</td><td class="p-4 font-mono text-accentCyan">98.10%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">Key Business Takeaways</h3>
+      <ul class="space-y-4 text-slate-300 mb-10">
+        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span class="leading-relaxed"><strong class="text-white">Top Performing Campaign:</strong> The <strong class="text-white">Search_Competitor</strong> campaign on TikTok drove an impressive aggregate <strong class="text-emerald-400">ROI of 166.46%</strong> (generating <strong class="text-white">$62,659.49 in revenue</strong> from just $23,515.79 in spend).</span></li>
+        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span class="leading-relaxed"><strong class="text-white">Peak Revenue:</strong> June 2023 marked the <strong class="text-white">highest monthly revenue at $170,214.50</strong>, coinciding perfectly with the highest monthly ROI (142.22%).</span></li>
+        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span class="leading-relaxed"><strong class="text-white">Spend Efficiency & Stability:</strong> Throughout 2023, the monthly <strong class="text-emerald-400">ROI consistently held above 100%</strong>. More importantly, when the client scaled their budget in June and October, ROI remained highly profitable, proving that the business can confidently scale ad spend without hitting immediate diminishing returns.</span></li>
+      </ul>
+
+      <h3 class="text-xl font-semibold text-accentCyan mt-10 mb-4">What a Business Owner Gains</h3>
+      <p>A business owner implementing this pipeline gains:</p>
+      <ul class="list-disc pl-6 space-y-2 mt-4 text-slate-300">
+        <li>Less time wasted on manual spreadsheet cleanup.</li>
+        <li>More reliable reporting, with totals free of double-counted rows.</li>
+        <li>Clearer visibility into channel-level performance and ROAS.</li>
+        <li>A repeatable system for future monthly reporting.</li>
+        <li>A stronger, error-free base for dashboard and budget analysis.</li>
+      </ul>
+
+      <div class="bg-slate-800/30 border-l-4 border-accentCyan p-6 rounded-r-2xl my-12">
+        <p class="italic text-sm text-slate-400 m-0">
+          <strong class="text-slate-300">Note on Data Privacy:</strong> To protect proprietary business intelligence, all transaction IDs and specific date stamps in this case study have been anonymized or generated as synthetic data. The underlying mathematical logic and Power Query cleaning workflows remain identical to the original production environment.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="max-w-5xl mx-auto px-6 w-full mb-20">
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-3xl p-10 md:p-14 text-center shadow-2xl relative overflow-hidden">
+      <!-- Decorative glow -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-accentCyan/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+      
+      <div class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 relative z-10">Next Step</div>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Need help with tracking, reporting, or dashboard work?</h2>
+      <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 relative z-10">
+        If you need support with GA4/GTM setup, Power Query cleanup, Excel dashboards, or SQL-based analysis, send me a message to discuss your project.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+        <a href="contact.html" class="px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+          Contact Me
+        </a>
+        <a href="portfolio.html" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors">
+          Back to Portfolio
+        </a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
