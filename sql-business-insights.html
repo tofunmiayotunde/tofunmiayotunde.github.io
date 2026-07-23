@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: SQL Business Questions Analysis - Tofunmi Ayotunde</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js for visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins', 'sans-serif'] },
+          colors: { 
+            bgDark: '#0b1120', 
+            accentCyan: '#22d3ee' 
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Glassmorphism utility classes */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Code styling in text */
+    code {
+      background-color: rgba(30, 41, 59, 1);
+      color: #38bdf8;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+    }
+
+    /* ── SQL CUSTOM CODE BLOCKS ── */
+    .sql-dropdown {
+      margin: 24px 0;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      background-color: rgba(15, 23, 42, 0.8);
+      overflow: hidden;
+    }
+    .sql-dropdown summary {
+      padding: 16px 24px;
+      background-color: rgba(30, 41, 59, 0.8);
+      color: #38bdf8;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      outline: none;
+      border-bottom: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+    .sql-dropdown summary:hover { background-color: rgba(30, 41, 59, 1); }
+    .sql-dropdown[open] summary { border-bottom: 1px solid #334155; }
+    .sql-dropdown pre.sql-code-block {
+      margin: 0;
+      padding: 24px;
+      color: #f8fafc;
+      background-color: transparent;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Auto-highlighting colors for SQL */
+    .sql-kw { color: #c678dd; font-weight: bold; } /* Keywords: Purple */
+    .sql-fn { color: #61afef; } /* Functions: Blue */
+    .sql-str { color: #98c379; } /* Strings: Green */
+    .sql-num { color: #d19a66; } /* Numbers: Orange */
+
+    /* 3D Flip Card Styles */
+    .sql-impact-grid {
+      perspective: 1500px;
+    }
+    .sql-card {
+      height: 240px;
+      position: relative;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    .sql-card.active {
+      transform: rotateY(180deg);
+    }
+    .sql-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    .sql-back {
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+
+<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark">
+
+  <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 w-full flex-grow">
+    
+    <!-- Back Navigation -->
+    <a href="portfolio.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-10 font-semibold group">
+      <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Back to Portfolio
+    </a>
+
+    <!-- Hero Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start mb-16">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/30 border border-cyan-800 rounded-full text-xs font-bold text-accentCyan mb-6 uppercase tracking-wider">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l7 4v10l-7 4-7-4V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+          Case Study
+        </div>
+        
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+          SQL Business Questions Analysis
+        </h1>
+        
+        <p class="text-lg md:text-xl text-slate-400 leading-relaxed mb-8">
+          How I used SQL to answer core commercial questions from raw marketing and sales data, uncovering true financial ROAS for a growing DTC brand.
+        </p>
+        
+        <div class="flex flex-wrap gap-2">
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">MySQL</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Relational Data Modeling</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Cohort Analysis</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">ROAS Engineering</span>
+        </div>
+      </div>
+
+      <!-- Quick Snapshot Sidebar -->
+      <div class="glass-card p-8 rounded-3xl border border-slate-700/50 shadow-2xl">
+        <div class="text-xs font-bold tracking-[0.1em] uppercase text-slate-500 mb-6">Quick Snapshot</div>
+        
+        <div class="space-y-6">
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Client Type</div>
+            <div class="text-lg font-semibold text-white">Mid-Sized DTC E-commerce Brand</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Main Goal</div>
+            <div class="text-lg font-semibold text-white">Answer core business questions with data.</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Output</div>
+            <div class="text-lg font-semibold text-white">Single-source SQL database & executive dashboard.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          The Problem
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">Ad platforms claimed high returns, but isolated data silos hid the reality of shrinking actual profit margins.</div>
+      </div>
+      
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Tech Stack
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">MySQL Workbench, Relational Schema Design, Complex Joins, CTEs, Time-Series Analysis.</div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          The Goal
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">Eliminate siloed marketing data to uncover true financial return on ad spend (ROAS) and customer lifetime value (LTV).</div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          Business ROI
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">Identified $44M in top-of-funnel cash-flow gaps, proved a 4x LTV return rate, and architected a single-source SQL database to replace manual Excel reporting.</div>
+      </div>
+    </div>
+
+    <!-- Before / After Section -->
+    <div class="mb-24">
+      <div class="text-center mb-10">
+        <div class="text-sm font-bold tracking-widest uppercase text-purple-400 mb-2">Transformation</div>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-white">The Workflow Evolution</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Before -->
+        <div class="bg-red-900/10 border border-red-900/50 rounded-3xl p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-red-900/50 text-red-400 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-red-200">Before</h3>
+          </div>
+          <ul class="space-y-4 text-slate-300">
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Meta and Google Ads claimed high ROI, but actual internal profit margins were shrinking.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Ad spend and actual sales data lived in isolated silos, forcing manual Excel merges.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Quarterly budgets were planned using platform-manipulated, unverified metrics.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> The business was bleeding budget on top-of-funnel campaigns with zero visibility into actual return.</li>
+          </ul>
+        </div>
+
+        <!-- After -->
+        <div class="bg-emerald-900/10 border border-emerald-900/50 rounded-3xl p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-emerald-900/50 text-emerald-400 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-emerald-200">After</h3>
+          </div>
+          <ul class="space-y-4 text-slate-300">
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> A normalized SQL schema tracked every marketing dollar directly to specific user orders.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Complex cross-platform JOINs and division-by-zero protections calculated absolute, true ROAS.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Cohort analysis and time-series grouping isolated repeat-purchase rates and real revenue trends.</li>
+            <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> The executive team instantly identified negative-ROI outliers and reallocated budget with confidence.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Article Content -->
+    <div class="max-w-4xl mx-auto space-y-6 text-lg text-slate-300 leading-relaxed">
+      
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">The Business Problem: The Siloed Attribution Crisis</h2>
+      
+      <p>A growing e-commerce brand was facing a <strong>classic data crisis</strong>: their marketing platforms and their actual bank accounts were telling two completely different stories.</p>
+      <p>Meta and Google Ads dashboards reported exceptionally <strong>high Returns on Ad Spend</strong> (ROAS), but the company’s internal sales data showed <strong>shrinking profit margins</strong>.</p>
+      <p>Because ad spend and actual sales data lived in isolated silos, the executive team relied on manual, error-prone spreadsheet merges to plan their quarterly budget. They were flying blind.</p>
+      <p>They handed over their raw, fragmented data and asked me to build an <strong>automated SQL analysis</strong> <strong>layer </strong>to answer their core commercial questions.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">My Approach: Engineering the Analysis Workflow</h2>
+      <p>To permanently eliminate manual spreadsheet crashes, I bypassed ad hoc exports and architected a relational SQL data model as a single source of truth.</p>
+      <p>Here is the step-by-step build process:</p>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 1 · Building the Foundation & Baselines</div>
+      
+      <p>Before writing analytical queries, I organized the raw tables into a normalized relational schema (<strong>orders</strong>, <strong>customers</strong>, and <strong>ad_performance</strong>). My first objective was to establish baseline revenue truths.</p>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-6 mb-2">1. Channel Revenue Contribution</h4>
+      <p class="italic text-slate-400">Question: Which marketing channels are actually driving verified transactional revenue?</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View Full SQL Query
+        </summary>
+<pre class="sql-code-block">SELECT
+    channel,
+    ROUND(SUM(revenue), 2) AS total_revenue,
+    COUNT(DISTINCT order_id) AS orders
+FROM orders
+GROUP BY channel
+ORDER BY total_revenue DESC;</pre>
+      </details>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/1-1024x649.png" alt="SQL Query & Result Grid for Channel Revenue" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <div class="bg-slate-800/30 border-l-4 border-accentCyan p-6 rounded-r-2xl my-8">
+        <h5 class="text-accentCyan font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0"><strong>Organic Search</strong> is the primary revenue engine (<strong>$134k / 1,048 orders</strong>), indicating strong SEO and brand equity. Social Ads and Paid Search are dead-tied in raw volume (~<strong>$126k each</strong>).</p>
+      </div>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-8 mb-2">2. Product Category Performance</h4>
+      <p class="italic text-slate-400">Question: Which product categories generate the highest sales volume vs. actual revenue?</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View Full SQL Query
+        </summary>
+<pre class="sql-code-block">SELECT
+    product_category,
+    ROUND(SUM(revenue), 2) AS total_revenue,
+    COUNT(DISTINCT order_id) AS orders
+FROM orders
+GROUP BY product_category
+ORDER BY total_revenue DESC;</pre>
+      </details>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/5-1024x649.png" alt="SQL Query & Result Grid for Product Categories" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <div class="bg-slate-800/30 border-l-4 border-accentCyan p-6 rounded-r-2xl my-8">
+        <h5 class="text-accentCyan font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0 mb-4"><strong>Electronics</strong> has a very strong <strong>Average Order Value</strong> (AOV), driving <strong>43%</strong> of total revenue despite having the lowest total order volume. Apparel drives the highest physical demand (1,314 orders) but yields the lowest revenue.</p>
+        <p class="text-slate-300 text-base m-0"><strong>Recommendation:</strong> Shift acquisition budgets toward Electronics to maximize ROAS, using Apparel as a "cart-builder" upsell.</p>
+      </div>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 2 · Identifying the "Leaky Bucket"</div>
+      
+      <p>With baselines established, I needed to join the marketing spend data with the backend sales data to find out where the business was bleeding cash.</p>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-6 mb-2">3. Comparing Campaigns by True ROAS</h4>
+      <p class="italic text-slate-400">Question: What is the true Return on Ad Spend when platform spend is joined to backend sales? (Note: I deployed division-by-zero protection logic <code>NULLIF</code> to prevent database crashes on zero-spend days).</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View Full SQL Query
+        </summary>
+<pre class="sql-code-block">SELECT
+    a.channel,
+    a.campaign,
+    ROUND(SUM(o.revenue), 2) AS revenue,
+    ROUND(SUM(a.spend), 2) AS spend,
+    ROUND(SUM(o.revenue) / NULLIF(SUM(a.spend), 0), 2) AS roas
+FROM ad_performance a
+LEFT JOIN orders o
+    ON a.channel = o.channel
+    AND a.campaign = o.campaign
+GROUP BY a.channel, a.campaign
+ORDER BY roas DESC;</pre>
+      </details>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/3-1024x651.png" alt="SQL Query & Result Grid for Campaign ROAS" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <div class="bg-slate-800/30 border-l-4 border-red-500 p-6 rounded-r-2xl my-8">
+        <h5 class="text-red-400 font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0">The blended ROAS across all paid channels is <strong>57%</strong>—meaning the business is <strong>losing roughly 43 cents</strong> on every ad dollar spent upfront.</p>
+      </div>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-8 mb-2">4. Filtering for High-Spend, Low-Return Outliers</h4>
+      <p class="italic text-slate-400">Question: Specifically, which campaigns are losing more than 50 cents on the dollar?</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View Full SQL Query
+        </summary>
+<pre class="sql-code-block">WITH CampaignEfficiency AS (
+    SELECT 
+        a.channel,
+        a.campaign,
+        ROUND(SUM(a.spend), 2) AS total_spend,
+        ROUND(SUM(o.revenue), 2) AS total_revenue,
+        ROUND(SUM(o.revenue) / NULLIF(SUM(a.spend), 0), 2) AS roas_ratio
+    FROM ad_performance a
+    LEFT JOIN orders o 
+        ON a.channel = o.channel 
+        AND a.campaign = o.campaign
+    GROUP BY a.channel, a.campaign
+)
+SELECT 
+    channel,
+    campaign,
+    total_spend,
+    total_revenue,
+    CONCAT(ROUND(roas_ratio * 100, 0), '%') AS roas
+FROM CampaignEfficiency
+WHERE roas_ratio < 0.50 
+ORDER BY total_spend DESC;</pre>
+      </details>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/Result-Grid-for-High-SpendLow-Return-1024x648.png" alt="SQL Query & Result Grid for High-SpendLow-Return" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <div class="bg-slate-800/30 border-l-4 border-red-500 p-6 rounded-r-2xl my-8">
+        <h5 class="text-red-400 font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0">Analysis isolated massive "<strong>Brand Awareness</strong>" spend operating at a <strong>36%</strong> initial ROAS, creating an immediate cash-flow gap.</p>
+      </div>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-8 mb-2">5. Time-Series Revenue Trends</h4>
+      <p class="italic text-slate-400">Question: How is this inefficient spend impacting month-over-month business health?</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View Full SQL Query
+        </summary>
+<pre class="sql-code-block">SELECT 
+    DATE_FORMAT(order_date, '%Y-%m') AS month, 
+    ROUND(SUM(revenue), 2) AS monthly_revenue
+FROM orders
+GROUP BY month
+ORDER BY month;</pre>
+      </details>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/4-1024x645.png" alt="SQL Query & Result Grid for Monthly Trends" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <div class="bg-slate-800/30 border-l-4 border-red-500 p-6 rounded-r-2xl my-8">
+        <h5 class="text-red-400 font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0">In 2026, monthly revenue plummeted by <strong>69%</strong> from <strong>January ($53k)</strong> to <strong>April ($16k)</strong>, indicating a severe downward trend in business liquidity that required immediate intervention.</p>
+      </div>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 3 · Customer Lifetime Value (LTV) Engineering</div>
+      
+      <p>To understand if taking a loss on initial acquisition was justified, I needed to analyze customer loyalty and repeat-purchase behavior.</p>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-6 mb-2">6. Engineering Customer Cohorts & LTV</h4>
+      <p class="italic text-slate-400">Question: What is the baseline repeat-purchase rate of our acquired customers? (Note: I architected a multi-step query using Common Table Expressions (CTEs) and dynamic CASE WHEN logic to bucket users into frequency cohorts).</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View Full SQL Query
+        </summary>
+<pre class="sql-code-block">WITH CustomerStats AS (
+    SELECT 
+        customer_id,
+        COUNT(order_id) AS total_orders,
+        SUM(revenue) AS lifetime_value
+    FROM orders
+    GROUP BY customer_id
+),
+BucketedCustomers AS (
+    SELECT 
+        customer_id,
+        lifetime_value,
+        CASE 
+            WHEN total_orders = 1 THEN '1 Order'
+            WHEN total_orders = 2 THEN '2 Orders'
+            WHEN total_orders BETWEEN 3 AND 4 THEN '3-4 Orders'
+            WHEN total_orders BETWEEN 5 AND 6 THEN '5-6 Orders'
+            WHEN total_orders BETWEEN 7 AND 8 THEN '7-8 Orders'
+            ELSE '9+ Orders' 
+        END AS order_frequency,
+
+        CASE 
+            WHEN total_orders = 1 THEN 1
+            WHEN total_orders = 2 THEN 2
+            WHEN total_orders BETWEEN 3 AND 4 THEN 3
+            WHEN total_orders BETWEEN 5 AND 6 THEN 4
+            WHEN total_orders BETWEEN 7 AND 8 THEN 5
+            ELSE 6 
+        END AS sort_order
+    FROM CustomerStats
+)
+SELECT 
+    order_frequency,
+    COUNT(customer_id) AS total_customers,
+    ROUND((COUNT(customer_id) * 100.0) / (SELECT COUNT(*) FROM CustomerStats), 1) AS pct_of_base,
+    SUM(lifetime_value) AS total_ltv
+FROM BucketedCustomers
+GROUP BY order_frequency, sort_order
+ORDER BY sort_order;</pre>
+      </details>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/Customer-Cohorts-Lifetime-Value-LTV-1024x648.png" alt="Customer Cohorts & Lifetime Value (LTV)" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <div class="bg-slate-800/30 border-l-4 border-emerald-500 p-6 rounded-r-2xl my-8">
+        <h5 class="text-emerald-400 font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0"><strong>96.7%</strong> of customers purchase more than once, with <strong>64%</strong> returning to make between 3 to 6 purchases.</p>
+      </div>
+
+      <div class="bg-indigo-900/40 border border-indigo-500/50 p-8 rounded-2xl my-12 shadow-[0_0_20px_rgba(99,102,241,0.15)]">
+        <h4 class="text-indigo-400 font-bold uppercase tracking-widest text-xs mb-3">Strategic Takeaway</h4>
+        <p class="text-indigo-100 text-lg leading-relaxed m-0 mb-4">While top-of-funnel "<strong>Brand Awareness</strong>" campaigns operate at an initial loss, the customers acquired through these campaigns reliably return <strong>4+ times</strong>.</p>
+        <p class="text-indigo-100 text-lg leading-relaxed m-0">However, the business cannot sustain a <strong>64%</strong> upfront loss without compromising short-term liquidity. We must shift from <strong>"Volume-at-any-cost"</strong> to <strong>"LTV-Capped Acquisition."</strong></p>
+      </div>
+
+      <h4 class="text-lg font-medium text-accentCyan mt-8 mb-2">7. Geographic AOV Variances</h4>
+      <p class="italic text-slate-400">Question: Should we adjust acquisition budgets based on the customer's country?</p>
+
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View Full SQL Query
+        </summary>
+<pre class="sql-code-block">SELECT
+    country,
+    ROUND(AVG(revenue), 2) AS average_order_value
+FROM orders o
+JOIN customers c
+    ON o.customer_id = c.customer_id
+GROUP BY country
+ORDER BY average_order_value DESC;</pre>
+      </details>
+
+      <img src="https://rebuildwithintention.com/wp-content/uploads/2026/05/7-1024x644.png" alt="SQL Query & Result Grid for AOV by Country" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+
+      <div class="bg-slate-800/30 border-l-4 border-accentCyan p-6 rounded-r-2xl my-8">
+        <h5 class="text-accentCyan font-bold uppercase tracking-widest text-xs mb-2">Key Insight</h5>
+        <p class="text-slate-300 text-base m-0">Purchasing power is remarkably flat across all regions (<strong>variance < $5</strong>). Geo-budgets can be allocated strictly based on where <strong>CAC</strong> and <strong>shipping logistics</strong> are the cheapest.</p>
+      </div>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6">The Executive Output & Business Impact</h2>
+      <p class="mb-10">By moving out of spreadsheets and into a unified database, the business gained distinct advantages:</p>
+
+      <div class="sql-impact-grid sql-impact-grid">
+        
+        <div class="sql-card sql-card" onclick="this.classList.toggle('active')">
+          <div class="sql-face sql-front glass-card border border-slate-700 hover:border-accentCyan/50 transition-colors !bg-transparent">
+            <div class="w-14 h-14 rounded-2xl bg-cyan-900/30 text-accentCyan flex items-center justify-center mb-6">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
+            <h3 class="text-xl font-bold text-white m-0">Financial Clarity</h3>
+            <span class="absolute bottom-5 text-[10px] font-bold tracking-widest text-slate-500 uppercase">Click to Reveal</span>
+          </div>
+          <div class="sql-face sql-back bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700">
+            <p class="text-slate-300 text-base m-0 leading-relaxed">Revealed a hidden <strong class="text-white">4.2x ROAS</strong> on Paid Search, redirecting focus to true revenue drivers instead of vanity metrics.</p>
+          </div>
+        </div>
+
+        <div class="sql-card sql-card" onclick="this.classList.toggle('active')">
+          <div class="sql-face sql-front glass-card border border-slate-700 hover:border-accentCyan/50 transition-colors !bg-transparent">
+            <div class="w-14 h-14 rounded-2xl bg-cyan-900/30 text-accentCyan flex items-center justify-center mb-6">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+            </div>
+            <h3 class="text-xl font-bold text-white m-0">Waste Elimination</h3>
+            <span class="absolute bottom-5 text-[10px] font-bold tracking-widest text-slate-500 uppercase">Click to Reveal</span>
+          </div>
+          <div class="sql-face sql-back bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700">
+            <p class="text-slate-300 text-base m-0 leading-relaxed">Identified negative-ROI campaigns consuming <strong class="text-white">2x the average budget</strong>, instantly halting the financial bleed.</p>
+          </div>
+        </div>
+
+        <div class="sql-card sql-card" onclick="this.classList.toggle('active')">
+          <div class="sql-face sql-front glass-card border border-slate-700 hover:border-accentCyan/50 transition-colors !bg-transparent">
+            <div class="w-14 h-14 rounded-2xl bg-cyan-900/30 text-accentCyan flex items-center justify-center mb-6">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-white m-0">Executive Confidence</h3>
+            <span class="absolute bottom-5 text-[10px] font-bold tracking-widest text-slate-500 uppercase">Click to Reveal</span>
+          </div>
+          <div class="sql-face sql-back bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700">
+            <p class="text-slate-300 text-base m-0 leading-relaxed">Empowered the C-suite to finalize Q3/Q4 budget allocations using <strong class="text-white">absolute database truth</strong>, ending reliance on guesswork.</p>
+          </div>
+        </div>
+
+        <div class="sql-card sql-card" onclick="this.classList.toggle('active')">
+          <div class="sql-face sql-front glass-card border border-slate-700 hover:border-accentCyan/50 transition-colors !bg-transparent">
+            <div class="w-14 h-14 rounded-2xl bg-cyan-900/30 text-accentCyan flex items-center justify-center mb-6">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-white m-0">Scalable Architecture</h3>
+            <span class="absolute bottom-5 text-[10px] font-bold tracking-widest text-slate-500 uppercase">Click to Reveal</span>
+          </div>
+          <div class="sql-face sql-back bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700">
+            <p class="text-slate-300 text-base m-0 leading-relaxed">Replaced manual, error-prone spreadsheet merges with an <strong class="text-white">automated, refreshable</strong> decision-support asset.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Executive Dashboard Embed -->
+      <div class="glass-card rounded-2xl border border-slate-700 p-6 md:p-8 shadow-2xl mt-16 mb-10">
+          
+          <!-- Header -->
+          <div class="mb-8 border-b border-slate-700 pb-6">
+              <h2 class="text-2xl font-bold text-white mb-2">Executive Overview: DTC E-Commerce Data</h2>
+              <p class="text-slate-400 text-sm">Visualizing the outputs of the MySQL relational schema.</p>
+          </div>
+
+          <!-- KPI Metrics Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <div class="border border-slate-700 bg-slate-800/50 p-4 rounded-xl">
+                  <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider">Blended ROAS</p>
+                  <h3 class="text-xl sm:text-3xl font-bold text-white mb-2">57%</h3>
+                  <span class="inline-flex items-center text-xs font-semibold text-red-400 bg-red-900/30 border border-red-500/30 px-2.5 py-1 rounded-full">
+                      Action Required
+                  </span>
+              </div>
+              <div class="border border-slate-700 bg-slate-800/50 p-4 rounded-xl">
+                  <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider">Repeat Purchase</p>
+                  <h3 class="text-xl sm:text-3xl font-bold text-white mb-2">96.7%</h3>
+                  <span class="inline-flex items-center text-xs font-semibold text-emerald-400 bg-emerald-900/30 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+                      Highly Loyal
+                  </span>
+              </div>
+              <div class="border border-slate-700 bg-slate-800/50 p-4 rounded-xl">
+                  <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider">Top Category</p>
+                  <h3 class="text-xl sm:text-2xl font-bold text-white mb-2 mt-1">Electronics</h3>
+                  <span class="inline-flex items-center text-xs font-semibold text-accentCyan bg-cyan-900/30 border border-cyan-500/30 px-2.5 py-1 rounded-full mt-1">
+                      43% of Total
+                  </span>
+              </div>
+              <div class="border border-slate-700 bg-slate-800/50 p-4 rounded-xl">
+                  <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider">Top Channel</p>
+                  <h3 class="text-xl sm:text-2xl font-bold text-white mb-2 mt-1">Organic</h3>
+                  <span class="inline-flex items-center text-xs font-semibold text-accentCyan bg-cyan-900/30 border border-cyan-500/30 px-2.5 py-1 rounded-full mt-1">
+                      $134k Rev
+                  </span>
+              </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              
+              <!-- Revenue Line Chart -->
+              <div class="lg:col-span-2 border border-slate-700 bg-slate-800/30 p-5 rounded-xl">
+                  <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Monthly Revenue Trend (Jan - Apr)</h3>
+                  <div class="relative h-[250px] w-full">
+                      <canvas id="revenueChart"></canvas>
+                  </div>
+              </div>
+
+              <!-- Cohort Pie Chart -->
+              <div class="border border-slate-700 bg-slate-800/30 p-5 rounded-xl">
+                  <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Customer Order Frequency</h3>
+                  <div class="relative h-[250px] w-full flex items-center justify-center">
+                      <canvas id="cohortChart"></canvas>
+                  </div>
+              </div>
+
+              <!-- Channel Bar Chart -->
+              <div class="lg:col-span-3 border border-slate-700 bg-slate-800/30 p-5 rounded-xl">
+                  <h3 class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Channel Performance Baseline</h3>
+                  <div class="relative h-[250px] w-full">
+                      <canvas id="channelChart"></canvas>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+
+      <div class="border-t border-slate-800 pt-8 mt-16">
+        <p class="italic text-sm text-slate-500">
+          <strong>Data Privacy & Governance Disclosure:</strong> To strictly adhere to client confidentiality, specific financial values and volumes in this case study have been anonymized. The SQL logic and strategic workflow represent authentic methodologies deployed in production environments.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="max-w-5xl mx-auto px-6 w-full mb-20">
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-3xl p-10 md:p-14 text-center shadow-2xl relative overflow-hidden">
+      <!-- Decorative glow -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-accentCyan/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+      
+      <div class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 relative z-10">Next Step</div>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Need help with tracking, reporting, or dashboard work?</h2>
+      <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 relative z-10">
+        If you need support with GA4/GTM setup, Power Query cleanup, Power BI modeling, or SQL-based analysis, send me a message to discuss your data architecture.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+        <a href="contact.html" class="px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+          Contact Me
+        </a>
+        <a href="portfolio.html" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors">
+          Back to Portfolio
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Custom SQL Syntax Highlighter (Dark Theme Optimized)
+      (function highlightMultipleSQL() {
+        const codeElements = document.querySelectorAll('.sql-code-block');
+        const keywords = ['WITH', 'SELECT', 'FROM', 'LEFT JOIN', 'JOIN', 'ON', 'AND', 'GROUP BY', 'ORDER BY', 'DESC', 'ASC', 'WHERE', 'AS', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END'];
+        const functions = ['ROUND', 'SUM', 'NULLIF', 'CONCAT', 'COUNT', 'DATE_FORMAT', 'AVG'];
+
+        codeElements.forEach(codeElement => {
+          let code = codeElement.innerHTML;
+
+          // Highlight Strings
+          code = code.replace(/('[^']*')/g, `<span class="sql-str">$1</span>`);
+          // Highlight Numbers
+          code = code.replace(/\b(\d+(\.\d+)?)\b/g, `<span class="sql-num">$1</span>`);
+          // Highlight Keywords
+          keywords.forEach(kw => {
+            const reg = new RegExp('\\b' + kw + '\\b(?=(?:[^\']*\'[^\']*\')*[^\']*$)', 'gi');
+            code = code.replace(reg, `<span class="sql-kw">${kw}</span>`);
+          });
+          // Highlight Functions
+          functions.forEach(fn => {
+            const reg = new RegExp('\\b' + fn + '\\b(?=(?:[^\']*\'[^\']*\')*[^\']*$)', 'gi');
+            code = code.replace(reg, `<span class="sql-fn">${fn}</span>`);
+          });
+
+          codeElement.innerHTML = code;
+        });
+      })();
+
+      // Chart.js Configuration for Dark Mode
+      Chart.defaults.color = '#94a3b8'; // text-slate-400
+      Chart.defaults.font.family = "'Poppins', sans-serif";
+      
+      const gridColor = '#334155'; // border-slate-700
+      
+      // 1. Revenue Drop Chart (Red Theme)
+      const revCtx = document.getElementById('revenueChart');
+      if (revCtx) {
+          new Chart(revCtx.getContext('2d'), {
+              type: 'line',
+              data: {
+                  labels: ['Jan 2026', 'Feb 2026', 'Mar 2026', 'Apr 2026'],
+                  datasets: [{
+                      label: 'Monthly Revenue ($)',
+                      data: [53200, 38000, 25000, 16000],
+                      borderColor: '#f87171', // red-400
+                      backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                      borderWidth: 3,
+                      fill: true,
+                      tension: 0.3,
+                      pointBackgroundColor: '#f87171',
+                      pointBorderColor: '#0b1120'
+                  }]
+              },
+              options: {
+                  responsive: true, maintainAspectRatio: false,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                      y: { beginAtZero: true, grid: { color: gridColor } },
+                      x: { grid: { display: false } }
+                  }
+              }
+          });
+      }
+
+      // 2. Cohort Chart (Multi-color Theme)
+      const cohortCtx = document.getElementById('cohortChart');
+      if (cohortCtx) {
+          new Chart(cohortCtx.getContext('2d'), {
+              type: 'doughnut',
+              data: {
+                  labels: ['1 Order', '2 Orders', '3-6 Orders', '7+ Orders'],
+                  datasets: [{
+                      data: [3.3, 20, 64, 12.7],
+                      backgroundColor: ['#64748b', '#38bdf8', '#34d399', '#fbbf24'], // slate, cyan, emerald, amber
+                      borderColor: '#1e293b', // Match background
+                      borderWidth: 2
+                  }]
+              },
+              options: {
+                  responsive: true, maintainAspectRatio: false, cutout: '75%',
+                  plugins: { legend: { position: 'bottom', labels: { padding: 15 } } }
+              }
+          });
+      }
+
+      // 3. Channel Chart (Cyan Theme)
+      const channelCtx = document.getElementById('channelChart');
+      if (channelCtx) {
+          new Chart(channelCtx.getContext('2d'), {
+              type: 'bar',
+              data: {
+                  labels: ['Organic Search', 'Social Ads', 'Paid Search'],
+                  datasets: [{
+                      label: 'Total Revenue ($)',
+                      data: [134000, 126000, 126000],
+                      backgroundColor: '#38bdf8', // cyan-400
+                      borderRadius: 4
+                  }]
+              },
+              options: {
+                  responsive: true, maintainAspectRatio: false,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                      y: { beginAtZero: true, grid: { color: gridColor } },
+                      x: { grid: { display: false } }
+                  }
+              }
+          });
+      }
+    });
+  </script>
+</body>
+</html>
