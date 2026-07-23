@@ -79,15 +79,15 @@
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/30 border border-cyan-800 rounded-full text-xs font-bold text-accentCyan mb-6 uppercase tracking-wider">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l7 4v10l-7 4-7-4V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
-          Marketing Data Analyst
+          Marketing Data & Growth Analyst
         </div>
         
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
-          Marketing Data & Growth Analytics
+          Architecting Truth in Marketing Data.
         </h1>
         
         <p class="text-lg md:text-xl text-slate-400 leading-relaxed mb-8">
-          Building clean data pipelines, accurate tracking setups, and clear dashboards to help marketing teams stop guessing and start growing.
+          I build resilient measurement architectures, automated SQL pipelines, and multi-touch attribution models so growth teams can stop guessing and start scaling.
         </p>
         
         <div class="flex flex-wrap gap-4 mb-10">
@@ -96,45 +96,123 @@
         </div>
         
         <div class="flex flex-wrap gap-2">
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Server-Side GTM</span>
           <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Data Cleaning & ETL</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">BigQuery & SQL</span>
           <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Attribution Analysis</span>
-          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">SQL Modeling</span>
-          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Marketing BI</span>
         </div>
       </div>
 
-      <!-- Quick Snapshot Sidebar -->
-      <div class="glass-card p-8 rounded-3xl border border-slate-700/50 shadow-2xl relative z-10">
-        <div class="text-xs font-bold tracking-[0.1em] uppercase text-slate-500 mb-6">Core Focus</div>
+      <!-- Right Column: Animated Terminal & Core Focus -->
+      <div class="flex flex-col gap-8 relative z-10">
         
-        <div class="grid grid-cols-2 gap-6">
-          <div>
-            <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
-              <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5h16v14H4z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 15l3-3 2 2 3-4"></path></svg>
-            </div>
-            <div class="text-sm font-bold text-white mb-1">Tracking Setup</div>
-            <div class="text-xs text-slate-400 leading-relaxed">GTM events, GA4 taxonomy, and reliable conversion tracking.</div>
+        <!-- Animated Hacker Terminal -->
+        <div class="glass-card rounded-2xl overflow-hidden border border-slate-700 shadow-[0_0_30px_rgba(34,211,238,0.15)] font-mono text-xs sm:text-sm">
+          <!-- Terminal Header -->
+          <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex gap-2 items-center">
+            <div class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_5px_#ef4444]"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500 shadow-[0_0_5px_#eab308]"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_5px_#22c55e]"></div>
+            <div class="text-slate-500 text-[11px] ml-2 font-sans font-semibold tracking-wider">tofunmi@data-architect:~</div>
           </div>
-          <div>
-            <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
-              <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 4h12v16H6z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9h6M9 13h6M9 17h4"></path></svg>
-            </div>
-            <div class="text-sm font-bold text-white mb-1">Data Pipelines</div>
-            <div class="text-xs text-slate-400 leading-relaxed">Extracting and flattening raw ad data for clean analysis.</div>
+          <!-- Terminal Screen -->
+          <div class="p-4 h-48 overflow-y-auto relative bg-[#050810]" id="terminal-screen">
+            <div id="terminal-content"></div>
+            <span class="animate-pulse text-accentCyan">_</span>
           </div>
-          <div>
-            <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
-              <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19V9M12 19V5M19 19v-7"></path></svg>
+        </div>
+
+        <script>
+          // Terminal Typing Animation Logic
+          document.addEventListener('DOMContentLoaded', () => {
+            const terminalLines = [
+              { text: '> git commit -m "fixed CMO\'s broken dashboard"', color: 'text-slate-300' },
+              { text: '> connecting to Snowflake Data Warehouse...', color: 'text-slate-400' },
+              { text: '[SUCCESS] connection established in 0.4s.', color: 'text-emerald-400 font-bold' },
+              { text: '> SELECT * FROM revenue WHERE attribution = \'Last Click\';', color: 'text-purple-400' },
+              { text: 'WARNING: 36% of conversion data missing (ad-blockers detected).', color: 'text-amber-400' },
+              { text: '> initializing server-side GTM container...', color: 'text-slate-300' },
+              { text: '> bypassing ad blockers... shhh don\'t tell Google.', color: 'text-slate-500 italic' },
+              { text: 'loading... [████████████████████] 100%', color: 'text-accentCyan' },
+              { text: '[SUCCESS] $286K ghost revenue recovered and attributed.', color: 'text-emerald-400 font-bold' },
+              { text: '> caffeine levels critical. deploying coffee.sh ☕', color: 'text-amber-400' },
+              { text: '> system ready for next challenge.', color: 'text-accentCyan' }
+            ];
+
+            const contentDiv = document.getElementById('terminal-content');
+            const screenDiv = document.getElementById('terminal-screen');
+            let lineIndex = 0;
+
+            function typeWriter() {
+              if (lineIndex >= terminalLines.length) {
+                // Wait 4 seconds, clear, and loop
+                setTimeout(() => {
+                  contentDiv.innerHTML = '';
+                  lineIndex = 0;
+                  typeWriter();
+                }, 4000);
+                return;
+              }
+
+              const lineData = terminalLines[lineIndex];
+              const p = document.createElement('p');
+              p.className = `mb-1.5 leading-relaxed ${lineData.color}`;
+              contentDiv.appendChild(p);
+
+              let charIndex = 0;
+              function typeChar() {
+                if (charIndex < lineData.text.length) {
+                  p.innerHTML += lineData.text.charAt(charIndex);
+                  charIndex++;
+                  screenDiv.scrollTop = screenDiv.scrollHeight; // Auto-scroll to bottom
+                  // Randomize typing speed for realism
+                  setTimeout(typeChar, Math.random() * 30 + 15);
+                } else {
+                  lineIndex++;
+                  // Pause between lines
+                  setTimeout(typeWriter, 600);
+                }
+              }
+              typeChar();
+            }
+            // Start the loop
+            setTimeout(typeWriter, 1000);
+          });
+        </script>
+
+        <!-- Quick Snapshot Sidebar -->
+        <div class="glass-card p-8 rounded-3xl border border-slate-700/50 shadow-2xl relative z-10">
+          <div class="text-xs font-bold tracking-[0.1em] uppercase text-slate-500 mb-6">Core Focus</div>
+          
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5h16v14H4z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 15l3-3 2 2 3-4"></path></svg>
+              </div>
+              <div class="text-sm font-bold text-white mb-1">Tracking Architecture</div>
+              <div class="text-xs text-slate-400 leading-relaxed">Server-side GTM, GA4 taxonomy, and CAPI pipelines.</div>
             </div>
-            <div class="text-sm font-bold text-white mb-1">Attribution</div>
-            <div class="text-xs text-slate-400 leading-relaxed">Analyzing customer journeys to find true ROI beyond last-click.</div>
-          </div>
-          <div>
-            <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
-              <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 12h6M7 17h10"></path><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"></rect></svg>
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 4h12v16H6z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9h6M9 13h6M9 17h4"></path></svg>
+              </div>
+              <div class="text-sm font-bold text-white mb-1">Data Engineering</div>
+              <div class="text-xs text-slate-400 leading-relaxed">Python, SQL, and API extractions to flatten raw ad data.</div>
             </div>
-            <div class="text-sm font-bold text-white mb-1">BI & Dashboards</div>
-            <div class="text-xs text-slate-400 leading-relaxed">Building clear, automated reports using Power BI & Looker Studio.</div>
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19V9M12 19V5M19 19v-7"></path></svg>
+              </div>
+              <div class="text-sm font-bold text-white mb-1">Attribution</div>
+              <div class="text-xs text-slate-400 leading-relaxed">Analyzing customer journeys to find true ROI beyond last-click.</div>
+            </div>
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 12h6M7 17h10"></path><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"></rect></svg>
+              </div>
+              <div class="text-sm font-bold text-white mb-1">Executive BI</div>
+              <div class="text-xs text-slate-400 leading-relaxed">Automated Power BI models for LTV, CAC, and pipeline health.</div>
+            </div>
           </div>
         </div>
       </div>
