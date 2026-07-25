@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Resolving a $7M Pipeline Discrepancy - Tofunmi Ayotunde</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif']
+          },
+          colors: { 
+            bgDark: '#0b1120', 
+            accentCyan: '#22d3ee' 
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Glassmorphism utility classes */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Code styling in text */
+    code {
+      background-color: rgba(30, 41, 59, 1);
+      color: #38bdf8;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+      font-family: 'Consolas', 'Monaco', monospace;
+    }
+
+    /* Custom animated load-in for the dashboard bars */
+    @keyframes growWidth { from { width: 0; } }
+    .animate-bar { animation: growWidth 1.5s ease-out forwards; }
+
+    /* ── SQL CUSTOM CODE BLOCKS ── */
+    .sql-dropdown {
+      margin: 24px 0;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      background-color: rgba(15, 23, 42, 0.8);
+      overflow: hidden;
+    }
+    .sql-dropdown summary {
+      padding: 16px 24px;
+      background-color: rgba(30, 41, 59, 0.8);
+      color: #38bdf8;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      outline: none;
+      border-bottom: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+    .sql-dropdown summary:hover { background-color: rgba(30, 41, 59, 1); }
+    .sql-dropdown[open] summary { border-bottom: 1px solid #334155; }
+    .sql-dropdown pre.sql-code-block {
+      margin: 0;
+      padding: 24px;
+      color: #f8fafc;
+      background-color: transparent;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Auto-highlighting colors for SQL */
+    .sql-kw { color: #c678dd; font-weight: bold; } /* Keywords: Purple */
+    .sql-fn { color: #61afef; } /* Functions: Blue */
+    .sql-str { color: #98c379; } /* Strings: Green */
+    .sql-num { color: #d19a66; } /* Numbers: Orange */
+  </style>
+</head>
+
+<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark">
+
+  <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 w-full flex-grow">
+    
+    <!-- Back Navigation -->
+    <a href="portfolio.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-10 font-semibold group">
+      <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Back to Portfolio
+    </a>
+
+    <!-- Hero Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start mb-16">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/30 border border-cyan-800 rounded-full text-xs font-bold text-accentCyan mb-6 uppercase tracking-wider">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l7 4v10l-7 4-7-4V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+          RevOps & Data Engineering
+        </div>
+        
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+          Resolving a $7M Pipeline Discrepancy: Reconciling GA4 & Salesforce
+        </h1>
+        
+        <p class="text-lg md:text-xl text-slate-400 leading-relaxed mb-8">
+          During a Q3 executive review, Marketing and Sales reported wildly different pipeline numbers. Here is how I built a deterministic SQL Identity Graph to connect raw GA4 event logs directly to Salesforce CRM data, recovering 1,600 lost leads and eliminating $7M in ghost revenue.
+        </p>
+        
+        <div class="flex flex-wrap gap-2">
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">BigQuery SQL</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">GA4 Raw Export</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Salesforce CRM</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Identity Resolution</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Window Functions</span>
+        </div>
+      </div>
+
+      <!-- Quick Snapshot Sidebar -->
+      <div class="glass-card p-8 rounded-3xl border border-slate-700/50 shadow-2xl">
+        <div class="text-xs font-bold tracking-[0.1em] uppercase text-slate-500 mb-6">Quick Snapshot</div>
+        
+        <div class="space-y-6">
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Business Context</div>
+            <div class="text-lg font-semibold text-white">B2B SaaS Data Silos</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">The Problem</div>
+            <div class="text-lg font-semibold text-white">Marketing & Sales reporting a $7M gap; ad budgets frozen.</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">The Solution</div>
+            <div class="text-lg font-semibold text-white">Custom ELT pipeline debugging & Deterministic Identity Graph.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          The Problem
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">Marketing reported efficient CPL; Sales saw missing leads and degraded pipeline volume.</div>
+      </div>
+      
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Tech Stack
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">BigQuery, PostgreSQL, GA4 Raw Event Logs, Salesforce, Google Tag Manager.</div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          The Solution
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">Diagnosed GTM double-fires, engineered a SQL Identity Graph, and normalized campaign tracking.</div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          Business ROI
+        </div>
+        <div class="text-slate-200 font-medium leading-relaxed">Removed $7M in ghost revenue, recovered 1,600 lost leads, and un-froze a $150k/mo ad budget.</div>
+      </div>
+    </div>
+
+    <!-- Main Article Content -->
+    <div class="max-w-4xl mx-auto space-y-6 text-lg text-slate-300 leading-relaxed">
+
+      <div class="mt-16 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Business Context</div>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">The Q3 Strategic Misalignment</h2>
+      
+      <p>In B2B SaaS, data silos between marketing automation and CRM systems are the main reason why CAC and ROAS numbers can be inaccurate.</p>
+      
+      <p>Our executive team ran into this issue one Monday morning. The VP of Marketing presented a slide showing 7,285 leads from LinkedIn and Google Ads. The VP of Sales countered with a Salesforce dashboard showing a heavily degraded lead volume and missing closed-won revenue. Sales blamed Marketing for focusing on clicks that did not convert, while Marketing said Sales was not following up on leads.</p>
+      
+      <p>Leadership quickly paused $150,000 in monthly ad spending. The CMO asked for the raw data to connect ad spend to real closed-won revenue and to find the source of the problem.</p>
+      
+      <p>The usual default data connectors did not work, so I had to use the raw data directly: a BigQuery export of GA4 events and a CSV file of Salesforce leads.</p>
+      
+      <p>Here’s how I solved it.</p>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 1</div>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Initial Data Exploration: Identifying the Cartesian Explosion</h2>
+      
+      <p>Ideally, merging a web analytics table with a CRM database is straightforward: you use a <code>LEFT JOIN</code> on a shared primary key, such as <code>lead_id</code>.</p>
+      
+      <p>To set a baseline, I wrote a simple query joining CRM pipeline data to GA4 <code>generate_lead</code> events. The results quickly showed a problem.</p>
+
+      <!-- SQL Dropdown 1 -->
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: The Naive Join
+        </summary>
+<pre class="sql-code-block">SELECT 
+    crm.lead_id, crm.email, crm.pipeline_stage, crm.arr_revenue, 
+    ga4.event_timestamp, ga4.source_medium
+FROM salesforce_leads crm
+LEFT JOIN ga4_raw_export ga4 
+    ON crm.lead_id = ga4.custom_lead_id
+    AND ga4.event_name = 'generate_lead';</pre>
+      </details>
+
+      <!-- Placeholder for Image 1 -->
+      <img src="cartesian-explosion-join.png" alt="Naive SQL query and the 8,451 row output showing $53M ARR" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p class="text-sm text-center text-slate-500 italic mb-8">Fig 1: The initial naive join exposing the $53M Cartesian explosion.</p>
+      
+      <p>Instead of the 7,285 leads in the CRM, the joined data showed over 8,450 rows. Even worse, the total pipeline ARR jumped to more than $53 million, which was clearly not accurate.</p>
+      
+      <p>This is a common data modeling problem called a <strong>Cartesian explosion</strong> (or fan-out). When a database finds multiple matches on the right side of a JOIN, it duplicates the left-side row for each match. For example, if a $50,000 deal matches twice in GA4, the dashboard will show $100,000.</p>
+      
+      <p>If I had trusted this raw join and sent it to Power BI, leadership might have made serious forecasting mistakes. I needed to find and fix the duplication at its source.</p>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 2</div>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Root Cause Analysis: Resolving Duplicate Tracking Events</h2>
+      
+      <p>I singled out the GA4 leads that were duplicated and looked at the raw BigQuery schema. By checking the <code>event_timestamp</code> and <code>user_pseudo_id</code>, I saw a clear pattern.</p>
+      
+      <p>I found that the same user was triggering the <code>generate_lead</code> event twice, sometimes just seconds or minutes apart. The Google Tag Manager (GTM) tag was firing twice. For example, if someone submitted a demo request, left the page, and then came back or refreshed the "Thank You" page, GTM sent a duplicate conversion to GA4.</p>
+      
+      <p>To fix this in SQL, I could not just use <code>GROUP BY</code> because that would remove important row-level UTM and campaign details needed for the final attribution model.</p>
+      
+      <p>Instead, I built a Common Table Expression (CTE) using the <code>ROW_NUMBER()</code> window function. By grouping data by <code>custom_lead_id</code> and sorting events by time, I could identify the real first touchpoint and filter out duplicates.</p>
+
+      <!-- SQL Dropdown 2 -->
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Deduplication CTE
+        </summary>
+<pre class="sql-code-block">WITH Deduplicated_GA4 AS (
+    SELECT 
+        custom_lead_id, event_timestamp, source_medium, campaign,
+        ROW_NUMBER() OVER (PARTITION BY custom_lead_id ORDER BY event_timestamp ASC) as rn
+    FROM ga4_raw_export
+    WHERE event_name = 'generate_lead' 
+      AND custom_lead_id IS NOT NULL
+)
+SELECT 
+    COUNT(crm.lead_id) as total_leads,
+    SUM(crm.arr_revenue) as true_arr
+FROM salesforce_leads crm
+LEFT JOIN Deduplicated_GA4 ga4 
+    ON crm.lead_id = ga4.custom_lead_id
+    AND ga4.rn = 1;</pre>
+      </details>
+
+      <!-- Placeholder for Image 2 -->
+      <img src="deduplicated-ga4-cte.png" alt="Deduplicated_GA4 CTE and the corrected ARR output dropping back to $46M" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p class="text-sm text-center text-slate-500 italic mb-8">Fig 2: Utilizing ROW_NUMBER() to eliminate GTM double-fires and correct ARR.</p>
+      
+      <p>This fixed the fan-out problem. The ARR numbers went back to normal, removing about <strong>$7M in false pipeline revenue</strong>.</p>
+      
+      <p>To fix the root cause, I worked with the front-end team to make a lasting change. We added a unique <code>transaction_id</code> to the dataLayer when a form was first submitted and set up GTM to use a session storage flag. I also added an Exception Trigger in GTM so the conversion tag would only fire once per session, protecting data quality in the future.</p>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 3</div>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Analyzing Unmatched Data: Disconnected CRM Records</h2>
+      
+      <p>After removing the duplicate leads, the matched lead count dropped to 5,620. Then I faced a new problem: more than <strong>1,600 qualified leads were in Salesforce but had no link to GA4</strong>.</p>
+      
+      <p>I filtered the CRM data to look at these unmatched leads. The data revealed a bigger issue with how leads were handled:</p>
+      
+      <ul class="space-y-3 mb-6 text-slate-300">
+        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> The primary key (<code>lead_id</code>) was NULL.</li>
+        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> The secondary tracking key (<code>ga_client_id</code>) was NULL.</li>
+        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> The <code>lead_source</code> was overwhelmingly categorized as "Manual Entry" or "Cold Call."</li>
+      </ul>
+      
+      <p>I found that Sales Account Executives were getting calls or emails from prospects and entering their details directly into Salesforce. Because they skipped the website lead form, the tracking data was lost.</p>
+      
+      <p>A junior analyst might label these 1,600 leads as only "Sales Generated / Offline," telling the VP of Marketing that her campaigns had no impact. But in B2B, buyers almost always interact online before calling Sales. They probably clicked ads or read blog posts weeks earlier. The tracking data was not missing; it was just disconnected.</p>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 4</div>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Building the SQL Identity Graph</h2>
+      
+      <p>To reconnect these unmatched leads and rebuild the real buyer journey, I built a <strong>deterministic Identity Graph</strong> in SQL.</p>
+      
+      <p>An Identity Graph uses fallback logic to connect user sessions across platforms. If the main key is missing, it tries to match using a secondary key, such as the prospect’s email address.</p>
+      
+      <h3 class="text-xl font-semibold text-accentCyan mt-8 mb-3">Step 1: Building the Bridging Table</h3>
+      <p>I queried the entire CRM history to build a master bridging table. This CTE searched for cases where both a user’s email and their GA4 cookie (<code>ga_client_id</code>) were captured in past events, such as whitepaper downloads or webinar signups.</p>
+      
+      <h3 class="text-xl font-semibold text-accentCyan mt-8 mb-3">Step 2: Healing the Broken Records via COALESCE</h3>
+      <p>Next, I ran the current Q3 pipeline through this graph using the <code>COALESCE()</code> function. When SQL found a manual entry with a missing tracking ID, <code>COALESCE</code> checked the Identity Graph. If the email was in our history, it pulled the old <code>ga_client_id</code> and linked it to the new record.</p>
+
+      <!-- SQL Dropdown 3 -->
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Identity Graph & COALESCE
+        </summary>
+<pre class="sql-code-block">WITH Identity_Graph AS (
+    SELECT 
+        email, 
+        MAX(ga_client_id) as master_ga_id
+    FROM salesforce_leads
+    WHERE ga_client_id IS NOT NULL
+    GROUP BY email
+),
+Healed_CRM AS (
+    SELECT 
+        crm.email,
+        crm.pipeline_stage,
+        crm.arr_revenue,
+        COALESCE(crm.ga_client_id, ig.master_ga_id) as final_ga_client_id 
+    FROM salesforce_leads crm
+    LEFT JOIN Identity_Graph ig ON crm.email = ig.email
+),
+Deduplicated_GA4 AS (
+    SELECT 
+        user_pseudo_id,
+        source_medium,
+        campaign,
+        ROW_NUMBER() OVER (PARTITION BY user_pseudo_id ORDER BY event_timestamp ASC) as rn
+    FROM ga4_raw_export
+    WHERE event_name = 'generate_lead'
+)
+SELECT 
+    ga4.source_medium,
+    COUNT(crm.email) as total_leads,
+    SUM(crm.arr_revenue) as true_arr
+FROM Healed_CRM crm
+LEFT JOIN Deduplicated_GA4 ga4 
+    ON crm.final_ga_client_id = ga4.user_pseudo_id AND ga4.rn = 1
+GROUP BY ga4.source_medium
+ORDER BY true_arr DESC;</pre>
+      </details>
+
+      <!-- Placeholder for Image 3 -->
+      <img src="identity-graph-coalesce.png" alt="Identity_Graph and Healed_CRM CTEs utilizing COALESCE" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p class="text-sm text-center text-slate-500 italic mb-8">Fig 3: Using COALESCE to resolve identities and heal disconnected CRM records.</p>
+      
+      <p>This approach successfully linked hundreds of "offline" CRM leads back to the digital marketing campaigns that first brought them in.</p>
+
+      <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 5</div>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Normalizing the Campaign Data</h2>
+      
+      <p>With the mapping in place, the data was accurate but not ready for executives. The raw output was messy because different media agencies used inconsistent UTM tracking (like <code>LinkedIn / CPC</code>, <code>linkedin ads</code>, <code>LI / cpc</code>).</p>
+      
+      <p>To make the final dashboard clear for executives, I added a normalization step to the master join. Using <code>LOWER()</code>, <code>TRIM()</code>, and <code>CASE</code> statements, I cleaned up the messy source strings into standard channel groups.</p>
+
+      <!-- SQL Dropdown 4 -->
+      <details class="sql-dropdown">
+        <summary>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          View SQL Query: Final Master Join
+        </summary>
+<pre class="sql-code-block">WITH Identity_Graph AS (
+    SELECT 
+        email, 
+        MAX(ga_client_id) as master_ga_id
+    FROM salesforce_leads
+    WHERE ga_client_id IS NOT NULL
+    GROUP BY email
+),
+Healed_CRM AS (
+    SELECT 
+        crm.email,
+        crm.pipeline_stage,
+        crm.arr_revenue,
+        COALESCE(crm.ga_client_id, ig.master_ga_id) as final_ga_client_id 
+    FROM salesforce_leads crm
+    LEFT JOIN Identity_Graph ig ON crm.email = ig.email
+),
+Deduplicated_GA4 AS (
+    SELECT 
+        user_pseudo_id,
+        source_medium,
+        campaign,
+        ROW_NUMBER() OVER (PARTITION BY user_pseudo_id ORDER BY event_timestamp ASC) as rn
+    FROM ga4_raw_export
+    WHERE event_name = 'generate_lead'
+)
+SELECT 
+    CASE 
+        WHEN LOWER(TRIM(ga4.source_medium)) IN ('linkedin / cpc', 'li / cpc', 'linkedin ads') THEN 'Paid Social (LinkedIn)'
+        WHEN LOWER(TRIM(ga4.source_medium)) IN ('google / cpc', 'google / ads', 'adwords') THEN 'Paid Search (Google)'
+        WHEN LOWER(TRIM(ga4.source_medium)) IN ('google / organic', 'organic search', 'seo') THEN 'Organic Search'
+        WHEN LOWER(TRIM(ga4.source_medium)) IN ('direct / none', '(direct) / (none)') THEN 'Direct'
+        ELSE 'Offline / Unattributed' 
+    END as channel_group,
+    COUNT(crm.email) as total_leads,
+    SUM(crm.arr_revenue) as true_arr
+FROM Healed_CRM crm
+LEFT JOIN Deduplicated_GA4 ga4 
+    ON crm.final_ga_client_id = ga4.user_pseudo_id
+    AND ga4.rn = 1
+GROUP BY channel_group
+ORDER BY true_arr DESC;</pre>
+      </details>
+
+      <!-- Placeholder for Image 4 -->
+      <img src="master-join-normalized.png" alt="Final Master Join SQL and the clean, final 5-row output table showing True Leads and True ARR by Channel" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      <p class="text-sm text-center text-slate-500 italic mb-8">Fig 4: Final Master Join applying string normalization for clean BI reporting.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8">Executive Dashboard Summary</h2>
+
+      <!-- ADAPTED DARK MODE DASHBOARD (Converted from user's light mode HTML) -->
+      <div class="font-inter bg-slate-800/40 backdrop-blur-md border border-slate-700 rounded-2xl shadow-2xl p-6 sm:p-8 max-w-4xl mx-auto my-12 overflow-hidden relative">
+        
+        <!-- Decorative Glow -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+
+        <!-- Header -->
+        <div class="mb-8 border-b border-slate-700 pb-6 relative z-10">
+          <h3 class="text-2xl font-bold text-white tracking-tight m-0">Q3 Pipeline Attribution</h3>
+          <p class="text-slate-400 text-sm mt-1">Post-Identity Graph Resolution (Deduplicated & Healed)</p>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 relative z-10">
+          <!-- KPI 1 -->
+          <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700 shadow-sm">
+            <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">True Pipeline ARR</div>
+            <div class="text-3xl font-bold text-white">$46.6M</div>
+            <div class="text-emerald-400 text-xs font-medium mt-2 flex items-center">
+              <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+              $7M Ghost Revenue Removed
+            </div>
+          </div>
+          <!-- KPI 2 -->
+          <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700 shadow-sm">
+            <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Total Verified Leads</div>
+            <div class="text-3xl font-bold text-white">7,285</div>
+            <div class="text-emerald-400 text-xs font-medium mt-2 flex items-center">
+              <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+              1,600 'Lost' Leads Recovered
+            </div>
+          </div>
+          <!-- KPI 3 -->
+          <div class="bg-indigo-900/40 p-5 rounded-xl border border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.15)] text-white">
+            <div class="text-indigo-300 text-xs font-semibold uppercase tracking-wider mb-1">Top Driver</div>
+            <div class="text-3xl font-bold">LinkedIn</div>
+            <div class="text-indigo-200 text-xs font-medium mt-2">
+              31% of Total Pipeline
+            </div>
+          </div>
+        </div>
+
+        <!-- Horizontal Bar Chart -->
+        <div class="mb-10 relative z-10">
+          <h4 class="text-sm font-semibold text-white mb-4 uppercase tracking-wider">Revenue by Standardized Channel</h4>
+          <div class="space-y-4">
+            
+            <!-- Bar 1 -->
+            <div>
+              <div class="flex justify-between text-xs font-medium mb-1">
+                <span class="text-slate-300">Paid Social (LinkedIn)</span>
+                <span class="text-white">$14.5M</span>
+              </div>
+              <div class="w-full bg-slate-900 rounded-full h-2.5 border border-slate-700">
+                <div class="bg-indigo-500 h-2.5 rounded-full animate-bar shadow-[0_0_10px_rgba(99,102,241,0.6)]" style="width: 31%"></div>
+              </div>
+            </div>
+
+            <!-- Bar 2 -->
+            <div>
+              <div class="flex justify-between text-xs font-medium mb-1">
+                <span class="text-slate-300">Paid Search (Google)</span>
+                <span class="text-white">$10.8M</span>
+              </div>
+              <div class="w-full bg-slate-900 rounded-full h-2.5 border border-slate-700">
+                <div class="bg-accentCyan h-2.5 rounded-full animate-bar shadow-[0_0_10px_rgba(34,211,238,0.6)]" style="width: 23%"></div>
+              </div>
+            </div>
+
+            <!-- Bar 3 -->
+            <div>
+              <div class="flex justify-between text-xs font-medium mb-1">
+                <span class="text-slate-300">Organic Search</span>
+                <span class="text-white">$8.5M</span>
+              </div>
+              <div class="w-full bg-slate-900 rounded-full h-2.5 border border-slate-700">
+                <div class="bg-emerald-400 h-2.5 rounded-full animate-bar shadow-[0_0_10px_rgba(52,211,153,0.6)]" style="width: 18%"></div>
+              </div>
+            </div>
+
+            <!-- Bar 4 -->
+            <div>
+              <div class="flex justify-between text-xs font-medium mb-1">
+                <span class="text-slate-300">Offline / Unattributed</span>
+                <span class="text-white">$7.9M</span>
+              </div>
+              <div class="w-full bg-slate-900 rounded-full h-2.5 border border-slate-700">
+                <div class="bg-slate-500 h-2.5 rounded-full animate-bar" style="width: 17%"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Clean Data Table -->
+        <div class="overflow-x-auto relative z-10 rounded-xl border border-slate-700">
+          <table class="w-full text-left text-sm text-slate-300 border-collapse">
+            <thead>
+              <tr class="border-b border-slate-700 bg-slate-900/80">
+                <th class="py-4 px-4 font-semibold text-white uppercase tracking-wider text-xs">Channel Group</th>
+                <th class="py-4 px-4 font-semibold text-white uppercase tracking-wider text-xs text-right">Total Leads</th>
+                <th class="py-4 px-4 font-semibold text-white uppercase tracking-wider text-xs text-right">True ARR</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-700 bg-slate-800/30">
+              <tr class="hover:bg-slate-800/80 transition-colors">
+                <td class="py-3 px-4 font-medium text-slate-200 flex items-center">
+                  <div class="w-2 h-2 rounded-full bg-indigo-500 mr-2 shadow-[0_0_5px_rgba(99,102,241,0.8)]"></div> Paid Social (LinkedIn)
+                </td>
+                <td class="py-3 px-4 text-right font-mono text-slate-400">2,253</td>
+                <td class="py-3 px-4 text-right font-mono font-medium text-emerald-400">$14,513,485</td>
+              </tr>
+              <tr class="hover:bg-slate-800/80 transition-colors">
+                <td class="py-3 px-4 font-medium text-slate-200 flex items-center">
+                  <div class="w-2 h-2 rounded-full bg-accentCyan mr-2 shadow-[0_0_5px_rgba(34,211,238,0.8)]"></div> Paid Search (Google)
+                </td>
+                <td class="py-3 px-4 text-right font-mono text-slate-400">1,746</td>
+                <td class="py-3 px-4 text-right font-mono font-medium text-emerald-400">$10,812,177</td>
+              </tr>
+              <tr class="hover:bg-slate-800/80 transition-colors">
+                <td class="py-3 px-4 font-medium text-slate-200 flex items-center">
+                  <div class="w-2 h-2 rounded-full bg-emerald-400 mr-2 shadow-[0_0_5px_rgba(52,211,153,0.8)]"></div> Organic Search
+                </td>
+                <td class="py-3 px-4 text-right font-mono text-slate-400">1,321</td>
+                <td class="py-3 px-4 text-right font-mono font-medium text-emerald-400">$8,578,903</td>
+              </tr>
+              <tr class="hover:bg-slate-800/80 transition-colors">
+                <td class="py-3 px-4 font-medium text-slate-200 flex items-center">
+                  <div class="w-2 h-2 rounded-full bg-slate-500 mr-2"></div> Offline / Unattributed
+                </td>
+                <td class="py-3 px-4 text-right font-mono text-slate-400">1,129</td>
+                <td class="py-3 px-4 text-right font-mono font-medium text-emerald-400">$7,931,721</td>
+              </tr>
+              <tr class="hover:bg-slate-800/80 transition-colors">
+                <td class="py-3 px-4 font-medium text-slate-200 flex items-center">
+                  <div class="w-2 h-2 rounded-full bg-amber-400 mr-2 shadow-[0_0_5px_rgba(251,191,36,0.8)]"></div> Direct
+                </td>
+                <td class="py-3 px-4 text-right font-mono text-slate-400">836</td>
+                <td class="py-3 px-4 text-right font-mono font-medium text-emerald-400">$4,830,651</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- END DARK MODE DASHBOARD -->
+
+      <p>When I showed the final, cleaned dataset to the CMO and VP of Sales, the misalignment between departments was quickly resolved. The data showed that Marketing was bringing in quality leads, but Sales processes were breaking the attribution and tagging issues were inflating the numbers.</p>
+      
+      <p>By building this unified data pipeline, I achieved three key business results:</p>
+      
+      <ul class="space-y-4 text-slate-300 mt-6 mb-10">
+        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span class="leading-relaxed"><strong class="text-white">Restored Data Trust:</strong> Prevented multi-million dollar forecasting errors by eliminating the ghost pipeline revenue traced back to the GTM double-fire.</span></li>
+        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span class="leading-relaxed"><strong class="text-white">Revealed True ROAS:</strong> Recovered over 1,600 manually entered leads, showing that Paid Social and Organic Search were driving top-of-funnel awareness for high-value accounts that Sales had thought were only offline acquisitions.</span></li>
+        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span class="leading-relaxed"><strong class="text-white">Enabled Strategic Reallocation:</strong> Leadership confidently restarted the $150k/month ad budget. With accurate CAC and pipeline metrics, we shifted 30% of the budget from underperforming channels to our best LinkedIn campaigns.</span></li>
+      </ul>
+      
+      <p>I also set up a feedback loop with RevOps to update Salesforce lead creation rules, making sure manual entries now require all key fields.</p>
+      
+      <div class="bg-indigo-900/40 border border-indigo-500/50 p-8 rounded-2xl my-12 shadow-[0_0_20px_rgba(99,102,241,0.15)]">
+        <h4 class="text-indigo-400 font-bold uppercase tracking-widest text-xs mb-3">Strategic Takeaway</h4>
+        <p class="text-indigo-100 text-lg leading-relaxed m-0">High-impact data analytics is not just about writing complex SQL joins. It is about really understanding business processes, from the first ad click to the sales call, and building strong data models that reflect real human actions.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="max-w-5xl mx-auto px-6 w-full mb-20">
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-3xl p-10 md:p-14 text-center shadow-2xl relative overflow-hidden">
+      <!-- Decorative glow -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-accentCyan/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+      
+      <div class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 relative z-10">Next Step</div>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Need help with tracking, reporting, or dashboard work?</h2>
+      <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 relative z-10">
+        If you need support with advanced tracking, data pipeline engineering, Power BI modeling, or SQL-based attribution analysis, send me a message to discuss your data architecture.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+        <a href="contact.html" class="px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+          Contact Me
+        </a>
+        <a href="portfolio.html" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors">
+          Back to Portfolio
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Custom SQL Syntax Highlighter (Dark Theme Optimized)
+      (function highlightMultipleSQL() {
+        const codeElements = document.querySelectorAll('.sql-code-block');
+        const keywords = ['WITH', 'SELECT', 'FROM', 'LEFT JOIN', 'JOIN', 'ON', 'AND', 'GROUP BY', 'ORDER BY', 'DESC', 'ASC', 'WHERE', 'AS', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END', 'IS NOT NULL', 'OVER', 'PARTITION BY'];
+        const functions = ['ROUND', 'SUM', 'NULLIF', 'CONCAT', 'COUNT', 'DATE_FORMAT', 'AVG', 'COALESCE', 'MAX', 'ROW_NUMBER', 'LOWER', 'TRIM'];
+
+        codeElements.forEach(codeElement => {
+          let code = codeElement.innerHTML;
+
+          // Highlight Strings
+          code = code.replace(/('[^']*')/g, `<span class="sql-str">$1</span>`);
+          // Highlight Numbers
+          code = code.replace(/\b(\d+(\.\d+)?)\b/g, `<span class="sql-num">$1</span>`);
+          // Highlight Keywords
+          keywords.forEach(kw => {
+            const reg = new RegExp('\\b' + kw + '\\b(?=(?:[^\']*\'[^\']*\')*[^\']*$)', 'gi');
+            code = code.replace(reg, `<span class="sql-kw">${kw}</span>`);
+          });
+          // Highlight Functions
+          functions.forEach(fn => {
+            const reg = new RegExp('\\b' + fn + '\\b(?=(?:[^\']*\'[^\']*\')*[^\']*$)', 'gi');
+            code = code.replace(reg, `<span class="sql-fn">${fn}</span>`);
+          });
+
+          codeElement.innerHTML = code;
+        });
+      })();
+    });
+  </script>
+</body>
+</html>
