@@ -118,7 +118,7 @@
         </h1>
         
         <p class="text-lg md:text-xl text-slate-400 leading-relaxed mb-8">
-          During a Q3 executive review, Marketing and Sales reported wildly different pipeline numbers. Here is how I built a deterministic SQL Identity Graph to connect raw GA4 event logs directly to Salesforce CRM data, recovering 1,600 lost leads and eliminating $7M in ghost revenue.
+          How I built a deterministic SQL Identity Graph to connect raw GA4 event logs directly to Salesforce CRM data. This project resolved a severe Q3 reporting discrepancy between Marketing and Sales, recovering 1,600 missing leads and eliminating $7M in ghost pipeline revenue.
         </p>
         
         <div class="flex flex-wrap gap-2">
@@ -136,54 +136,35 @@
         
         <div class="space-y-6">
           <div>
-            <div class="text-sm font-bold text-slate-500 mb-1">Business Context</div>
-            <div class="text-lg font-semibold text-white">B2B SaaS Data Silos</div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Discrepancy Resolved</div>
+            <div class="text-lg font-semibold text-white">$7M Ghost Revenue Eliminated</div>
           </div>
           <div>
-            <div class="text-sm font-bold text-slate-500 mb-1">The Problem</div>
-            <div class="text-lg font-semibold text-white">Marketing & Sales reporting a $7M gap; ad budgets frozen.</div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Data Recovered</div>
+            <div class="text-lg font-semibold text-white">1,600 Disconnected Leads</div>
           </div>
           <div>
-            <div class="text-sm font-bold text-slate-500 mb-1">The Solution</div>
-            <div class="text-lg font-semibold text-white">Custom ELT pipeline debugging & Deterministic Identity Graph.</div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Primary Technique</div>
+            <div class="text-lg font-semibold text-white">SQL Identity Graph & COALESCE</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Data Sources</div>
+            <div class="text-lg font-semibold text-white">GA4 BigQuery & Salesforce</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Summary Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
-        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
-          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          The Problem
-        </div>
-        <div class="text-slate-200 font-medium leading-relaxed">Marketing reported efficient CPL; Sales saw missing leads and degraded pipeline volume.</div>
+    <!-- Executive Summary -->
+    <div class="glass-card p-8 md:p-10 rounded-3xl mb-20 border border-slate-700/50 shadow-xl relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-accentCyan/5 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+      <div class="text-xs font-bold uppercase tracking-widest text-accentCyan mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Executive Summary
       </div>
-      
-      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
-        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
-          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          Tech Stack
-        </div>
-        <div class="text-slate-200 font-medium leading-relaxed">BigQuery, PostgreSQL, GA4 Raw Event Logs, Salesforce, Google Tag Manager.</div>
-      </div>
-
-      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
-        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
-          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          The Solution
-        </div>
-        <div class="text-slate-200 font-medium leading-relaxed">Diagnosed GTM double-fires, engineered a SQL Identity Graph, and normalized campaign tracking.</div>
-      </div>
-
-      <div class="glass-card p-6 rounded-2xl hover:-translate-y-1 transition-transform">
-        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
-          <svg class="text-accentCyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-          Business ROI
-        </div>
-        <div class="text-slate-200 font-medium leading-relaxed">Removed $7M in ghost revenue, recovered 1,600 lost leads, and un-froze a $150k/mo ad budget.</div>
-      </div>
+      <p class="text-slate-300 text-lg leading-relaxed m-0">
+        During the Q3 executive pipeline review, a severe data discrepancy emerged: Marketing reported highly efficient Cost Per Lead (CPL) metrics, while Sales reported degraded lead volume and missing revenue. To bridge this gap, I bypassed standard BI connectors and built a custom ELT pipeline joining raw GA4 BigQuery exports with Salesforce CRM data. By identifying a Google Tag Manager double-fire error and engineering a deterministic SQL Identity Graph to heal disconnected records, I successfully aligned the datasets. This project recovered 1,600 missing leads, eliminated $7M in false pipeline revenue, and provided leadership with a verified financial baseline for their quarterly ad budgets.
+      </p>
     </div>
 
     <!-- Main Article Content -->
@@ -203,7 +184,7 @@
       <p>Here’s how I solved it.</p>
 
       <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 1</div>
-      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Initial Data Exploration: Identifying the Cartesian Explosion</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Data Exploration: Identifying the Cartesian Explosion</h2>
       
       <p>Ideally, merging a web analytics table with a CRM database is straightforward: you use a <code>LEFT JOIN</code> on a shared primary key, such as <code>lead_id</code>.</p>
       
@@ -235,7 +216,7 @@ LEFT JOIN ga4_raw_export ga4
       <p>If I had trusted this raw join and sent it to Power BI, leadership might have made serious forecasting mistakes. I needed to find and fix the duplication at its source.</p>
 
       <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 2</div>
-      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Root Cause Analysis: Resolving Duplicate Tracking Events</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Root Cause: Resolving Duplicate Tracking Events</h2>
       
       <p>I singled out the GA4 leads that were duplicated and looked at the raw BigQuery schema. By checking the <code>event_timestamp</code> and <code>user_pseudo_id</code>, I saw a clear pattern.</p>
       
@@ -277,7 +258,7 @@ LEFT JOIN Deduplicated_GA4 ga4
       <p>To fix the root cause, I worked with the front-end team to make a lasting change. We added a unique <code>transaction_id</code> to the dataLayer when a form was first submitted and set up GTM to use a session storage flag. I also added an Exception Trigger in GTM so the conversion tag would only fire once per session, protecting data quality in the future.</p>
 
       <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 3</div>
-      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Analyzing Unmatched Data: Disconnected CRM Records</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Analyzing Unmatched CRM Data Records</h2>
       
       <p>After removing the duplicate leads, the matched lead count dropped to 5,620. Then I faced a new problem: more than <strong>1,600 qualified leads were in Salesforce but had no link to GA4</strong>.</p>
       
@@ -291,7 +272,7 @@ LEFT JOIN Deduplicated_GA4 ga4
       
       <p>I found that Sales Account Executives were getting calls or emails from prospects and entering their details directly into Salesforce. Because they skipped the website lead form, the tracking data was lost.</p>
       
-      <p>A junior analyst might label these 1,600 leads as only "Sales Generated / Offline," telling the VP of Marketing that her campaigns had no impact. But in B2B, buyers almost always interact online before calling Sales. They probably clicked ads or read blog posts weeks earlier. The tracking data was not missing; it was just disconnected.</p>
+      <p>Most analysts might label these 1,600 leads as only "Sales Generated / Offline," telling the VP of Marketing that her campaigns had no impact. But in B2B, buyers almost always interact online before calling Sales. They probably clicked ads or read blog posts weeks earlier. The tracking data was not missing; it was just disconnected.</p>
 
       <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 4</div>
       <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Building the SQL Identity Graph</h2>
