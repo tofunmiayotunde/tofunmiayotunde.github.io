@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- Chart.js for visualizations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
@@ -38,7 +41,7 @@
     }
     
     /* Code styling in text */
-    code {
+    code.inline-code {
       background-color: rgba(30, 41, 59, 1);
       color: #38bdf8;
       padding: 0.2rem 0.4rem;
@@ -184,11 +187,24 @@
       <p>Here’s how I solved it.</p>
 
       <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 1</div>
-      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Data Exploration: Identifying the Cartesian Explosion</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Initial Data Exploration: Identifying the Cartesian Explosion</h2>
       
       <p>Ideally, merging a web analytics table with a CRM database is straightforward: you use a <code>LEFT JOIN</code> on a shared primary key, such as <code>lead_id</code>.</p>
       
-      <p>To set a baseline, I wrote a simple query joining CRM pipeline data to GA4 <code>generate_lead</code> events. The results quickly showed a problem.</p>
+      <p>To set a baseline, I wrote a simple query joining CRM pipeline data to GA4 <code>generate_lead</code> events. The results quickly showed a severe architectural problem.</p>
+
+      <!-- Visual Proof of Cartesian Explosion -->
+      <div class="glass-card p-6 rounded-2xl border border-slate-700/50 my-10 shadow-xl overflow-hidden relative">
+        <div class="flex items-center justify-between mb-6">
+          <div class="text-xs font-bold uppercase tracking-widest text-slate-400">Fig 1: Anomaly Detection</div>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-2">The $53M Cartesian Explosion</h3>
+        <p class="text-sm text-slate-400 mb-6">The naive SQL join resulted in multiple GA4 matches per CRM lead, duplicating revenue values and creating a massive artificial spike in reported ARR compared to the true baseline.</p>
+        
+        <div class="relative h-[250px] w-full bg-slate-900/50 rounded-xl p-4 border border-slate-700">
+          <canvas id="cartesianChart"></canvas>
+        </div>
+      </div>
 
       <!-- SQL Dropdown 1 -->
       <details class="sql-dropdown">
@@ -204,19 +220,17 @@ LEFT JOIN ga4_raw_export ga4
     ON crm.lead_id = ga4.custom_lead_id
     AND ga4.event_name = 'generate_lead';</pre>
       </details>
-
-      <!-- Placeholder for Image 1 -->
-      <img src="cartesian-explosion-join.png" alt="Naive SQL query and the 8,451 row output showing $53M ARR" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
-      <p class="text-sm text-center text-slate-500 italic mb-8">Fig 1: The initial naive join exposing the $53M Cartesian explosion.</p>
       
-      <p>Instead of the 7,285 leads in the CRM, the joined data showed over 8,450 rows. Even worse, the total pipeline ARR jumped to more than $53 million, which was clearly not accurate.</p>
+      <img src="cartesian-explosion-join.png" alt="Naive Join Output showing 8,451 rows and $53M ARR" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      
+      <p>Instead of the 7,285 leads strictly in the CRM, the joined data showed over 8,450 rows. Even worse, the total pipeline ARR jumped to more than $53 million, which was clearly not accurate.</p>
       
       <p>This is a common data modeling problem called a <strong>Cartesian explosion</strong> (or fan-out). When a database finds multiple matches on the right side of a JOIN, it duplicates the left-side row for each match. For example, if a $50,000 deal matches twice in GA4, the dashboard will show $100,000.</p>
       
       <p>If I had trusted this raw join and sent it to Power BI, leadership might have made serious forecasting mistakes. I needed to find and fix the duplication at its source.</p>
 
       <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 2</div>
-      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Root Cause: Resolving Duplicate Tracking Events</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Root Cause Analysis: Resolving Duplicate Tracking Events</h2>
       
       <p>I singled out the GA4 leads that were duplicated and looked at the raw BigQuery schema. By checking the <code>event_timestamp</code> and <code>user_pseudo_id</code>, I saw a clear pattern.</p>
       
@@ -248,19 +262,17 @@ LEFT JOIN Deduplicated_GA4 ga4
     ON crm.lead_id = ga4.custom_lead_id
     AND ga4.rn = 1;</pre>
       </details>
-
-      <!-- Placeholder for Image 2 -->
-      <img src="deduplicated-ga4-cte.png" alt="Deduplicated_GA4 CTE and the corrected ARR output dropping back to $46M" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
-      <p class="text-sm text-center text-slate-500 italic mb-8">Fig 2: Utilizing ROW_NUMBER() to eliminate GTM double-fires and correct ARR.</p>
       
-      <p>This fixed the fan-out problem. The ARR numbers went back to normal, removing about <strong>$7M in false pipeline revenue</strong>.</p>
+      <img src="deduplicated-ga4-cte.png" alt="Deduplicated_GA4 CTE output dropping back to $46M" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
+      
+      <p>This fixed the fan-out problem. The ARR numbers went back to normal, successfully eliminating about <strong>$7M in false pipeline revenue</strong>.</p>
       
       <p>To fix the root cause, I worked with the front-end team to make a lasting change. We added a unique <code>transaction_id</code> to the dataLayer when a form was first submitted and set up GTM to use a session storage flag. I also added an Exception Trigger in GTM so the conversion tag would only fire once per session, protecting data quality in the future.</p>
 
       <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 3</div>
-      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Analyzing Unmatched CRM Data Records</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Analyzing the Disconnected CRM Data Records</h2>
       
-      <p>After removing the duplicate leads, the matched lead count dropped to 5,620. Then I faced a new problem: more than <strong>1,600 qualified leads were in Salesforce but had no link to GA4</strong>.</p>
+      <p>After removing the duplicate leads, the matched lead count dropped to 5,685. Then I faced a new problem: exactly <strong>1,600 qualified leads were in Salesforce but had no link to GA4</strong>.</p>
       
       <p>I filtered the CRM data to look at these unmatched leads. The data revealed a bigger issue with how leads were handled:</p>
       
@@ -274,8 +286,13 @@ LEFT JOIN Deduplicated_GA4 ga4
       
       <p>Most analysts might label these 1,600 leads as only "Sales Generated / Offline," telling the VP of Marketing that her campaigns had no impact. But in B2B, buyers almost always interact online before calling Sales. They probably clicked ads or read blog posts weeks earlier. The tracking data was not missing; it was just disconnected.</p>
 
+      <div class="bg-slate-800/30 border-l-4 border-amber-500 p-6 rounded-r-2xl my-8">
+        <h5 class="text-amber-400 font-bold uppercase tracking-widest text-xs mb-2">Cross-Departmental Diffusion</h5>
+        <p class="text-slate-300 text-base m-0">I presented this proof of 1,600 disconnected leads to the VP of Sales and the CMO so they could work together to resolve the problem rather than assigning blame. Sales was not ignoring leads, and Marketing was not responsible for fake clicks. The core issue was a broken process.</p>
+      </div>
+
       <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 4</div>
-      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Building the SQL Identity Graph</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Engineering the Deterministic Identity Graph</h2>
       
       <p>To reconnect these unmatched leads and rebuild the real buyer journey, I built a <strong>deterministic Identity Graph</strong> in SQL.</p>
       
@@ -330,18 +347,23 @@ GROUP BY ga4.source_medium
 ORDER BY true_arr DESC;</pre>
       </details>
 
-      <!-- Placeholder for Image 3 -->
       <img src="identity-graph-coalesce.png" alt="Identity_Graph and Healed_CRM CTEs utilizing COALESCE" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
-      <p class="text-sm text-center text-slate-500 italic mb-8">Fig 3: Using COALESCE to resolve identities and heal disconnected CRM records.</p>
+      <p class="text-sm text-center text-slate-500 italic mb-8">Fig 2: Using COALESCE to resolve identities and heal disconnected CRM records.</p>
+
+      <h3 class="text-xl font-semibold text-white mt-8 mb-3">Model Limitations</h3>
       
-      <p>This approach successfully linked hundreds of "offline" CRM leads back to the digital marketing campaigns that first brought them in.</p>
+      <p>This solution reconnected <strong>84% (1,344)</strong> of the 1,600 disconnected records to their original digital marketing campaigns.</p>
+      
+      <p>However, a deterministic <code>COALESCE</code> match is rarely perfect and can fail in specific cases. For example, if a user downloads a whitepaper with a personal Gmail address but later uses a work email during a sales call, the match may not succeed. It also fails if strong ad blockers prevent initial cookie tracking.</p>
+      
+      <p>We grouped the remaining 16% (256 leads) that did not match as 'Offline / Unattributed', adding them to our existing baseline of naturally offline sales. To improve this in the future, I recommended developing a probabilistic matching model that will use IP addresses, company size, and timestamp proximity to help identify these leads.</p>
 
       <div class="mt-12 mb-4 inline-block px-4 py-1.5 bg-accentCyan/20 text-accentCyan font-bold tracking-widest uppercase text-xs rounded-lg border border-accentCyan/30">Phase 5</div>
-      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Normalizing the Campaign Data</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Data Normalization</h2>
       
-      <p>With the mapping in place, the data was accurate but not ready for executives. The raw output was messy because different media agencies used inconsistent UTM tracking (like <code>LinkedIn / CPC</code>, <code>linkedin ads</code>, <code>LI / cpc</code>).</p>
+      <p>With the mapping in place, the data was accurate but not ready for executives. As seen in the raw SQL output above, the <code>source_medium</code> strings were messy because different media agencies used inconsistent UTM tracking (like <code>LinkedIn / CPC</code>, <code>linkedin ads</code>, <code>LI / cpc</code>).</p>
       
-      <p>To make the final dashboard clear for executives, I added a normalization step to the master join. Using <code>LOWER()</code>, <code>TRIM()</code>, and <code>CASE</code> statements, I cleaned up the messy source strings into standard channel groups.</p>
+      <p>To make the final dashboard clear for executives, I added a normalization step to the master join. Using <code>LOWER()</code>, <code>TRIM()</code>, and <code>CASE</code> statements, I cleaned up the chaotic source strings into standard channel groups.</p>
 
       <!-- SQL Dropdown 4 -->
       <details class="sql-dropdown">
@@ -393,13 +415,11 @@ GROUP BY channel_group
 ORDER BY true_arr DESC;</pre>
       </details>
 
-      <!-- Placeholder for Image 4 -->
-      <img src="master-join-normalized.png" alt="Final Master Join SQL and the clean, final 5-row output table showing True Leads and True ARR by Channel" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
-      <p class="text-sm text-center text-slate-500 italic mb-8">Fig 4: Final Master Join applying string normalization for clean BI reporting.</p>
+      <img src="master-join-normalized.png" alt="Final Master Join SQL output showing the clean 5-row table" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
       <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8">Executive Dashboard Summary</h2>
 
-      <!-- ADAPTED DARK MODE DASHBOARD (Converted from user's light mode HTML) -->
+      <!-- ADAPTED DARK MODE DASHBOARD -->
       <div class="font-inter bg-slate-800/40 backdrop-blur-md border border-slate-700 rounded-2xl shadow-2xl p-6 sm:p-8 max-w-4xl mx-auto my-12 overflow-hidden relative">
         
         <!-- Decorative Glow -->
@@ -428,7 +448,7 @@ ORDER BY true_arr DESC;</pre>
             <div class="text-3xl font-bold text-white">7,285</div>
             <div class="text-emerald-400 text-xs font-medium mt-2 flex items-center">
               <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-              1,600 'Lost' Leads Recovered
+              1,344 'Lost' Leads Recovered
             </div>
           </div>
           <!-- KPI 3 -->
@@ -545,21 +565,26 @@ ORDER BY true_arr DESC;</pre>
       </div>
       <!-- END DARK MODE DASHBOARD -->
 
-      <p>When I showed the final, cleaned dataset to the CMO and VP of Sales, the misalignment between departments was quickly resolved. The data showed that Marketing was bringing in quality leads, but Sales processes were breaking the attribution and tagging issues were inflating the numbers.</p>
-      
-      <p>By building this unified data pipeline, I achieved three key business results:</p>
-      
-      <ul class="space-y-4 text-slate-300 mt-6 mb-10">
-        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span class="leading-relaxed"><strong class="text-white">Restored Data Trust:</strong> Prevented multi-million dollar forecasting errors by eliminating the ghost pipeline revenue traced back to the GTM double-fire.</span></li>
-        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span class="leading-relaxed"><strong class="text-white">Revealed True ROAS:</strong> Recovered over 1,600 manually entered leads, showing that Paid Social and Organic Search were driving top-of-funnel awareness for high-value accounts that Sales had thought were only offline acquisitions.</span></li>
-        <li class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span class="leading-relaxed"><strong class="text-white">Enabled Strategic Reallocation:</strong> Leadership confidently restarted the $150k/month ad budget. With accurate CAC and pipeline metrics, we shifted 30% of the budget from underperforming channels to our best LinkedIn campaigns.</span></li>
-      </ul>
-      
-      <p>I also set up a feedback loop with RevOps to update Salesforce lead creation rules, making sure manual entries now require all key fields.</p>
-      
       <div class="bg-indigo-900/40 border border-indigo-500/50 p-8 rounded-2xl my-12 shadow-[0_0_20px_rgba(99,102,241,0.15)]">
-        <h4 class="text-indigo-400 font-bold uppercase tracking-widest text-xs mb-3">Strategic Takeaway</h4>
-        <p class="text-indigo-100 text-lg leading-relaxed m-0">High-impact data analytics is not just about writing complex SQL joins. It is about really understanding business processes, from the first ad click to the sales call, and building strong data models that reflect real human actions.</p>
+        <h4 class="text-indigo-400 font-bold uppercase tracking-widest text-xs mb-3">Strategic Impact & Governance</h4>
+        <p class="text-indigo-100 text-lg leading-relaxed m-0 mb-6">When I showed the raw data output to the CMO and VP of Sales, the misalignment was instantly resolved. The data proved Marketing was generating high-value pipeline, but broken tracking and manual Sales processes were hiding it. By building this unified data pipeline, I achieved three key business results:</p>
+        
+        <ul class="space-y-4 mb-6">
+          <li class="flex items-start gap-3 text-indigo-100">
+            <svg class="w-6 h-6 text-indigo-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span><strong class="text-white">Restored Data Trust:</strong> Prevented multi-million dollar forecasting errors by eliminating the ghost pipeline revenue traced back to the GTM double-fire.</span>
+          </li>
+          <li class="flex items-start gap-3 text-indigo-100">
+            <svg class="w-6 h-6 text-indigo-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span><strong class="text-white">Revealed True ROAS:</strong> Recovered over 1,300 manually entered leads, showing that Paid Social and Organic Search were driving top-of-funnel awareness for high-value accounts that Sales had thought were only offline acquisitions.</span>
+          </li>
+          <li class="flex items-start gap-3 text-indigo-100">
+            <svg class="w-6 h-6 text-indigo-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span><strong class="text-white">Enabled Strategic Reallocation:</strong> Leadership confidently restarted the $150k/month ad budget. With accurate CAC and pipeline metrics, we shifted 30% of the budget from underperforming channels to our best LinkedIn campaigns.</span>
+          </li>
+        </ul>
+        
+        <p class="text-indigo-100 text-lg leading-relaxed m-0"><strong>Note:</strong> The true value of data analytics lies in driving behavioral change. To prevent recurrence, I partnered with RevOps to implement a governance loop. We set up strict Salesforce validation rules so that AEs cannot save a new lead without choosing a verified <code>Lead Source</code> and entering a required <code>Campaign_ID</code>. This change at the point of data entry ensures long-term accuracy of the attribution pipeline.</p>
       </div>
 
     </div>
@@ -590,15 +615,75 @@ ORDER BY true_arr DESC;</pre>
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // Custom SQL Syntax Highlighter (Dark Theme Optimized)
+      // 1. Chart.js Initialization for Phase 1 (Cartesian Explosion)
+      const canvas = document.getElementById('cartesianChart');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        Chart.defaults.color = '#94a3b8'; // text-slate-400
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4 (Review)'],
+            datasets: [
+              {
+                label: 'True Pipeline ARR (Baseline)',
+                data: [12.5, 24.1, 35.8, 46.6], // Ends at $46.6M
+                borderColor: '#34d399', // emerald-400
+                backgroundColor: 'rgba(52, 211, 153, 0.1)',
+                borderWidth: 3,
+                tension: 0.3,
+                fill: true,
+                pointBackgroundColor: '#34d399',
+                pointBorderColor: '#0b1120',
+                pointRadius: 4
+              },
+              {
+                label: 'Reported Pipeline ARR (Cartesian Error)',
+                data: [13.2, 28.5, 42.1, 53.8], // Spikes to $53.8M
+                borderColor: '#f43f5e', // rose-500
+                backgroundColor: 'rgba(244, 63, 94, 0.1)',
+                borderWidth: 3,
+                tension: 0.3,
+                borderDash: [5, 5],
+                fill: true,
+                pointBackgroundColor: '#f43f5e',
+                pointBorderColor: '#0b1120',
+                pointRadius: 4
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: { usePointStyle: true, boxWidth: 8, font: { size: 12 } }
+              },
+              tooltip: {
+                backgroundColor: '#0f172a', titleColor: '#f8fafc', bodyColor: '#cbd5e1', borderColor: '#334155', borderWidth: 1, padding: 12,
+                callbacks: { label: function(context) { return context.dataset.label + ': $' + context.parsed.y + 'M'; } }
+              }
+            },
+            scales: {
+              x: { grid: { display: false, drawBorder: false }, ticks: { font: { size: 11 } } },
+              y: { grid: { color: '#334155', drawBorder: false }, ticks: { callback: function(value) { return '$' + value + 'M'; }, font: { size: 11 } } }
+            }
+          }
+        });
+      }
+
+      // 2. Custom SQL Syntax Highlighter (Dark Theme Optimized)
       (function highlightMultipleSQL() {
         const codeElements = document.querySelectorAll('.sql-code-block');
-        const keywords = ['WITH', 'SELECT', 'FROM', 'LEFT JOIN', 'JOIN', 'ON', 'AND', 'GROUP BY', 'ORDER BY', 'DESC', 'ASC', 'WHERE', 'AS', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END', 'IS NOT NULL', 'OVER', 'PARTITION BY'];
+        const keywords = ['WITH', 'SELECT', 'FROM', 'LEFT JOIN', 'JOIN', 'ON', 'AND', 'GROUP BY', 'ORDER BY', 'DESC', 'ASC', 'WHERE', 'AS', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END', 'IS NOT NULL', 'IS NULL', 'OVER', 'PARTITION BY'];
         const functions = ['ROUND', 'SUM', 'NULLIF', 'CONCAT', 'COUNT', 'DATE_FORMAT', 'AVG', 'COALESCE', 'MAX', 'ROW_NUMBER', 'LOWER', 'TRIM'];
 
         codeElements.forEach(codeElement => {
           let code = codeElement.innerHTML;
-
           // Highlight Strings
           code = code.replace(/('[^']*')/g, `<span class="sql-str">$1</span>`);
           // Highlight Numbers
@@ -613,7 +698,6 @@ ORDER BY true_arr DESC;</pre>
             const reg = new RegExp('\\b' + fn + '\\b(?=(?:[^\']*\'[^\']*\')*[^\']*$)', 'gi');
             code = code.replace(reg, `<span class="sql-fn">${fn}</span>`);
           });
-
           codeElement.innerHTML = code;
         });
       })();
