@@ -205,12 +205,7 @@
         </div>
       </div>
 
-      <!-- IMAGE PLACEHOLDER 1 -->
-      <div class="img-placeholder group">
-        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 1</p>
-        <p class="text-xs text-slate-500 max-w-sm mx-auto">The "Before" State - Chrome DevTools Network Tab showing /g/collect firing directly to google-analytics.com.</p>
-      </div>
+      <img src="chrome-devtools-client-side-tracking.png" alt="The Before State - Chrome DevTools Network Tab showing /g/collect firing directly to google-analytics.com" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
       <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">Step 1: Provisioning the Tagging Server Environments</h2>
       <p>To process data server-side, you need a server environment. There are two primary ways to approach this.</p>
@@ -238,21 +233,11 @@
         <li>Create a Stape.io account, deploy a new container using the string, and add your custom subdomain in Stape settings.</li>
       </ul>
 
-      <!-- IMAGE PLACEHOLDER 2 -->
-      <div class="img-placeholder group">
-        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 2</p>
-        <p class="text-xs text-slate-500 max-w-sm mx-auto">Stape Domain Setup showing metrics.bestloadout.online as "Ready".</p>
-      </div>
+      <img src="stape-domain-verified.png" alt="Stape Domain Setup showing metrics.bestloadout.online as Ready" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
       <p>On Cloudflare, create a CNAME record pointing metrics to the target provided by Stape. Set the Cloudflare proxy status for this record to <span class="hl-cyan">DNS Only (grey cloud)</span> at first. Stape needs to verify the domain and issue an SSL certificate without proxy interference.</p>
 
-      <!-- IMAGE PLACEHOLDER 3 -->
-      <div class="img-placeholder group">
-        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 3</p>
-        <p class="text-xs text-slate-500 max-w-sm mx-auto">Cloudflare DNS Mapping showing CNAME pointing to Stape with "DNS Only" toggled.</p>
-      </div>
+      <img src="cloudflare-dns-only-cname.png" alt="Cloudflare DNS Mapping showing CNAME pointing to Stape with DNS Only toggled" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
       <p>Once verified, update the Tagging Server URL in your GTM Server Container Admin settings to <code>https://metrics.bestloadout.online</code>, then switch that DNS record back to Proxied (orange cloud).</p>
 
@@ -272,12 +257,7 @@
         <li>Turn <strong>off</strong> the "Set up tag" automated injection toggle.</li>
       </ul>
 
-      <!-- IMAGE PLACEHOLDER 4 -->
-      <div class="img-placeholder group">
-        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 4</p>
-        <p class="text-xs text-slate-500 max-w-sm mx-auto">Cloudflare GTG Settings - "Set up tag" toggle turned OFF.</p>
-      </div>
+      <img src="cloudflare-gtg-auto-injection-off.png" alt="Cloudflare GTG Settings - Set up tag toggle turned OFF" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
       <p>Automated injection causes duplicate container loads and fires tags unpredictably. A data analyst needs strict architectural control over their tag placements, so leaving this off is the best practice.</p>
 
@@ -303,12 +283,7 @@ f.parentNode.insertBefore(j,f);
       
       <p><strong>Optional but recommended:</strong> To avoid detection by privacy scanners parsing raw HTML, update the fallback pixel domain in the <code>&lt;noscript&gt;</code> tag too. Change it to <code>metrics.bestloadout.online/ns.html</code>.</p>
 
-      <!-- IMAGE PLACEHOLDER 5 -->
-      <div class="img-placeholder group">
-        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 5</p>
-        <p class="text-xs text-slate-500 max-w-sm mx-auto">Modified HTML Snippet showing custom domain replacing Google's.</p>
-      </div>
+      <img src="modified-gtm-snippet-first-party.png" alt="Modified HTML Snippet showing custom domain replacing Google's" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
       <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">Step 4: Routing the Web Container Data</h2>
       <p>With the script loading first-party, the GA4 tags need to be told to send their payloads (<code>/g/collect</code> requests) to the new server instead of Google's default endpoints.</p>
@@ -320,12 +295,7 @@ f.parentNode.insertBefore(j,f);
         <li>Set the value to <code>https://metrics.bestloadout.online</code>.</li>
       </ul>
 
-      <!-- IMAGE PLACEHOLDER 6 -->
-      <div class="img-placeholder group">
-        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 6</p>
-        <p class="text-xs text-slate-500 max-w-sm mx-auto">Web GTM base tag showing server_container_url mapped to subdomain.</p>
-      </div>
+      <img src="web-gtm-server-container-url.png" alt="Web GTM base tag showing server_container_url mapped to subdomain" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
       <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">Step 5: Setting the Cookie — The Conversion Linker</h2>
       <p>To bypass ITP's client-side caps, the server has to explicitly write the cookie back to the browser using an HTTP header.</p>
@@ -337,14 +307,11 @@ f.parentNode.insertBefore(j,f);
         <li>Set the trigger to fire on <strong>All Pages</strong>. Save and publish.</li>
       </ul>
 
-      <!-- IMAGE PLACEHOLDER 7 -->
-      <div class="img-placeholder group">
-        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 7</p>
-        <p class="text-xs text-slate-500 max-w-sm mx-auto">Server GTM Conversion Linker tag firing on All Pages.</p>
-      </div>
+      <img src="server-gtm-conversion-linker-tag.png" alt="Server GTM Conversion Linker tag firing on All Pages" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
       <p class="bg-slate-800/40 p-4 border border-slate-700 rounded-xl"><strong>What happens:</strong> The server responds to the browser with a 200 OK status, attaching a <code>Set-Cookie</code> header. Because this originates from a genuine first-party interaction, the cookie isn't subject to ITP's JavaScript-cookie restrictions.</p>
+
+      <img src="chrome-devtools-server-side-tracking.png" alt="The After State - Chrome DevTools Network Tab showing /g/collect firing to metrics.bestloadout.online" class="rounded-2xl border border-slate-700 shadow-xl my-12 w-full object-cover bg-slate-800 p-1">
 
       <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">Step 6: Testing, Troubleshooting, and Live Validation</h2>
       
@@ -381,12 +348,7 @@ f.parentNode.insertBefore(j,f);
       <h4 class="text-lg font-bold text-accentCyan">1. The Secure Response Header</h4>
       <p>Click the incoming <code>/g/collect</code> request and examine the Response Headers. You'll see a <code>Set-Cookie</code> command generating the FPID. This carries the <code>HttpOnly</code> flag—meaning ad blockers and browser extensions can't see it at all.</p>
 
-      <!-- IMAGE PLACEHOLDER 8 -->
-      <div class="img-placeholder group">
-        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 8</p>
-        <p class="text-xs text-slate-500 max-w-sm mx-auto">Network Tab highlighting the Set-Cookie: FPID... HttpOnly line.</p>
-      </div>
+      <img src="network-tab-fpid-httponly-cookie.png" alt="Network Tab highlighting the Set-Cookie: FPID... HttpOnly line" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
       <h4 class="text-lg font-bold text-accentCyan mt-8">2. The Matching Timestamps</h4>
       <p>The traditional client-side <code>_ga</code> cookie and the newly minted FPID cookie will end in the same Unix timestamp. The matching timestamp confirms the server picked up the same session rather than minting a new one.</p>
@@ -394,12 +356,7 @@ f.parentNode.insertBefore(j,f);
       <h4 class="text-lg font-bold text-accentCyan mt-8">3. The Two-Year Request</h4>
       <p>Navigate to the Application Tab > Storage > Cookies. In Chrome, the Max-Age column will show exactly 730 days, or two years. Chrome, Firefox, and Edge will honor it in full.</p>
 
-      <!-- IMAGE PLACEHOLDER 9 -->
-      <div class="img-placeholder group">
-        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 9</p>
-        <p class="text-xs text-slate-500 max-w-sm mx-auto">Application Tab showcasing identical timestamp suffixes and 2-year expiry.</p>
-      </div>
+      <img src="application-tab-two-year-cookie-expiry.png" alt="Application Tab showcasing identical timestamp suffixes and 2-year expiry" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
       <!-- UX BLOCK: Expert Editorial Note (EEAT) -->
       <div class="bg-premiumIndigo/10 border border-premiumIndigo/30 rounded-2xl p-6 md:p-8 my-12 shadow-[0_0_20px_rgba(99,102,241,0.1)]">
