@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: First-Party Tracking Pipeline - Tofunmi Ayotunde</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            mono: ['Consolas', 'Monaco', 'Courier New', 'monospace']
+          },
+          colors: { 
+            bgDark: '#0b1120', 
+            accentCyan: '#22d3ee',
+            premiumIndigo: '#6366f1'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Glassmorphism & UI Utilities */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Premium Text Highlights */
+    .hl-cyan {
+      background: linear-gradient(120deg, rgba(34, 211, 238, 0.15) 0%, rgba(34, 211, 238, 0.05) 100%);
+      border-bottom: 1px solid rgba(34, 211, 238, 0.4);
+      padding: 0 4px;
+      border-radius: 4px;
+      color: #e2e8f0;
+    }
+    .hl-red {
+      background: linear-gradient(120deg, rgba(244, 63, 94, 0.15) 0%, rgba(244, 63, 94, 0.05) 100%);
+      border-bottom: 1px solid rgba(244, 63, 94, 0.4);
+      padding: 0 4px;
+      border-radius: 4px;
+      color: #e2e8f0;
+    }
+
+    /* Custom Image Placeholder Dropzones */
+    .img-placeholder {
+      border: 2px dashed rgba(100, 116, 139, 0.4);
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      margin: 32px 0;
+    }
+    .img-placeholder:hover {
+      border-color: rgba(34, 211, 238, 0.6);
+      background: rgba(15, 23, 42, 0.8);
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+    }
+
+    /* Code Block Styling */
+    pre.custom-code {
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      color: #e2e8f0;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+    .token.keyword { color: #c678dd; }
+    .token.string { color: #98c379; }
+    .token.function { color: #61afef; }
+    .token.punctuation { color: #aab2c0; }
+    .token.tag { color: #e06c75; }
+    .token.attr-name { color: #d19a66; }
+  </style>
+</head>
+
+<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark">
+
+  <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 w-full flex-grow">
+    
+    <!-- Back Navigation -->
+    <a href="portfolio.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-10 font-semibold group">
+      <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Back to Portfolio
+    </a>
+
+    <!-- Hero Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-start mb-16">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/30 border border-cyan-800 rounded-full text-xs font-bold text-accentCyan mb-6 uppercase tracking-wider">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l7 4v10l-7 4-7-4V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+          Technical Architecture
+        </div>
+        
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+          Building a First-Party Tracking Pipeline Using Cloudflare GTG and sGTM
+        </h1>
+        
+        <p class="text-lg md:text-xl text-slate-400 leading-relaxed mb-8 font-inter">
+          How I bypassed standard ITP restrictions by shifting from client-side JavaScript tracking to a resilient, server-side HTTP pipeline.
+        </p>
+        
+        <div class="flex flex-wrap gap-2">
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Server-Side GTM</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Cloudflare GTG</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">ITP Bypass</span>
+          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">HTTP Cookies</span>
+        </div>
+      </div>
+
+      <!-- Quick Snapshot Sidebar -->
+      <div class="glass-card p-8 rounded-3xl border border-slate-700/50">
+        <div class="text-xs font-bold tracking-[0.1em] uppercase text-slate-500 mb-6">Execution Snapshot</div>
+        <div class="space-y-6">
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Core Problem</div>
+            <div class="text-lg font-semibold text-white">Browser ITP deleting attribution cookies within 24 hours.</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Infrastructure</div>
+            <div class="text-lg font-semibold text-white">Cloudflare Reverse Proxy & Stape.io</div>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-500 mb-1">Primary Mechanism</div>
+            <div class="text-lg font-semibold text-white">First-Party <code>Set-Cookie</code> HTTP Headers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Article Content -->
+    <div class="max-w-4xl mx-auto text-lg text-slate-300 leading-relaxed font-inter space-y-8">
+      
+      <p>As a Marketing Data Analyst, one of the most frustrating challenges you face today is the aggressive degradation of data quality caused by browser tracking prevention. In my <a href="ad-blocker-ghost-transactions.html" class="text-accentCyan hover:text-cyan-300 underline decoration-cyan-800 hover:decoration-cyan-300 underline-offset-4 transition-all">previous case study—where I reverse-engineered how ad blockers were skewing conversion data by over 36%</a>—I concluded that modern attribution must evolve toward server-side architectures to survive.</p>
+      
+      <p>While ad blockers create massive visibility gaps, they are only half the problem. Even a user who <em>never</em> installs an ad blocker still gets their data scrubbed by the browser itself.</p>
+
+      <!-- UX BLOCK: The ITP Pain Point -->
+      <div class="bg-red-900/10 border border-red-500/20 rounded-2xl p-6 md:p-8 my-10 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
+        <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+          <svg class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          The Safari ITP Death Sentence
+        </h3>
+        <p class="text-slate-300 m-0 text-base leading-relaxed">
+          Let’s say you run a campaign. A user clicks your ad, browses your site, leaves, and comes back 10 days later to convert. Normally, that conversion is attributed to your campaign. <span class="hl-red">But on Safari, it isn't.</span>
+        </p>
+        <p class="text-slate-300 mt-4 mb-0 text-base leading-relaxed">
+          Apple's Intelligent Tracking Prevention (ITP) forces a strict 7-day expiration limit on cookies created via JavaScript (<code>document.cookie</code>). Worse, if the user lands on your site with a tracking parameter in the URL (like a <code>gclid</code> from Google Ads or an <code>fbclid</code> from Meta), Safari caps that cookie's lifespan to <strong>just 24 hours</strong>. Your multi-touch attribution breaks instantly.
+        </p>
+      </div>
+
+      <p>The returning user gets logged as a brand-new visitor, and the campaign that actually drove the conversion gets zero credit.</p>
+
+      <p>The best solution is to move away from client-side JavaScript tracking entirely and build a <span class="hl-cyan">first-party tracking pipeline</span>. By using Server-Side Google Tag Manager (sGTM) paired with a Cloudflare reverse proxy, you can set your tracking cookies via secure HTTP response headers directly from your own domain instead of the browser. ITP respects HTTP-only first-party cookies, allowing you to extend their lifespan back to two years.</p>
+      
+      <p>This guide breaks down exactly how I architected this pipeline, using the sandbox domain <code>bestloadout.online</code> as the testing ground.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">The Architecture Overview</h2>
+      <p>Before provisioning any servers, it's critical to map how the data will flow.</p>
+
+      <!-- UX BLOCK: Architecture Comparison Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
+        <!-- Client Side -->
+        <div class="bg-slate-800/30 border border-slate-700 rounded-2xl p-6 relative">
+          <div class="absolute top-4 right-4 bg-slate-700/50 text-slate-400 text-xs font-bold px-2 py-1 rounded">Legacy</div>
+          <h4 class="text-lg font-bold text-slate-200 mb-4 border-b border-slate-700 pb-2">Client-Side (Default)</h4>
+          <ol class="space-y-4 text-sm text-slate-400 list-decimal pl-4">
+            <li>User visits <code>bestloadout.online</code>.</li>
+            <li>Browser downloads GTM script from <code>www.googletagmanager.com</code>.</li>
+            <li>Script executes in browser, sending events directly to <code>www.google-analytics.com</code>.</li>
+            <li><strong class="text-red-400">Result:</strong> Safari flags the third-party script and restricts the cookie lifespan to 1-7 days.</li>
+          </ol>
+        </div>
+
+        <!-- Server Side -->
+        <div class="bg-emerald-900/10 border border-emerald-500/20 rounded-2xl p-6 relative">
+          <div class="absolute top-4 right-4 bg-emerald-500/20 text-emerald-400 text-xs font-bold px-2 py-1 rounded">New Pipeline</div>
+          <h4 class="text-lg font-bold text-emerald-100 mb-4 border-b border-emerald-500/20 pb-2">First-Party Server-Side</h4>
+          <ol class="space-y-4 text-sm text-slate-300 list-decimal pl-4">
+            <li>User visits <code>bestloadout.online</code>.</li>
+            <li>Cloudflare intercepts and serves the GTM script natively from <code>bestloadout.online/gtm.js</code>.</li>
+            <li>Events route to custom endpoint: <code>metrics.bestloadout.online</code>.</li>
+            <li><strong class="text-emerald-400">Result:</strong> Server sends back a <code>Set-Cookie</code> header. Safari views it as secure first-party data.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- IMAGE PLACEHOLDER 1 -->
+      <div class="img-placeholder group">
+        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 1</p>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto">The "Before" State - Chrome DevTools Network Tab showing /g/collect firing directly to google-analytics.com.</p>
+      </div>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">Step 1: Provisioning the Tagging Server Environments</h2>
+      <p>To process data server-side, you need a server environment. There are two primary ways to approach this.</p>
+
+      <!-- UX BLOCK: Pros/Cons Grid for Infrastructure -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
+        <div class="glass-card rounded-xl p-6 border-t-4 border-t-blue-500">
+          <h4 class="font-bold text-white mb-2">Method 1: Google Cloud Run</h4>
+          <p class="text-sm text-slate-400 mb-4">The enterprise standard. Requires setting up two distinct Cloud Run services (Preview and Tagging) allowing it to auto-scale.</p>
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">The Catch</div>
+          <p class="text-sm text-slate-300">Requires a verified GCP billing account. If local banking cards fail international verification, provisioning is blocked.</p>
+        </div>
+        <div class="glass-card rounded-xl p-6 border-t-4 border-t-accentCyan">
+          <h4 class="font-bold text-white mb-2">Method 2: Stape.io (Used Here)</h4>
+          <p class="text-sm text-slate-400 mb-4">Provides a free dev tier allowing 10,000 requests/month with absolutely no credit card required. Perfect sandbox environment.</p>
+          <div class="text-xs font-semibold text-accentCyan uppercase tracking-wider mb-2">The Setup</div>
+          <p class="text-sm text-slate-300">Deploy via container config string, map a custom subdomain, and manage DNS via Cloudflare.</p>
+        </div>
+      </div>
+
+      <ul class="list-disc pl-6 space-y-3 text-slate-300 mb-8">
+        <li>Ensure your DNS nameservers are already pointing to Cloudflare.</li>
+        <li>Create a subdomain for the server side: <code>metrics.bestloadout.online</code>.</li>
+        <li>Open GTM, create a Server container, and copy the Container Config string.</li>
+        <li>Create a Stape.io account, deploy a new container using the string, and add your custom subdomain in Stape settings.</li>
+      </ul>
+
+      <!-- IMAGE PLACEHOLDER 2 -->
+      <div class="img-placeholder group">
+        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 2</p>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto">Stape Domain Setup showing metrics.bestloadout.online as "Ready".</p>
+      </div>
+
+      <p>On Cloudflare, create a CNAME record pointing metrics to the target provided by Stape. Set the Cloudflare proxy status for this record to <span class="hl-cyan">DNS Only (grey cloud)</span> at first. Stape needs to verify the domain and issue an SSL certificate without proxy interference.</p>
+
+      <!-- IMAGE PLACEHOLDER 3 -->
+      <div class="img-placeholder group">
+        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 3</p>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto">Cloudflare DNS Mapping showing CNAME pointing to Stape with "DNS Only" toggled.</p>
+      </div>
+
+      <p>Once verified, update the Tagging Server URL in your GTM Server Container Admin settings to <code>https://metrics.bestloadout.online</code>, then switch that DNS record back to Proxied (orange cloud).</p>
+
+      <!-- UX BLOCK: Architecture Warning -->
+      <div class="bg-slate-800/50 border-l-4 border-slate-500 p-6 rounded-r-2xl my-8">
+        <p class="text-sm text-slate-400 m-0">
+          <strong>Note:</strong> Leaving the record on DNS Only permanently puts your tagging server on Stape's own IP range, entirely separate from wherever bestloadout.online is hosted, which is exactly the setup Safari's ITP is built to detect. Proxying it through Cloudflare doesn't guarantee a matching IP subnet on a free plan, but it is a meaningfully better starting position.
+        </p>
+      </div>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">Step 2: Configuring the Cloudflare Google Tag Gateway</h2>
+      <p>The server is ready, but the actual GTM library (gtm.js) is still loading from Google's servers, leaving it vulnerable to network-level ad blockers. Cloudflare's <strong>Google Tag Gateway (GTG)</strong> solves this as a reverse proxy.</p>
+      
+      <ul class="list-disc pl-6 space-y-2 text-slate-300 mb-8">
+        <li>In the Cloudflare dashboard, search for Google Tag Gateway.</li>
+        <li>Enable the feature for your domain.</li>
+        <li>Turn <strong>off</strong> the "Set up tag" automated injection toggle.</li>
+      </ul>
+
+      <!-- IMAGE PLACEHOLDER 4 -->
+      <div class="img-placeholder group">
+        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 4</p>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto">Cloudflare GTG Settings - "Set up tag" toggle turned OFF.</p>
+      </div>
+
+      <p>Automated injection causes duplicate container loads and fires tags unpredictably. A data analyst needs strict architectural control over their tag placements, so leaving this off is the best practice.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">Step 3: Modifying the Client-Side Code</h2>
+      <p>Because the auto-injector is off, the hardcoded GTM snippets on the website need to be updated manually to point to the new first-party gateway.</p>
+
+      <!-- UX BLOCK: Code Formatting -->
+      <div class="my-8">
+        <div class="flex items-center justify-between bg-slate-900 px-4 py-2 border border-slate-700 border-b-0 rounded-t-xl">
+          <span class="text-xs font-mono text-slate-400">HTML</span>
+        </div>
+<pre class="custom-code !rounded-t-none !mt-0 border-t-0"><code class="language-html"><span class="token tag">&lt;!-- Google Tag Manager --&gt;</span>
+<span class="token tag">&lt;script&gt;</span><span class="token keyword">(function</span>(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;
+<span class="token string">j.src='https://metrics.bestloadout.online/gtm.js?id='+i+dl;</span>
+f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-XXXXXXX');<span class="token tag">&lt;/script&gt;</span>
+<span class="token tag">&lt;!-- End Google Tag Manager --&gt;</span></code></pre>
+      </div>
+
+      <p>Locate the standard <code>googletagmanager.com/gtm.js</code> URL inside the script and replace it with your custom domain as shown above.</p>
+      
+      <p><strong>Optional but recommended:</strong> To avoid detection by privacy scanners parsing raw HTML, update the fallback pixel domain in the <code>&lt;noscript&gt;</code> tag too. Change it to <code>metrics.bestloadout.online/ns.html</code>.</p>
+
+      <!-- IMAGE PLACEHOLDER 5 -->
+      <div class="img-placeholder group">
+        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 5</p>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto">Modified HTML Snippet showing custom domain replacing Google's.</p>
+      </div>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">Step 4: Routing the Web Container Data</h2>
+      <p>With the script loading first-party, the GA4 tags need to be told to send their payloads (<code>/g/collect</code> requests) to the new server instead of Google's default endpoints.</p>
+
+      <ul class="list-disc pl-6 space-y-2 text-slate-300 mb-8">
+        <li>Open your Web GTM Container.</li>
+        <li>Open your base Google Tag.</li>
+        <li>Under Configuration Settings, add a new parameter named <code>server_container_url</code>.</li>
+        <li>Set the value to <code>https://metrics.bestloadout.online</code>.</li>
+      </ul>
+
+      <!-- IMAGE PLACEHOLDER 6 -->
+      <div class="img-placeholder group">
+        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 6</p>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto">Web GTM base tag showing server_container_url mapped to subdomain.</p>
+      </div>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">Step 5: Setting the Cookie — The Conversion Linker</h2>
+      <p>To bypass ITP's client-side caps, the server has to explicitly write the cookie back to the browser using an HTTP header.</p>
+
+      <ul class="list-disc pl-6 space-y-2 text-slate-300 mb-8">
+        <li>Open your Server GTM Container.</li>
+        <li>Ensure the GA4 Client is active to catch incoming requests.</li>
+        <li>Create a new tag and select <strong>Conversion Linker</strong>.</li>
+        <li>Set the trigger to fire on <strong>All Pages</strong>. Save and publish.</li>
+      </ul>
+
+      <!-- IMAGE PLACEHOLDER 7 -->
+      <div class="img-placeholder group">
+        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 7</p>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto">Server GTM Conversion Linker tag firing on All Pages.</p>
+      </div>
+
+      <p class="bg-slate-800/40 p-4 border border-slate-700 rounded-xl"><strong>What happens:</strong> The server responds to the browser with a 200 OK status, attaching a <code>Set-Cookie</code> header. Because this originates from a genuine first-party interaction, the cookie isn't subject to ITP's JavaScript-cookie restrictions.</p>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-8 font-sans">Step 6: Testing, Troubleshooting, and Live Validation</h2>
+      
+      <!-- UX BLOCK: Common Mistakes / Warning Box -->
+      <div class="bg-amber-900/10 border border-amber-500/20 rounded-2xl p-6 md:p-8 my-10">
+        <h3 class="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          Common Roadblocks & Troubleshooting
+        </h3>
+        <p class="text-slate-300 text-sm mb-4">If requests are still firing to <code>google-analytics.com</code>, check these 4 bottlenecks:</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-slate-900/50 p-4 rounded-xl border border-amber-900/30">
+            <h5 class="text-amber-200 font-bold text-sm mb-1">1. Browser Caching</h5>
+            <p class="text-xs text-slate-400 m-0">Browsers hold onto the old <code>gtm.js</code>. Force an Empty Cache and Hard Reload in DevTools.</p>
+          </div>
+          <div class="bg-slate-900/50 p-4 rounded-xl border border-amber-900/30">
+            <h5 class="text-amber-200 font-bold text-sm mb-1">2. Unpublished Workspace</h5>
+            <p class="text-xs text-slate-400 m-0">You must actively submit and publish the Web GTM container to push the routing rule to production.</p>
+          </div>
+          <div class="bg-slate-900/50 p-4 rounded-xl border border-amber-900/30">
+            <h5 class="text-amber-200 font-bold text-sm mb-1">3. Cloudflare Edge Cache</h5>
+            <p class="text-xs text-slate-400 m-0">The CDN holds onto the outdated script. Navigate to Cloudflare's Caching configuration and Purge Everything.</p>
+          </div>
+          <div class="bg-slate-900/50 p-4 rounded-xl border border-amber-900/30">
+            <h5 class="text-amber-200 font-bold text-sm mb-1">4. Rogue Plugins</h5>
+            <p class="text-xs text-slate-400 m-0">Plugins like Google Site Kit force hardcoded client-side hits. Disable them.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-semibold text-white mt-10 mb-4">Validating the Success State</h3>
+
+      <h4 class="text-lg font-bold text-accentCyan">1. The Secure Response Header</h4>
+      <p>Click the incoming <code>/g/collect</code> request and examine the Response Headers. You'll see a <code>Set-Cookie</code> command generating the FPID. This carries the <code>HttpOnly</code> flag—meaning ad blockers and browser extensions can't see it at all.</p>
+
+      <!-- IMAGE PLACEHOLDER 8 -->
+      <div class="img-placeholder group">
+        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 8</p>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto">Network Tab highlighting the Set-Cookie: FPID... HttpOnly line.</p>
+      </div>
+
+      <h4 class="text-lg font-bold text-accentCyan mt-8">2. The Matching Timestamps</h4>
+      <p>The traditional client-side <code>_ga</code> cookie and the newly minted FPID cookie will end in the same Unix timestamp. The matching timestamp confirms the server picked up the same session rather than minting a new one.</p>
+
+      <h4 class="text-lg font-bold text-accentCyan mt-8">3. The Two-Year Request</h4>
+      <p>Navigate to the Application Tab > Storage > Cookies. In Chrome, the Max-Age column will show exactly 730 days, or two years. Chrome, Firefox, and Edge will honor it in full.</p>
+
+      <!-- IMAGE PLACEHOLDER 9 -->
+      <div class="img-placeholder group">
+        <svg class="w-12 h-12 text-slate-500 mx-auto mb-3 group-hover:text-accentCyan transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <p class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-1">📸 Insert Screenshot 9</p>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto">Application Tab showcasing identical timestamp suffixes and 2-year expiry.</p>
+      </div>
+
+      <!-- UX BLOCK: Expert Editorial Note (EEAT) -->
+      <div class="bg-premiumIndigo/10 border border-premiumIndigo/30 rounded-2xl p-6 md:p-8 my-12 shadow-[0_0_20px_rgba(99,102,241,0.1)]">
+        <div class="text-premiumIndigo font-bold uppercase tracking-widest text-xs mb-3 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          The Safari Reality Check (ITP vs CNAME Cloaking)
+        </div>
+        <p class="text-indigo-100 text-base leading-relaxed m-0 mb-4">
+          Since Safari 16.4, ITP doesn't just cap JavaScript cookies; it applies that same 7-day cap to server-set HTTP cookies whenever it detects <strong>CNAME cloaking</strong>—a tagging domain that resolves to an IP address outside your main site's subnet.
+        </p>
+        <p class="text-indigo-100 text-base leading-relaxed m-0">
+          This is exactly the pattern this pipeline creates (Stape infrastructure vs. Web host). If you're implementing this for an enterprise client, know for a fact that closing the IP gap between your tagging server and your web host is a genuinely hard infrastructure problem.
+        </p>
+      </div>
+
+      <h2 class="text-2xl md:text-3xl font-bold text-white mt-16 mb-6 font-sans">Conclusion</h2>
+      <p>Moving tracking infrastructure to a first-party, server-side model delivers real, verifiable gains. The pipeline survives ad blockers and network-level filtering that a client-side GTM script never would. The FPID cookie is <code>HttpOnly</code>, so client-side scripts can't touch it. And on every non-Safari browser, this pipeline delivers a full two-year attribution window.</p>
+      
+      <p>On Safari, this architecture still beats a normal client-side setup, since Safari's JavaScript-cookie cap and its 24-hour link-decoration cap are both worse than its 7-day server-cookie cap.</p>
+
+      <div class="bg-slate-800/40 border-l-4 border-accentCyan p-6 rounded-r-2xl mt-10 mb-8">
+        <h5 class="text-accentCyan font-bold uppercase tracking-widest text-xs mb-2">Key Takeaway</h5>
+        <p class="text-slate-300 text-base m-0 mb-3">Extending any identifier's lifespan is a consent question as much as a technical one. Pairing this pipeline with proper consent management (Google Consent Mode v2 or equivalent) keeps the win on the data-quality side without creating a liability on the privacy side.</p>
+        <p class="text-slate-300 text-base m-0">With the pipeline live, the next step is ingesting this cleaner data directly into BigQuery.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer CTA -->
+  <div class="max-w-5xl mx-auto px-6 w-full mb-20">
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-3xl p-10 md:p-14 text-center shadow-2xl relative overflow-hidden">
+      <!-- Decorative glow -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-accentCyan/10 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+      
+      <div class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 relative z-10">Next Step</div>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Need resilient measurement architecture?</h2>
+      <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 relative z-10">
+        If you need support migrating to Server-Side GTM, bypassing client-side data loss, or engineering accurate attribution pipelines, let's talk.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+        <a href="contact.html" class="px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+          Contact Me
+        </a>
+        <a href="portfolio.html" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors">
+          Back to Portfolio
+        </a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
