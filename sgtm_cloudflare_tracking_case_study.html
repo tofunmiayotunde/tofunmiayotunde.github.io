@@ -235,7 +235,7 @@
 
       <img src="stape-domain-verified.png" alt="Stape Domain Setup showing metrics.bestloadout.online as Ready" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
-      <p>On Cloudflare, create a CNAME record pointing metrics to the target provided by Stape. Set the Cloudflare proxy status for this record to <span class="hl-cyan">DNS Only (grey cloud)</span> at first. Stape needs to verify the domain and issue an SSL certificate without proxy interference.</p>
+      <p>On Cloudflare, create a CNAME record pointing metrics to the target provided by Stape. <strong class="text-rose-400">Crucial:</strong> Set the Cloudflare proxy status for this record to <span class="hl-cyan">DNS Only (grey cloud)</span> and leave it there permanently. Stape must be able to continuously ping the domain to auto-renew your SSL certificate. If you turn on the Cloudflare proxy (orange cloud), Stape's verification handshake will fail, and your tracking will eventually disconnect.</p>
 
       <img src="cloudflare-dns-only-cname.png" alt="Cloudflare DNS Mapping showing CNAME pointing to Stape with DNS Only toggled" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
