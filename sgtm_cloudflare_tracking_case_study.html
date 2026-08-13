@@ -239,12 +239,12 @@
 
       <img src="cloudflare-dns-only-cname.png" alt="Cloudflare DNS Mapping showing CNAME pointing to Stape with DNS Only toggled" class="rounded-2xl border border-slate-700 shadow-xl my-8 w-full object-cover bg-slate-800 p-1">
 
-      <p>Once verified, update the Tagging Server URL in your GTM Server Container Admin settings to <code>https://metrics.bestloadout.online</code>, then switch that DNS record back to Proxied (orange cloud).</p>
+      <p>Once verified, update the Tagging Server URL in your GTM Server Container Admin settings to <code>https://metrics.bestloadout.online</code>.</p>
 
       <!-- UX BLOCK: Architecture Warning -->
       <div class="bg-slate-800/50 border-l-4 border-slate-500 p-6 rounded-r-2xl my-8">
         <p class="text-sm text-slate-400 m-0">
-          <strong>Note:</strong> Leaving the record on DNS Only permanently puts your tagging server on Stape's own IP range, entirely separate from wherever bestloadout.online is hosted, which is exactly the setup Safari's ITP is built to detect. Proxying it through Cloudflare doesn't guarantee a matching IP subnet on a free plan, but it is a meaningfully better starting position.
+          <strong>Note:</strong> Stape provisions and manages a free SSL certificate (via Let's Encrypt) for your custom domain so that your server can securely accept HTTPS requests. Leaving the proxy off prevents Cloudflare from intercepting this validation.
         </p>
       </div>
 
