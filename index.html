@@ -4,41 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tofunmi Ayotunde | Marketing Data Analyst</title>
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Tofunmi Ayotunde | Marketing Data & Growth Analyst. Specializing in GA4, SQL pipelines, server-side GTM, and multi-touch attribution architectures.">
-  <meta name="keywords" content="Marketing Data Analyst, Growth Analyst, RevOps, Data Engineering, GA4, Server-side GTM, SQL, BigQuery, Power BI, Marketing Attribution">
-  <meta name="author" content="Tofunmi Ayotunde">
-
-  <!-- Open Graph / Social Media Meta Tags -->
-  <meta property="og:title" content="Tofunmi Ayotunde | Marketing Data Analyst">
-  <meta property="og:description" content="Architecting Truth in Marketing Data. View my case studies on attribution, SQL pipelines, and tracking architecture.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://tofunmiayotunde.github.io/">
   
-  <!-- Schema.org Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Tofunmi Ayotunde",
-    "jobTitle": "Marketing Data Analyst",
-    "url": "https://tofunmiayotunde.github.io/",
-    "sameAs": [
-      "https://linkedin.com/in/tofunmi-ayotunde-860253356/"
-    ],
-    "knowsAbout": [
-      "Google Analytics 4", 
-      "SQL", 
-      "Power Query", 
-      "Data Engineering", 
-      "Marketing Attribution", 
-      "Server-side GTM"
-    ]
-  }
-  </script>
+  <!-- SEO & Open Graph Meta Tags -->
+  <meta name="description" content="Portfolio of Tofunmi Ayotunde, a Marketing Data & Growth Analyst specializing in Server-Side GTM, BigQuery SQL, and Multi-Touch Attribution pipelines.">
+  <meta name="keywords" content="Marketing Data Analyst, SQL, BigQuery, Server-Side GTM, Data Engineering, Attribution, RevOps">
+  <meta name="author" content="Tofunmi Ayotunde">
+  <meta property="og:title" content="Tofunmi Ayotunde | Architecting Truth in Marketing Data">
+  <meta property="og:description" content="I build resilient measurement architectures and multi-touch attribution models so growth teams can stop guessing and start scaling.">
+  <meta property="og:type" content="website">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -46,10 +23,16 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Poppins', 'sans-serif'] },
+          fontFamily: { 
+            sans: ['Poppins', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
           colors: { 
             bgDark: '#0b1120', 
-            accentCyan: '#22d3ee' 
+            accentCyan: '#22d3ee',
+            brandTeal: '#00F0FF',
+            brandPurple: '#8A2BE2',
+            brandGold: '#F59E0B',
           }
         }
       }
@@ -69,16 +52,44 @@
       border-color: rgba(34, 211, 238, 0.5);
       box-shadow: 0 0 25px rgba(34, 211, 238, 0.15);
     }
+
+    .pipeline-panel {
+      background: linear-gradient(135deg, rgba(17,24,39,0.8) 0%, rgba(17,24,39,0.4) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
     
-    /* Custom scrollbar for a premium feel */
+    /* Custom scrollbar */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #0b1120; }
     ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    /* Floating SVG Path Animation */
+    .floating-path {
+      stroke-dasharray: 20 40;
+      animation: dashFlow 30s linear infinite;
+      filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.6));
+    }
+    @keyframes dashFlow {
+      from { stroke-dashoffset: 1000; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    .pulse-dot {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .4; transform: scale(0.8); }
+    }
   </style>
 </head>
 
-<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark relative">
+<body class="bg-bgDark text-slate-300 antialiased font-sans min-h-screen flex flex-col selection:bg-accentCyan selection:text-bgDark relative overflow-x-hidden">
 
   <!-- Background decorative glows -->
   <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
@@ -96,19 +107,13 @@
     </div>
     
     <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-400">
-      <a href="#services" class="hover:text-accentCyan transition-colors">Services</a>
+      <a href="#architecture" class="hover:text-accentCyan transition-colors">Architecture</a>
       <a href="#case-studies" class="hover:text-accentCyan transition-colors">Case Studies</a>
-      <a href="#tools" class="hover:text-accentCyan transition-colors">Tech Stack</a>
+      <a href="#services" class="hover:text-accentCyan transition-colors">Services</a>
       
       <!-- LinkedIn Icon -->
-      <a href="https://linkedin.com/in/tofunmi-ayotunde-860253356/" target="_blank" rel="noopener noreferrer" class="hover:text-accentCyan transition-colors flex items-center gap-1" title="LinkedIn">
+      <a href="https://linkedin.com/in/YOUR_LINKEDIN_URL" target="_blank" rel="noopener noreferrer" class="hover:text-accentCyan transition-colors flex items-center gap-1" title="LinkedIn">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-      </a>
-      
-      <!-- Resume Download -->
-      <a href="Tofunmi_Ayotunde_CV.pdf" target="_blank" class="flex items-center gap-1 hover:text-accentCyan transition-colors">
-        Resume 
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
       </a>
       
       <a href="contact.html" class="px-5 py-2.5 rounded-lg border border-slate-700 hover:border-accentCyan hover:text-white transition-all">Contact</a>
@@ -118,7 +123,7 @@
   <div class="max-w-7xl mx-auto px-6 pt-12 pb-24 w-full flex-grow">
     
     <!-- Hero Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center mb-16">
+    <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center mb-24">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-900/30 border border-cyan-800 rounded-full text-xs font-bold text-accentCyan mb-6 uppercase tracking-wider">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l7 4v10l-7 4-7-4V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
@@ -139,31 +144,22 @@
         </div>
         
         <div class="flex flex-wrap gap-2">
-          <!-- Location Badge Added Here -->
           <span class="px-4 py-2 bg-slate-800/80 border border-slate-700 rounded-full text-sm font-semibold text-slate-300 flex items-center gap-1.5">
             <svg class="w-4 h-4 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
             Lagos, NG (Open to Remote)
           </span>
-          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Server-Side GTM</span>
-          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Data Cleaning & ETL</span>
-          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">BigQuery & SQL</span>
-          <span class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-sm font-semibold text-slate-300">Attribution Analysis</span>
         </div>
       </div>
 
-      <!-- Right Column: Animated Terminal & Core Focus -->
+      <!-- Animated Hacker Terminal -->
       <div class="flex flex-col gap-8 relative z-10">
-        
-        <!-- Animated Hacker Terminal -->
         <div class="glass-card rounded-2xl overflow-hidden border border-slate-700 shadow-[0_0_30px_rgba(34,211,238,0.15)] font-mono text-xs sm:text-sm">
-          <!-- Terminal Header -->
           <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex gap-2 items-center">
             <div class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_5px_#ef4444]"></div>
             <div class="w-3 h-3 rounded-full bg-yellow-500 shadow-[0_0_5px_#eab308]"></div>
             <div class="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_5px_#22c55e]"></div>
             <div class="text-slate-500 text-[11px] ml-2 font-sans font-semibold tracking-wider">tofunmi@data-architect:~</div>
           </div>
-          <!-- Terminal Screen -->
           <div class="p-4 h-48 overflow-y-auto relative bg-[#050810]" id="terminal-screen">
             <div id="terminal-content"></div>
             <span class="animate-pulse text-accentCyan">_</span>
@@ -171,20 +167,18 @@
         </div>
 
         <script>
-          // Terminal Typing Animation Logic
           document.addEventListener('DOMContentLoaded', () => {
             const terminalLines = [
               { text: '> git commit -m "fixed CMO\'s broken dashboard"', color: 'text-slate-300' },
-              { text: '> connecting to Snowflake Data Warehouse...', color: 'text-slate-400' },
+              { text: '> connecting to BigQuery Data Warehouse...', color: 'text-slate-400' },
               { text: '[SUCCESS] connection established in 0.4s.', color: 'text-emerald-400 font-bold' },
-              { text: '> SELECT * FROM revenue WHERE attribution = \'Last Click\';', color: 'text-purple-400' },
-              { text: 'WARNING: 36% of conversion data missing (ad-blockers detected).', color: 'text-amber-400' },
-              { text: '> initializing server-side GTM container...', color: 'text-slate-300' },
-              { text: '> bypassing ad blockers... shhh don\'t tell Google.', color: 'text-slate-500 italic' },
+              { text: '> SELECT * FROM pipeline WHERE attribution = \'Last Click\';', color: 'text-purple-400' },
+              { text: 'WARNING: 36% of conversion data missing (ITP block detected).', color: 'text-amber-400' },
+              { text: '> initializing server-side GTM container via Cloudflare...', color: 'text-slate-300' },
+              { text: '> bypassing browser limits... routing CAPI payloads.', color: 'text-slate-500 italic' },
               { text: 'loading... [████████████████████] 100%', color: 'text-accentCyan' },
-              { text: '[SUCCESS] $286K ghost revenue recovered and attributed.', color: 'text-emerald-400 font-bold' },
+              { text: '[SUCCESS] $2.4M ghost pipeline recovered and attributed.', color: 'text-emerald-400 font-bold' },
               { text: '> caffeine levels critical. deploying coffee.sh ☕', color: 'text-amber-400' },
-              { text: '> system ready for next challenge.', color: 'text-accentCyan' }
             ];
 
             const contentDiv = document.getElementById('terminal-content');
@@ -193,14 +187,9 @@
 
             function typeWriter() {
               if (lineIndex >= terminalLines.length) {
-                setTimeout(() => {
-                  contentDiv.innerHTML = '';
-                  lineIndex = 0;
-                  typeWriter();
-                }, 4000);
+                setTimeout(() => { contentDiv.innerHTML = ''; lineIndex = 0; typeWriter(); }, 5000);
                 return;
               }
-
               const lineData = terminalLines[lineIndex];
               const p = document.createElement('p');
               p.className = `mb-1.5 leading-relaxed ${lineData.color}`;
@@ -223,47 +212,169 @@
             setTimeout(typeWriter, 1000);
           });
         </script>
+      </div>
+    </div>
 
-        <!-- Quick Snapshot Sidebar -->
-        <div class="glass-card p-8 rounded-3xl border border-slate-700/50 shadow-2xl relative z-10">
-          <div class="text-xs font-bold tracking-[0.1em] uppercase text-slate-500 mb-6">Core Focus</div>
+    <!-- PIPELINE ARCHITECTURE COMPONENT -->
+    <div id="architecture" class="py-16 md:py-24 border-t border-slate-800 relative z-10">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-brandTeal font-bold tracking-widest uppercase text-sm mb-4 block font-mono">Infrastructure Overview</span>
+        <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-4">End-to-End Marketing Data Pipeline</h2>
+        <p class="text-lg text-slate-400">Transforming fractured, multi-channel ad data into single-source revenue truth.</p>
+      </div>
+
+      <!-- Responsive Grid for Pipeline -->
+      <div class="relative w-full max-w-6xl mx-auto rounded-3xl bg-slate-900/30 border border-slate-700/50 p-6 md:p-10 shadow-2xl overflow-hidden group">
+        
+        <!-- Decorative grid background -->
+        <div class="absolute inset-0 opacity-[0.03] z-0" style="background-image: linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px); background-size: 24px 24px;"></div>
+        
+        <!-- NEW: Floating SVG Data Flow overlay (goes OVER everything) -->
+        <svg class="absolute inset-0 w-full h-full z-20 pointer-events-none opacity-60 mix-blend-screen" preserveAspectRatio="none" viewBox="0 0 1000 300">
+            <!-- Wave 1: Teal to Purple to Gold -->
+            <path class="floating-path" d="M -50,150 C 200,50 300,250 500,150 S 800,50 1050,150" fill="none" stroke="url(#flowGradient)" stroke-width="3" stroke-linecap="round"></path>
+            <!-- Wave 2: Slower reverse wave -->
+            <path class="floating-path" d="M -50,200 C 250,280 350,20 550,120 S 850,250 1050,100" fill="none" stroke="url(#flowGradient2)" stroke-width="2" stroke-linecap="round" style="animation-direction: reverse; animation-duration: 40s; opacity: 0.5;"></path>
+            <defs>
+                <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#00F0FF" />
+                    <stop offset="50%" stop-color="#8A2BE2" />
+                    <stop offset="100%" stop-color="#F59E0B" />
+                </linearGradient>
+                <linearGradient id="flowGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#8A2BE2" />
+                    <stop offset="100%" stop-color="#00F0FF" />
+                </linearGradient>
+            </defs>
+        </svg>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-10 relative z-10">
           
-          <div class="grid grid-cols-2 gap-6">
-            <div>
-              <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
-                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5h16v14H4z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 15l3-3 2 2 3-4"></path></svg>
-              </div>
-              <div class="text-sm font-bold text-white mb-1">Tracking Architecture</div>
-              <div class="text-xs text-slate-400 leading-relaxed">Server-side GTM, GA4 taxonomy, and CAPI pipelines.</div>
+          <!-- Column 1: Extraction -->
+          <div class="flex flex-col gap-3 relative">
+            <div class="text-xs font-mono text-gray-400 mb-2 uppercase tracking-widest pl-2">1. Extraction</div>
+
+            <div class="pipeline-panel p-2.5 flex items-center justify-between group/panel hover:border-blue-500/50 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-blue-900/50 flex items-center justify-center border border-blue-500/30">
+                        <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M21.35,11.1h-9.1v2.8h5.4c-0.3,1.6-1.5,2.9-3.3,3.4v2.7h5.1c2.9-2.7,4.6-6.6,4.6-11C24,11.7,23.9,11.4,21.35,11.1z"/><path d="M12.25,24c3.2,0,5.9-1.1,7.9-2.9l-5.1-2.7c-1.1,0.7-2.4,1.1-3.8,1.1c-3.1,0-5.7-2.1-6.6-4.9h-5v2.8C3.8,21.6,7.7,24,12.25,24z"/></svg>
+                    </div>
+                    <span class="text-sm font-semibold text-white">Google Ads</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-brandTeal pulse-dot"></span>
             </div>
-            <div>
-              <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
-                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 4h12v16H6z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9h6M9 13h6M9 17h4"></path></svg>
-              </div>
-              <div class="text-sm font-bold text-white mb-1">Data Engineering</div>
-              <div class="text-xs text-slate-400 leading-relaxed">Python, SQL, and API extractions to flatten raw ad data.</div>
+
+            <div class="pipeline-panel p-2.5 flex items-center justify-between group/panel hover:border-indigo-500/50 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-indigo-900/50 flex items-center justify-center border border-indigo-500/30">
+                        <svg class="w-4 h-4 text-indigo-400" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </div>
+                    <span class="text-sm font-semibold text-white">Meta Ads</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-brandPurple pulse-dot" style="animation-delay: 0.3s"></span>
             </div>
-            <div>
-              <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
-                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19V9M12 19V5M19 19v-7"></path></svg>
-              </div>
-              <div class="text-sm font-bold text-white mb-1">Attribution</div>
-              <div class="text-xs text-slate-400 leading-relaxed">Analyzing customer journeys to find true ROI beyond last-click.</div>
+
+            <div class="pipeline-panel p-2.5 flex items-center justify-between group/panel hover:border-blue-400/50 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-blue-800/50 flex items-center justify-center border border-blue-400/30">
+                        <svg class="w-4 h-4 text-blue-300" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>
+                    </div>
+                    <span class="text-sm font-semibold text-white">LinkedIn</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-brandTeal pulse-dot" style="animation-delay: 0.6s"></span>
             </div>
-            <div>
-              <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
-                <svg class="w-5 h-5 text-accentCyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 12h6M7 17h10"></path><rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"></rect></svg>
-              </div>
-              <div class="text-sm font-bold text-white mb-1">Executive BI</div>
-              <div class="text-xs text-slate-400 leading-relaxed">Automated Power BI models for LTV, CAC, and pipeline health.</div>
+
+            <div class="pipeline-panel p-2.5 flex items-center justify-between group/panel hover:border-orange-500/50 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-orange-900/50 flex items-center justify-center border border-orange-500/30">
+                        <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <span class="text-sm font-semibold text-white">CRM Data</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-brandGold pulse-dot" style="animation-delay: 0.9s"></span>
             </div>
           </div>
+
+          <!-- Column 2: Engineering -->
+          <div class="flex flex-col justify-center items-center h-full relative">
+            <div class="text-xs font-mono text-brandTeal mb-4 uppercase tracking-widest text-center">2. Engineering</div>
+
+            <div class="pipeline-panel w-full p-5 border-brandTeal/40 relative overflow-hidden group/panel hover:shadow-[0_0_30px_rgba(0,240,255,0.15)] transition-all">
+                <div class="absolute inset-0 bg-brandTeal/5 group-hover/panel:bg-brandTeal/10 transition-colors"></div>
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="w-14 h-14 rounded-full bg-brandTeal/10 border border-brandTeal flex items-center justify-center mb-4 shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+                        <svg class="w-7 h-7 text-brandTeal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-lg text-white text-center leading-tight mb-2">Identity<br>Resolution</h3>
+                    <div class="flex flex-wrap justify-center gap-2 mt-2">
+                        <span class="px-2 py-1 bg-slate-800 rounded-md text-[10px] font-mono text-slate-300 border border-slate-600">SQL</span>
+                        <span class="px-2 py-1 bg-slate-800 rounded-md text-[10px] font-mono text-slate-300 border border-slate-600">BigQuery</span>
+                        <span class="px-2 py-1 bg-slate-800 rounded-md text-[10px] font-mono text-slate-300 border border-slate-600">sGTM</span>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+          <!-- Column 3: Measurement -->
+          <div class="flex flex-col justify-center items-center h-full relative">
+            <div class="text-xs font-mono text-brandPurple mb-4 uppercase tracking-widest text-center">3. Measurement</div>
+
+            <div class="pipeline-panel w-full p-5 border-brandPurple/40 relative hover:shadow-[0_0_30px_rgba(138,43,226,0.15)] transition-all">
+                <div class="absolute inset-0 bg-gradient-to-b from-brandPurple/10 to-transparent rounded-xl"></div>
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="w-14 h-14 rounded-xl bg-brandPurple/10 border border-brandPurple flex items-center justify-center mb-4 shadow-[0_0_15px_rgba(138,43,226,0.3)]">
+                        <svg class="w-7 h-7 text-brandPurple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-lg text-white text-center leading-tight mb-4">Multi-Touch<br>Attribution</h3>
+                    
+                    <div class="w-full h-10 flex items-end justify-between px-2 gap-1 border-b border-slate-600 pb-1">
+                        <div class="w-full bg-brandTeal/40 rounded-t-sm h-[40%] hover:h-[45%] transition-all"></div>
+                        <div class="w-full bg-brandTeal/60 rounded-t-sm h-[20%] hover:h-[25%] transition-all"></div>
+                        <div class="w-full bg-brandTeal/80 rounded-t-sm h-[30%] hover:h-[35%] transition-all"></div>
+                        <div class="w-full bg-brandPurple rounded-t-sm h-[100%] shadow-[0_0_8px_rgba(138,43,226,0.8)]"></div>
+                    </div>
+                    <div class="text-[10px] font-mono text-slate-400 mt-2 text-center">DATA-DRIVEN MODEL</div>
+                </div>
+            </div>
+          </div>
+
+          <!-- Column 4: Insights -->
+          <div class="flex flex-col justify-center gap-4 relative">
+            <div class="text-xs font-mono text-brandGold mb-1 uppercase tracking-widest pl-2">4. Output</div>
+            
+            <div class="pipeline-panel p-4 border-l-4 border-l-brandPurple hover:translate-x-1 transition-transform">
+                <div class="flex justify-between items-end mb-2">
+                    <div class="text-xs text-slate-400 font-semibold uppercase tracking-wide">True ROAS</div>
+                    <div class="text-emerald-400 text-xs font-mono flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                        24.8%
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-white tracking-tight">4.2x</div>
+                <div class="w-full bg-slate-800 h-1.5 rounded-full mt-3 overflow-hidden">
+                    <div class="bg-gradient-to-r from-brandPurple to-brandTeal h-full w-[78%]"></div>
+                </div>
+            </div>
+
+            <div class="pipeline-panel p-4 border-l-4 border-l-brandGold hover:translate-x-1 transition-transform">
+                <div class="flex justify-between items-end mb-2">
+                    <div class="text-xs text-slate-400 font-semibold uppercase tracking-wide">Pipeline Recovered</div>
+                    <div class="text-[10px] font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Q3</div>
+                </div>
+                <div class="text-3xl font-bold text-white tracking-tight">$2.4M</div>
+                <div class="flex justify-between items-center mt-3 text-[10px] font-mono text-slate-400 border-t border-slate-700 pt-2">
+                    <span>Target: $3.0M</span>
+                    <span class="text-brandGold">80% to goal</span>
+                </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
 
     <!-- CASE STUDIES SECTION -->
-    <div id="case-studies" class="pt-24 pb-12 relative z-10">
+    <div id="case-studies" class="pt-16 pb-12 relative z-10 border-t border-slate-800">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <span class="text-accentCyan font-bold tracking-widest uppercase text-sm mb-4 block">Portfolio</span>
         <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6">Featured Projects</h2>
@@ -272,187 +383,181 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
         
-        <!-- Case Study 1: Ghost Transactions -->
-        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300 relative z-10">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-2xl -z-10"></div>
-          <div class="flex gap-2 mb-6">
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Data Reconciliation</span>
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">sGTM</span>
+        <!-- NEW Case Study 1: Cloudflare & sGTM ITP Bypass -->
+        <a href="sgtm-cloudflare-tracking.html" class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-all duration-300 relative z-10 hover:bg-slate-900 cursor-pointer">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl -z-10"></div>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-accentCyan">Server-Side GTM</span>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Cloudflare GTG</span>
           </div>
-          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Ghost Transactions & Attribution Decay</h3>
-          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
-            <p><strong class="text-slate-200">Problem:</strong> Client-side tracking is bleeding data due to ad blockers, skewing executive dashboards.</p>
-            <p><strong class="text-slate-200">Solution:</strong> Reconciled 50,000 backend server logs against front-end events to expose a 36% data loss, solved via server-side architecture.</p>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">First-Party Tracking Pipeline & ITP Bypass</h3>
+          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base">
+            <p><strong class="text-slate-200">Problem:</strong> Apple's Safari ITP was enforcing a strict 24-hour cookie limit, instantly breaking multi-touch attribution for returning users.</p>
+            <p><strong class="text-slate-200">Solution:</strong> Engineered a secure HTTP tracking architecture using Cloudflare Tag Gateway and Stape.io to bypass client-side JavaScript restrictions.</p>
           </div>
           
-          <ul class="space-y-2 mb-8 text-slate-400">
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Server-Side Architecture</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Client Hints Parsing</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Database Reconciliation</li>
+          <ul class="space-y-2 mb-8 text-slate-400 text-sm">
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> 2-Year Attribution Window Restored</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Custom Subdomain CNAME Routing</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> HTTP-Only `Set-Cookie` Headers</li>
           </ul>
 
-          <a href="ad-blocker-ghost-transactions.html" class="relative z-20 inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
+          <div class="inline-flex items-center gap-2 font-bold text-accentCyan mt-auto group-hover:gap-3 transition-all">
             Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-          </a>
-        </div>
-
-        <!-- Case Study 2: Last-Click Attribution -->
-        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300 relative z-10">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -z-10"></div>
-          <div class="flex gap-2 mb-6">
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Attribution</span>
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">SQL</span>
           </div>
-          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Last-Click Attribution Analysis</h3>
-          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
-            <p><strong class="text-slate-200">Problem:</strong> Default last-click reporting credited $0 to every paid social channel.</p>
-            <p><strong class="text-slate-200">Solution:</strong> Built a custom SQL attribution engine directly within the data warehouse, exposing a $412K misattribution error.</p>
+        </a>
+
+        <!-- Case Study 2: Ghost Transactions -->
+        <a href="ad-blocker-ghost-transactions.html" class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-all duration-300 relative z-10 hover:bg-slate-900 cursor-pointer">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl -z-10"></div>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-rose-400">Data Reconciliation</span>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Client Hints API</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-rose-400 transition-colors">Ghost Transactions & Attribution Decay</h3>
+          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base">
+            <p><strong class="text-slate-200">Problem:</strong> Client-side tracking is bleeding data due to ad blockers, skewing executive dashboards.</p>
+            <p><strong class="text-slate-200">Solution:</strong> Reconciled 50,000 backend server logs against front-end events to expose a 36% data loss, tracing the suppression back to specific privacy browsers.</p>
           </div>
           
-          <ul class="space-y-2 mb-8 text-slate-400">
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> SQL & Recursive CTEs</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Multi-Touch Attribution</li>
+          <ul class="space-y-2 mb-8 text-slate-400 text-sm">
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Server vs. Client Database Reconciliation</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> SEC-CH-UA Parsing</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Quantified $23M Missing Revenue Gap</li>
+          </ul>
+
+          <div class="inline-flex items-center gap-2 font-bold text-rose-400 mt-auto group-hover:gap-3 transition-all">
+            Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </div>
+        </a>
+
+        <!-- Case Study 3: Last-Click Attribution -->
+        <a href="last-click-attribution-analysis.html" class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-all duration-300 relative z-10 hover:bg-slate-900 cursor-pointer">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl -z-10"></div>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-blue-400">Attribution</span>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">BigQuery SQL</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-blue-400 transition-colors">Last-Click Attribution Analysis</h3>
+          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base">
+            <p><strong class="text-slate-200">Problem:</strong> Default last-click reporting incorrectly credited $0 to every paid social channel.</p>
+            <p><strong class="text-slate-200">Solution:</strong> Built a custom SQL attribution engine directly within the data warehouse, exposing a $412K misattribution error and mapping true TOFU performance.</p>
+          </div>
+          
+          <ul class="space-y-2 mb-8 text-slate-400 text-sm">
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Recursive SQL CTEs for Journey Mapping</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Multi-Touch Linear & First-Click Models</li>
              <li class="flex items-center gap-2"><svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Executive Misattribution Report</li>
           </ul>
 
-          <a href="last-click-attribution-analysis.html" class="relative z-20 inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
+          <div class="inline-flex items-center gap-2 font-bold text-blue-400 mt-auto group-hover:gap-3 transition-all">
             Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-          </a>
-        </div>
-
-        <!-- Case Study 3: Power Query -->
-        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300 relative z-10">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl -z-10"></div>
-          <div class="flex gap-2 mb-6">
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Power Query</span>
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">ETL</span>
           </div>
-          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">Power Query Automated ETL Pipeline</h3>
-          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
-            <p><strong class="text-slate-200">Problem:</strong> Fragmented ad-platform datasets contained overlapping channels, conflicting date structures, and unusable financial formats.</p>
-            <p><strong class="text-slate-200">Solution:</strong> Engineered a fully automated, refreshable Power Query pipeline using custom M Code to permanently eliminate manual Excel cleanup.</p>
+        </a>
+
+        <!-- Case Study 4: Pipeline Discrepancy Resolution -->
+        <a href="pipeline-discrepancy-resolution.html" class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-all duration-300 relative z-10 hover:bg-slate-900 cursor-pointer">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl -z-10"></div>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-purple-400">RevOps</span>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Identity Graph</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-purple-400 transition-colors">GA4 & Salesforce Pipeline Reconciliation</h3>
+          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base">
+            <p><strong class="text-slate-200">Problem:</strong> Executives paused a $150k/month budget due to a severe data mismatch between Marketing (GA4) and Sales (CRM).</p>
+            <p><strong class="text-slate-200">Solution:</strong> Engineered a deterministic SQL Identity Graph to connect raw web logs directly to CRM data, eliminating a massive Cartesian explosion error.</p>
           </div>
           
-          <ul class="space-y-2 mb-8 text-slate-400">
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Custom M Code Programming</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Automated ETL Workflows</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Clean Data Modeling</li>
+          <ul class="space-y-2 mb-8 text-slate-400 text-sm">
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> COALESCE() Logic for Disconnected Records</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> $7M in "Ghost" Pipeline Removed</li>
+             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> 1,600 Untracked Leads Recovered</li>
           </ul>
 
-          <a href="power-query-ecommerce-cleanup.html" class="relative z-20 inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
+          <div class="inline-flex items-center gap-2 font-bold text-purple-400 mt-auto group-hover:gap-3 transition-all">
             Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-          </a>
-        </div>
-
-        <!-- Case Study 4: SQL Business Questions -->
-        <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col glow-border group hover:-translate-y-1 transition-transform duration-300 relative z-10">
-          <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-2xl -z-10"></div>
-          <div class="flex gap-2 mb-6">
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">SQL</span>
-            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs font-semibold text-slate-300">Modeling</span>
           </div>
-          <h3 class="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accentCyan transition-colors">SQL Business Questions Analysis</h3>
-          <div class="space-y-4 mb-8 text-slate-400 flex-grow text-base md:text-lg">
-            <p><strong class="text-slate-200">Problem:</strong> Ad platforms claimed high returns, but isolated data silos hid the reality of shrinking actual profit margins.</p>
-            <p><strong class="text-slate-200">Solution:</strong> Architected a normalized SQL database to eliminate manual spreadsheet merges and calculate true financial ROAS.</p>
-          </div>
-          
-          <ul class="space-y-2 mb-8 text-slate-400">
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Relational Data Modeling</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Cohort Analysis & LTV</li>
-             <li class="flex items-center gap-2"><svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> ROAS Engineering</li>
-          </ul>
-
-          <a href="sql-business-insights.html" class="relative z-20 inline-flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
-            Read Case Study <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-          </a>
-        </div>
+        </a>
       </div>
 
       <!-- View All Portfolio Button -->
-      <div class="text-center relative z-20">
+      <div class="text-center relative z-20 mt-10">
         <a href="portfolio.html" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all mt-auto cursor-pointer">
-          View Full Portfolio Library
+          View Full Case Study Archive
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
         </a>
       </div>
     </div>
 
-    <!-- SERVICES -->
-    <div id="services" class="py-24 border-t border-slate-800 relative z-10">
+    <!-- SERVICES & EXPERTISE SECTION -->
+    <div id="services" class="py-16 md:py-24 relative z-10 border-t border-slate-800">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <span class="text-accentCyan font-bold tracking-widest uppercase text-sm mb-4 block">Services</span>
-        <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6">Core Capabilities</h2>
-        <p class="text-lg text-slate-400">Building the data foundation marketing teams need to make confident decisions.</p>
+        <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6">Core Capabilities & Expertise</h2>
+        <p class="text-lg text-slate-400">The complete marketing data lifecycle: From raw pixel collection to executive boardroom insights.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        <div class="glass-card rounded-3xl p-8 hover:bg-slate-800/50 transition-colors border border-slate-700/50">
-          <div class="w-14 h-14 rounded-2xl bg-cyan-900/30 text-accentCyan flex items-center justify-center mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5h16v14H4z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 15l3-3 2 2 3-4"></path></svg>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <!-- Service 1: Data Engineering -->
+        <div class="glass-card p-8 rounded-3xl border-t-4 border-t-accentCyan hover:-translate-y-1 transition-transform">
+          <div class="w-12 h-12 rounded-xl bg-cyan-900/30 text-accentCyan flex items-center justify-center mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
           </div>
-          <h3 class="text-2xl font-bold text-white mb-4">Tracking & Data Collection</h3>
-          <p class="text-slate-400 leading-relaxed">Configuring reliable GTM events, GA4 taxonomy, and proper conversion tracking so your raw data is actually trustworthy.</p>
+          <h3 class="text-xl font-bold text-white mb-3">Data Engineering & Pipelines</h3>
+          <p class="text-slate-400 text-sm mb-6">Extracting raw data from fragmented ad platforms, CRMs, and web analytics. Building automated, normalized SQL schemas in BigQuery to create a single source of commercial truth.</p>
+          <div class="flex flex-wrap gap-2 mt-auto">
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">Advanced SQL</span>
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">BigQuery</span>
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">Python</span>
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">APIs</span>
+          </div>
         </div>
 
-        <div class="glass-card rounded-3xl p-8 hover:bg-slate-800/50 transition-colors border border-slate-700/50">
-          <div class="w-14 h-14 rounded-2xl bg-emerald-900/30 text-emerald-400 flex items-center justify-center mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 4h12v16H6z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9h6M9 13h6M9 17h4"></path></svg>
+        <!-- Service 2: Measurement Architecture -->
+        <div class="glass-card p-8 rounded-3xl border-t-4 border-t-brandPurple hover:-translate-y-1 transition-transform">
+          <div class="w-12 h-12 rounded-xl bg-purple-900/30 text-brandPurple flex items-center justify-center mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           </div>
-          <h3 class="text-2xl font-bold text-white mb-4">Data Cleaning & Pipelines</h3>
-          <p class="text-slate-400 leading-relaxed">Using Python and Power Query to clean messy CRM exports and flatten ad platform data into standardized, automated pipelines.</p>
+          <h3 class="text-xl font-bold text-white mb-3">Measurement Architecture</h3>
+          <p class="text-slate-400 text-sm mb-6">Designing resilient event taxonomies and server-side pipelines. Bypassing Safari ITP and ad-blockers using Cloudflare, sGTM, and Conversion APIs for lossless data collection.</p>
+          <div class="flex flex-wrap gap-2 mt-auto">
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">sGTM</span>
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">GA4</span>
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">Cloudflare</span>
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">Meta CAPI</span>
+          </div>
         </div>
 
-        <div class="glass-card rounded-3xl p-8 hover:bg-slate-800/50 transition-colors border border-slate-700/50">
-          <div class="w-14 h-14 rounded-2xl bg-purple-900/30 text-purple-400 flex items-center justify-center mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19V9M12 19V5M19 19v-7"></path></svg>
+        <!-- Service 3: Attribution -->
+        <div class="glass-card p-8 rounded-3xl border-t-4 border-t-blue-500 hover:-translate-y-1 transition-transform">
+          <div class="w-12 h-12 rounded-xl bg-blue-900/30 text-blue-400 flex items-center justify-center mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
           </div>
-          <h3 class="text-2xl font-bold text-white mb-4">Analytics & Dashboards</h3>
-          <p class="text-slate-400 leading-relaxed">Writing SQL to answer complex business questions (like attribution and LTV) and visualizing the answers in Power BI or Looker Studio.</p>
+          <h3 class="text-xl font-bold text-white mb-3">Attribution & Revenue Analytics</h3>
+          <p class="text-slate-400 text-sm mb-6">Moving beyond flawed last-click reporting. Engineering multi-touch attribution models, deterministic identity graphs, and LTV forecasts to prove the true ROI of top-of-funnel marketing.</p>
+          <div class="flex flex-wrap gap-2 mt-auto">
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">Identity Resolution</span>
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">Multi-Touch</span>
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">ROAS Modeling</span>
+          </div>
         </div>
 
+        <!-- Service 4: BI & Dashboards -->
+        <div class="glass-card p-8 rounded-3xl border-t-4 border-t-brandGold hover:-translate-y-1 transition-transform">
+          <div class="w-12 h-12 rounded-xl bg-amber-900/30 text-brandGold flex items-center justify-center mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Executive BI & Storytelling</h3>
+          <p class="text-slate-400 text-sm mb-6">Translating complex data warehouse models into clear, automated executive dashboards. Giving C-suite leaders the visual clarity needed to confidently allocate high-scale ad budgets.</p>
+          <div class="flex flex-wrap gap-2 mt-auto">
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">Power BI</span>
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">Looker Studio</span>
+            <span class="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300">Data Visualization</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- TOOLS / TECH STACK SECTION -->
-    <div id="tools" class="py-24 border-t border-slate-800 bg-slate-900/30 rounded-3xl -mx-6 px-6 sm:mx-0 sm:px-0 relative z-10">
-      <div class="text-center max-w-3xl mx-auto mb-16 px-6">
-        <span class="text-accentCyan font-bold tracking-widest uppercase text-sm mb-4 block">Stack</span>
-        <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6">The Tech Stack</h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-6">
-        
-        <div class="glass-card rounded-3xl p-8 border border-slate-700/50">
-          <h3 class="text-xl font-bold text-white mb-6 border-b border-slate-700 pb-4">Data Extraction & Cleaning</h3>
-          <ul class="space-y-4 text-slate-400">
-            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-accentCyan"></span> Python (Pandas, Data Gen)</li>
-            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-accentCyan"></span> Advanced SQL (Window Functions)</li>
-            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-accentCyan"></span> Power Query (M Code)</li>
-          </ul>
-        </div>
-
-        <div class="glass-card rounded-3xl p-8 border border-slate-700/50">
-          <h3 class="text-xl font-bold text-white mb-6 border-b border-slate-700 pb-4">Measurement & Tracking</h3>
-          <ul class="space-y-4 text-slate-400">
-            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Google Analytics 4 (GA4)</li>
-            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Google Tag Manager (GTM)</li>
-            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Conversion APIs / Pixel Setup</li>
-          </ul>
-        </div>
-
-        <div class="glass-card rounded-3xl p-8 border border-slate-700/50">
-          <h3 class="text-xl font-bold text-white mb-6 border-b border-slate-700 pb-4">Data Visualization & BI</h3>
-          <ul class="space-y-4 text-slate-400">
-            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-purple-400"></span> Microsoft Power BI</li>
-            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-purple-400"></span> Looker Studio</li>
-            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-purple-400"></span> Executive Data Storytelling</li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
   </div>
 
   <!-- Footer CTA -->
@@ -463,43 +568,19 @@
       <div class="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 relative z-10">Get in Touch</div>
       <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Need help with tracking, data pipelines, or marketing analytics?</h2>
       <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 relative z-10">
-        If you need support with GA4/GTM setup, data cleaning, Power BI modeling, or SQL-based analysis, send me a message.
+        If you need support with GA4/sGTM setup, data reconciliation, SQL-based attribution analysis, or BI dashboards, send me a message.
       </p>
 
       <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-20">
         <a href="contact.html" class="px-8 py-4 rounded-xl font-bold text-bgDark bg-accentCyan hover:bg-cyan-300 transition-colors shadow-[0_0_15px_rgba(34,211,238,0.4)] cursor-pointer">
           Contact Me
         </a>
-        <a href="#case-studies" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors cursor-pointer">
-          View Case Studies
+        <a href="portfolio.html" class="px-8 py-4 rounded-xl font-bold text-white bg-slate-800 border border-slate-600 hover:bg-slate-700 transition-colors cursor-pointer">
+          View All Case Studies
         </a>
       </div>
     </div>
   </div>
 
-  <script>
-    // Mobile Menu Toggle Logic
-    document.addEventListener('DOMContentLoaded', () => {
-      const btn = document.getElementById('mobileMenuBtn');
-      const menu = document.getElementById('mobileMenu');
-      const links = document.querySelectorAll('.mobile-link');
-
-      // Toggle menu when clicking the hamburger icon
-      if(btn && menu) {
-        btn.addEventListener('click', () => {
-          menu.classList.toggle('hidden');
-          menu.classList.toggle('flex');
-        });
-
-        // Close menu when clicking a link inside it
-        links.forEach(link => {
-          link.addEventListener('click', () => {
-            menu.classList.add('hidden');
-            menu.classList.remove('flex');
-          });
-        });
-      }
-    });
-  </script>
 </body>
 </html>
