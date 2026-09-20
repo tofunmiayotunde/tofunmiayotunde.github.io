@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Media Mix & ROAS Calculator | How to Allocate Your Advertising Budget</title>
+<meta name="description" content="Free media mix and ROAS calculator. Learn how to allocate your advertising budget across Meta, Google, DSP, Influencer and more. Get a personalised recommendation and realistic ROAS range.">
+<link rel="canonical" href="https://brackenads.com/tools/media-mix-roas-calculator">
+<style>
+:root{
+  --primary:#0B7A4B;
+  --primary-dark:#08603C;
+  --primary-light:#E6F5EE;
+  --green-soft:#F0F9F4;
+  --text:#1A1A2E;
+  --muted:#5A6A7A;
+  --border:#E2E8F0;
+  --white:#ffffff;
+  --radius:12px;
+  --shadow:0 4px 24px rgba(11,122,75,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--text);background:#fafbfa;line-height:1.7;font-size:17px}
+.container{max-width:780px;margin:0 auto;padding:0 20px}
+.wide{max-width:920px;margin:0 auto;padding:0 20px}
+
+/* Header */
+.site-header{background:var(--white);border-bottom:1px solid var(--border);padding:12px 0;position:sticky;top:0;z-index:50}
+.site-header .inner{max-width:920px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo img{height:36px;width:auto}
+.header-cta{font-size:.9rem;color:var(--primary);text-decoration:none;font-weight:600;padding:8px 14px;border:1.5px solid var(--primary);border-radius:6px}
+.header-cta:hover{background:var(--primary-light)}
+
+/* Hero - green */
+.hero{background:var(--primary);color:#fff;padding:56px 20px 48px;text-align:center}
+.hero .badge{display:inline-block;background:rgba(255,255,255,.18);color:#fff;font-size:.72rem;font-weight:700;letter-spacing:.05em;padding:5px 12px;border-radius:4px;margin-bottom:16px;text-transform:uppercase}
+.hero h1{font-size:clamp(1.7rem,4.5vw,2.3rem);font-weight:800;line-height:1.25;margin-bottom:14px;max-width:680px;margin-left:auto;margin-right:auto}
+.hero .lead{font-size:1.1rem;opacity:.92;max-width:540px;margin:0 auto 26px}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 22px;border-radius:7px;font-weight:600;font-size:.95rem;text-decoration:none;border:none;cursor:pointer;transition:all .15s}
+.btn-white{background:#fff;color:var(--primary)}.btn-white:hover{background:#f0fdf4}
+.btn-outline-white{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.7)}.btn-outline-white:hover{background:rgba(255,255,255,.12)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-full{width:100%;padding:14px;font-size:1rem}
+
+/* Calculator */
+.calc-section{padding:40px 0 24px}
+.calc-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow)}
+.calc-card h2{font-size:1.3rem;margin-bottom:6px;text-align:center;color:var(--text)}
+.calc-card .sub{text-align:center;color:var(--muted);font-size:.95rem;margin-bottom:22px}
+.form-group{margin-bottom:15px}
+label{display:block;font-weight:600;font-size:.88rem;margin-bottom:5px}
+.hint{font-size:.78rem;color:var(--muted);margin-top:3px}
+select,input[type=text],input[type=email]{width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:.95rem;background:#fff}
+select:focus,input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(11,122,75,.12)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:560px){.row{grid-template-columns:1fr}}
+.check-row{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:6px}
+.check-row label{font-weight:400;display:flex;align-items:center;gap:5px;font-size:.9rem}
+.gate{display:none;margin-top:18px;padding-top:18px;border-top:1px solid var(--border)}.gate.active{display:block}
+.status-msg{font-size:.85rem;margin-top:10px;text-align:center}.status-msg.success{color:var(--primary)}.status-msg.error{color:#c53030}
+#results{display:none;margin-top:24px}
+.result-header{text-align:center;margin-bottom:16px}.result-header h2{font-size:1.25rem}
+.kpi-box{background:var(--green-soft);border-radius:8px;padding:14px 16px;font-size:.9rem;margin-bottom:18px;color:var(--muted);border:1px solid #c6e9d5}
+.kpi-box strong{color:var(--text)}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}@media(max-width:560px){.metric-grid{grid-template-columns:1fr}}
+.metric{background:var(--green-soft);border-radius:10px;padding:14px 10px;text-align:center;border:1px solid #d1eade}
+.metric .value{font-size:1.3rem;font-weight:700;color:var(--primary)}
+.metric .label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;margin-top:3px}
+.metric .explain{font-size:.76rem;color:var(--muted);margin-top:4px;line-height:1.35}
+.mix-bar{margin-bottom:12px}.mix-label{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:4px}
+.bar-track{height:9px;background:#e8f0ec;border-radius:4px;overflow:hidden}.bar-fill{height:100%;border-radius:4px}
+.bar-dsp{background:var(--primary)}.bar-meta{background:#1877F2}.bar-google{background:#EA4335}.bar-kol{background:#0B7A4B}.bar-gaming{background:#6b46c1}.bar-other{background:#718096}
+.insights{background:var(--green-soft);border-left:3px solid var(--primary);padding:14px 16px;border-radius:0 8px 8px 0;margin:16px 0;font-size:.92rem}
+.insights ul{padding-left:18px;margin-top:6px}.insights li{margin-bottom:5px}
+.cta-inline{background:var(--primary);color:#fff;border-radius:var(--radius);padding:22px;text-align:center;margin-top:20px}
+.cta-inline h3{color:#fff;font-size:1.15rem;margin-bottom:6px}.cta-inline p{opacity:.92;margin-bottom:14px;font-size:.95rem}
+.cta-inline .btn{background:#fff;color:var(--primary)}.cta-inline .btn:hover{background:#f0fdf4}
+.disclaimer{font-size:.76rem;color:var(--muted);text-align:center;margin-top:14px}
+
+/* Content sections with cards */
+.content-wrap{padding:8px 0 40px}
+.section-block{padding:36px 0}
+.section-block.alt{background:var(--green-soft)}
+.section-block.green{background:var(--primary);color:#fff}
+.section-block.green h2,.section-block.green h3,.section-block.green p,.section-block.green li{color:#fff}
+.section-block.green .card{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+.section-block h2{font-size:1.5rem;margin-bottom:14px;line-height:1.3}
+.section-block h3{font-size:1.15rem;margin:22px 0 8px}
+.section-block p{margin-bottom:14px}
+.section-block ul,.section-block ol{margin:0 0 16px 20px}
+.section-block li{margin-bottom:7px}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}@media(max-width:600px){.card-grid{grid-template-columns:1fr}}
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:20px 18px;box-shadow:0 2px 12px rgba(0,0,0,.03)}
+.card h3{font-size:1.05rem;margin:0 0 8px;color:var(--primary)}
+.card p{font-size:.92rem;color:var(--muted);margin:0}
+.card .num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--primary);color:#fff;border-radius:50%;font-weight:700;font-size:.85rem;margin-bottom:10px}
+.callout{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:0 8px 8px 0;padding:16px 18px;margin:20px 0}
+.callout p{margin:0;font-size:.95rem}
+
+/* FAQ */
+.faq-section{padding:40px 0 56px;background:var(--white)}
+.faq-section h2{text-align:center;margin-bottom:24px;font-size:1.5rem}
+.accordion{max-width:760px;margin:0 auto}
+.acc-item{background:var(--white);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.acc-btn{width:100%;text-align:left;padding:15px 18px;background:none;border:none;font-size:.98rem;font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.acc-btn:hover{background:var(--green-soft)}
+.acc-btn .icon{font-size:1.2rem;color:var(--primary);transition:transform .2s}
+.acc-item.open .acc-btn .icon{transform:rotate(45deg)}
+.acc-panel{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 18px}
+.acc-item.open .acc-panel{max-height:400px;padding-bottom:14px}
+.acc-panel p{color:var(--muted);font-size:.93rem;margin:0}
+
+footer{background:#0d3d28;color:#a7d4bc;padding:28px 20px;text-align:center;font-size:.9rem}
+footer a{color:#7ddea8;text-decoration:none}footer strong{color:#e8f5ee}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="inner">
+    <a href="https://brackenads.com" class="logo">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXUAAAGgCAMAAABi0AdmAAAAElBMVEX///9KeVYybELH08qCnogAUxC5dmqfAAAgAElEQVR4nO2di5qrKgyFBfT9X3mPkssKBC+trVtLvnNmptV29vymi5AEHIZu3br9go3p6n/BD9oYY8f+dRtDp/51+3P1jv3r9qfq40y9q/s3baYeYnf4r9rs52OYrVP/nhH17utftVnOlyhm7NS/Zwv1Ppp+2Tr1L9o4EeRO/XumWQCm3qF/3jQL0Kl/z8TXs7jEDv0L9sd6ROqhpx2/YJb62GdIX7GRdXxRmrFnA75iM/UldMyzUoYu4WS3c41gJw5eMBfQi0qfsuzXQj0A9S7vnzIia6gz9KknwD5kFCMS9Vy8Y+o97Xim4RiZQ0bOu8yPeILE7t/tHMMeAKQec9SYh9D50vQQ5kTDcDwH6jQhDRqr96zj2fY3gsqMf416h36qJa1F0/RIynb8dequfraNhjqnAwx1dveu7KfZLDGr1Bf3j71P4FxLTeoza5H53hNzqqmzV9TnA4Sffup2lo0MVCalSakr9D45PcdoeBx53t+kTt8u/uc+xGheOnJmkYIVQ51cffnGX7q9Yw3q4u8sLOLxvbn3BBvtKJpnQpz3kmbeEGmGiun2bi/biKMoz/pL6nO2l8PIPkd912Z8CfIsPA2izPr8MEgMY+ap3V42yOeCiGsViU1zjvKl28s2UtkoTZplbFAf4cp06u9ZIpZjSZ0dv3T1HEFe/c++ufESjL+pUiLdRhGvoId8JXre8S2T0TFFhjvGQmJI+/mJ7uuvmi4IYM8e1cdHQz0q9Kw/faH1q6Zd0sBaQ0aZofIEij8IfYr0liVOphPIumSUfZuhc3mjF5PescTVifxDkpTWaGQGXVxkpkN/1VQ8gizfHTEsz+RjnqFCGNNd/R1L3FqEU35J7lLKMQQO2aN4ehf1N+xPU9LitSmjVXXJX6KkYAg7Q+/U3zBpspidO4Fwa/3ImAy+t6eeJlMOS18tjiUeRIME6wNv05Aq6ibiubnFAKBTjB/FnmAYTDGyki8xpE32htiC/hDqgD2Za3C+JQU2clySIxRwdpmnWk3nevYjBtP5rxPScybkk9gT+Km0NUo5VKadYyXrIOlPGEzT/Kci9Y86e0XdTIGS+L7J8Rbj6BNc/c/Zx0Gw/2ntZ32dY8UBqauX265pCx0U6AFmqI8fjmJSmv/LP4YYgWjU4j9MWSHjyB+Mm85Lp2AezsiR+medPQ2MfVzCRoM9u3MKxtnLH+8JnWNF0pIlbOGg/Q/5Z6kv/QAkzCkNmAGT4p1qikQ5KjTSm3c3dc8jpsYu4Owz8s9LDFNXKUdnD5Z6kMQAZL/uGLNrj0l2+lFmqF+hzti5DMrYcQg1wylq/ZICu2e7nfw5M/Y8M7qAehZ4SatAWVRI6xXQT0S8rbqzp2eJR9Qfp77M/UnLIyccFbs6u3V7hX7fBLvoSxzJwVlibBBzfl5mjthVVKxI21YM9PSI3+4KHbBP5OyDoc6wT8/LJHBgdnaLvUjARK2dUlfefaET9pnolD2ePHyRl8hZgtMTBLaViyf3KeCIWqcCRuzMuDN0dfZhjggM9cUfP0Od0gCSQlRnh8swPhZ6Dh8pcsz4kTplCc5PQSaeZCZ0dou9SMBY6ON0Z+g5/xLYtdnZl5GVff8jed/8SSLqHEQm6RGImOQF6NPtHZ3iFQphaLLqUh8/EEZSXj3nHkccRrWU9EDoLNYThzD5ma9RJzmhaF3DkiVGSdAXoJdiur+6SAaGsdOgydQ5pvnURJWdPeZKBmGneNzGL7jG0TK/n9cb7BkzzpjYz4eTEpCpyA+qs8M8lTo0bKwewd3Nm9wx/aXhy8iYlz/RUp/POYl6QYgrpljX4A0xCqMyqUyQhjxZ0onWjYzDF5V2njQh9TD7euA0/Bv4U4GInX2MBnvt7IF6wpT5KKp/O+g5fIlmZmqoi9bzhOm9eqokXlhrxNmjFKfJ2SvqWWmEuYnk72bTCF8iFDk86pSNf8/ZA9XruBmAfjBzpQZ1YK7hzdsIrjDFTmqzSj2EN6lHFgsW9MAaA+mseTVYE3ru+bITqLuYFqoZ+zJqqrOvUy+aIvdbMsMkSHOaEHs1mPK1yfIvE6ibRTAzYvpx+R5HGUiVOoc1y2CqkMZ38r6pAVQnQFooLc+CMTfvPni7xWDzP59+DMOgkh4ig5UUDLv6yAW/+E4GkrEn5K/STvG6e22kt3rQLUxvBZ1i9fxjxm4a88fBoX6OuCcGnbRYjtOfVCR58cpo2emuZQ0NR6YwaOEaqVtZN+r+XvgYYE4KzRaaGvCmSfOL7w49ezuNijX2JfHVos4lptdseZeUGLuJIyMrd9VAzUVqqLPeMge2aPkk9dICe84CUKevoZ4H1zfjx5xXp9kSzZ5MWa+MHZfmF6zv3ZL5ILPSSRozHJGBuNF+fycv80eUYkXFHs0gGiuFMR7/d/ymzGfLAjOxxDsiU1OPJ1CPIVHvkbbEyFy1baTmIRbJy7sZ6bqP3VIvhOatHGQeRylGhGWMbsRYQr858tkYe/SwjwVmq/LvWFZ10PQd2Ou4Zbyt0/Pcvpr4L4AhTtda01nUc5Oixd7WmBL6eNPserZJ3X20zp4f5pCFuwgwG/yOZWefBDvPk9yMgQN9nCLMsO5o6u4WuwqMtsWwq59CXb4GDthjkW2MMcaizjQsl0fTNfeiDutj1N3LtEAoMmEcwr9a20iCiAJHKG7kxeyWOfVh2JnpJGtO70cd0o5G3fGvJvZlRe/1lgEoWOexFDO7pbhohRSb1qP4+x0FZnFZgQfqXilqTf3l4jVUTlnURWMaUq6tdiFIpD5y5uxm0HPxCOjxzzUA6Y9JNLK+QR3qEAkyjc20u5RTZXXGwMyXtO/rf/5FJvkAfhx8d7eKLkr/mgF2dvMV7BHKGKZUzd5/I1ePEhnMjxA7+bvlDq7OT+SHU+4ZOHYFkg6SvBNPBG33XX4E5LIiabkgZ/D4junfV7h75KfKsB1DxsD9d4krIceoa5GUNYa6NVrUAycbc9nUBDA32riUSr4xLxMYVNKphlekBiTbRdShjB1eCCJn5IRdhlKbcGygz/84GE3DzQZTqTazpAQzlPphO+k6BO/q93tMPFxmpYNZfLeBPZQRzN1K1Yu7008TK3mUPoGCeoiB1s5w9MLd1TEeGVglqTtBMkAK/nu83UYwtytVD7OaE3dI9sJCa+QeuRtP3JyjSA7kd5k0lxrsLOmb2Evmt6yaKvdYDqDLQwnlIHBU4IMsSD0wS52VJLPWaakMqHEDuwTvIu23hD7MRSRtWkf3RuyycsNSl/+ncXcnmIQvBHxKLDuySWwzkInY+DXcvLbBgXsxLYWHFCOywEwl+SNrxQS5TJAk2xiln66FPX8Vnbkx9Nky9wK7RI8RqBvgNKBOh1boEfY4V6tVxKKuw2gQjyXzu0UvZDFCxnGQGWYs/lKGHlRPMPF7uHQtdQxMA2iPhoOdVgqMNoa5K/VgUo46phaV0/k5oc6LImUVDZT1ts2ELoKd93hJThSjazPGaJjfFDpjR+5ToTKg6lRXipqNiaO6+s4OXxo4tWrHZY1EdWrEHmE1jGGuzUi3tFyvi5B0nKZCZbQjIHI1Dwp4iS5C2hmyk4PLtBQvwpQ4LVb7svHzm86O1FjZkbtg57TkyJEMdWVgMoaDyr0TJZr5W+wjPRCJT4b6KD6fs413hz5oknea9CcI4CWhHoKuSBKBgfLS3ggmWuwB2jNUyoNSF9DDKDHm/YNGqCVJgoDSMYrdyI3v6rsDx4DYcaP1anaEvQEjphtvGzWCITCR9VFzkAa7unq5IvWAsyt2uQbrsyMTq984ajQGqi76oml2s4zFFDa4sqGzpB0+rysd8/BpwvZVM6WMB2C33MHvsGgn/g0/6hc5dws7N77QBHU3dnuzk0dQt9yLFO829fxcSntWAC/rBSBkF+w7mHNMeetw3e6NPIE6GO7mEkjixKR8I5zZwCEtX3QfKsAuXtxU91JcRlwpeTeLdmoaIzYLOAYdv7Wrw6XxzOy17mFvpmG8OynRFbqlx3M4hoOp33gnf79eAJMCQ2s5e7ldw6TCErWoVHOvBL3Yk/B+JnNQA143LGlZLTB2CHZM0l3Mi5pLBd8YXeyRb3LCbn976LLvV9FJFFfj56CuPmkAk/Bz4BmnXYRYmiae/Zt5fjGwwj/FaNCNJ6hRfNOA34rjRsi+2FaZNvWs6MZRkyy2wK5qf2eYCvp9meuMJz9k24BO01HVF3T1ZsSeKunAmsake6ntgX5b6pNSgJhxxywRloU51Ns05uWOyehFgT2B8stZNh9jL8IdrZjr87PR/L3eZdCVkPKDBPJr0ySqYAA4Vfk59VhuIACVpLrOdFfqxrOrSRI/rCfrDBlcXSLvdqZd2uzkApWOKwsBKq58qw12+7vG6mwo5dEIDXj/hqsr9TQ0qdPSaZ0cFW4P8Y31dbq7aeKC0qiz0/sbwR+LxzFWd3StykpGaVYiGO0EkDASPbtcfUdPBw7TuaIRsZv9CVZwt4KiAlNXUNl9U5NGCtwCE803hV7fUROURqHDhOrOZpPi4PGQRNSeR94FrywryeVp5Nh1hQaX76YJRCU217ID5zE+BnqxFG/QpurBzKLU7Y2Wwxwp6ffalhZHmnwKfthAsJH7clxcbzVwa/qSjTErNpZHjVET4hhtRBIl8px9jtV11QCHIEnnDH4SRp7Vm5nq5lPxTstjKlvcVYqTGKJLjGelJARDeuRiBR+tUfBxackQ7vLbICXpXYloHZ3217gvdG4I4MRvOydgyqYInWt36OumiCotGawxuM8xp2MWFfEcHR9AJHPP24KpaYvjKM848EdwdQ0eRws9BvFngEIhjFmZBB11Ut5IlrldtV4wv7G8kAl3I8rJsgfqELHL10xaM5H4VrYRRheayspTQm3ERVseC+jLt/tDx3XVVehngmr+SaDnb9oqwO2i0ch74nvF4B1jcr+qp2hYy5DRczLMnwAdl5wW9dTBz7czZ26KYVFJtMSomDAxdpkekbM31sTIpXAF/RmOng25a8rRH1sxy8sDZ4pmlBWFod29klnSq9sKjlXKgSOWZJb0JmD+HOio6jbbugZdRlSIHiGWHCDnksyCgSQuT5uYRghe0a+lJUMeP4n5bLDkuqDbgG4FRn18mcKyhAdWnCQxuehNooIp7e0oKdySeak1jzLVBejkKrHTABoMdXV1kg7pCojLrFQ3bZD5rQgNx958d+Q15jdPrXuGM3reJmCosI/CvBAY1nhGT2W6KDe+h9UxgXKQ5PF8l6TlnlWyB7JOjnHG9CzqmllE7pyPMYOdXgArMCTSsLAxarJAJqd0Es91RGLmmSmDtV0ws+GNlJ9kMIhisreZ+SaBh7F0oPsim+Wk3AgDzq7YlzI1SYwGkTAzYOZTfDx14F6j1rDGcXUq/1hlAmc3W6zRJchC5G6gKTrPCvRU6qqmGWeRfcWwphxL5YAktkLusU4YQQ4Cn2+hYRSlhD5qLLlkfB8JfcTujIq7ceJqLC2oaw2bNEaoo8/zSOtAD7jslDsFnkTdygYMZctDoWCUw7i66e9NcJqot02AgePHVepEWdoznlStBn/m9COA18FN0+i6h0k9fkqAGAW7RH04RYUdqBzqkAumbdqlZ+Yp81NHRkTn7SXh5GLl6s7wqXUjlpvBRu2Rpd2BrsjhRHvo9oZ/NwSOtGcjOqAR9LITjC6bZMGSFJL0ApTrkrzoRWZK0vn7dOgYsIvjF9F8Mq4ealePGMC3sbPGONixhEsZg2dRr+M25c4Z2yKyMa5uxtIgmRedrIrK6FgK2Lc2FTS1pWAU/87mfsSJe7laiZx/5jy5rh4oy5ifRC/XlBi4eEwNZ29CD09x90guZP801Rk9hKOo1KiNqwfsvksC1fCOoOfNuFHTMs+Erh0ClrwzQQVXl86jMg+fx9Ehn2nw+tj5WywH7jQW0HVsfYhBLckMZKV6jJWrQwu7OG/UtIDFLi2OZfTCKHmJGI2gFnrSLPxTDDsEIF6EvWQFsWwgqxciZ8fnxxknUueLIo4OSl9TxxkpQI80MX0W9KHsNVXyRu+j7v8V9ToEmRUFCFsGjBNzgbRUHENd7tQ+DLoXDN3cgY4/jbnq7AhPeRXrsdAcHlOJOoTig023WO4FdrnGzB/XzjyV+YDbaMYKvcFejK+ciuHLZkRDWo8kK2biGi+HP02TzKlMqvcCJp+1Yk8i7oZRoa/geK5eXBzI68L9HTXd5QTrUYJ5mkBxaSMfnC/Ig1zeYqWIMbeCRa98qmdCzA4VIRO2gMZYzFWwLun0CNBHaY2CwOYhlv8ypT4btJh7fq6uDlmXxVjcJTGAU1N4u1K6BDqMo1GJD8+LYmhnTQkHs5VVPCWU12qAq0e5kTtdDLtJAEh78iXLgY4FJVCcB5nZrXeDu+WMqS56LMnGEbDDAOtjzzETq0u0jv2UPe5K01b2gCFkzZ1idhaS/GgsqWslyWA3CYGGy1dePeYCywOha2+vrFwpM73CHPRZutnLclKZWlfsqXpP8PdUeDXvinzDG8fsNU7t8kAqlQ0AUyRn6CGItf4ofC122IPKd/T8qzUjxgmBZ0IfoJddi6c2F2N34oGFGzV1yb0Idogm3f3VeKeGMv/42LkpW6y4lyFeWdKjOlEZOGLDl7q9Ync3D4DsF164p0MfsKka/L05TxqoooT+zz7fxt5wdpP+0gTkM5kX92+MwXLXyWoFqcx+oUFKoMI++s4Oad6yC2l43loNmZJovxcENLXkKPSBV90tYGONUGdJJv84ubs22JzXYnrTtvicFqTFIPtV1ZKWo5MbQwYqW+v21MXxqDUMkxOIibb7qrH//S6UE7qVKe/D/iToizFt6j3iKJm7BcrIgq4K3V+WV2k0wvAm9pq5ASvVO/zwPM3ysCjG9OuQnSxxg0YuWZSF6wwrb1lNaV2DvcrbV/NRc5kfOaLORmk+IE/oy/YLAUEJGdfV7YqZnFY32NtOruW8x3V9ORYVgk2ANULHkZOJlatHqdrxtBSS7ovaoBtXTq6Fu+dDLxIuCr+Z76VRtEqu6Oqjal+SVP8mrY1Ge3Xuv2XpLvNi8uYUKXAivXZ10+IoxKCUXQpW+Vusp4cHy/pikm9q5mLVEs1L6zwi5NgR+yBD60qu14H+qPUCvsW4MhutPDTLTDne2iRvQmC8Kc8adtIX+SXP2T5TrbwjryYINshH2f2rKlRIbYmwG0fdU9motqB6GHS60UasQnWba/eYD0PZ99jAbmRGsG9Df3D+i+cr02TiRZuLqcjTpwGmSfYUU1Ki91B9b8WiBrpd+vg849Ti0uqDSwUw9VUlYcDV6YbKwC4W2Ok64qqBgjaElqaK91Tog6lmzDc2mSIEEC54oZ63Iik0xty1BLAD3pJ5GmQTJHT0Z25SooYCM5je0lgUspk6j6UV9JwZU+zu3KhkLmnhMQLzKT7X1bNFd1Q1CXchh2vCnFCQ63fLPErG0kZOkvV74nIdlDfS7XfN3GGxSoCp20fo8DKbxvoxjGDnH4dGEs2yhnjlh6CzplTJx3wAXTRop2OFE7DbPJjn6xFa1ktBf1rhrrS6RIfw3RQ7N905B2VWarF7KRh1+dEwD7/g6tgTgIGGV0jiQ+L2BqCmWyb46rk7d03/LPTZOHAftJZUmUefvVsFJ+7Czv7PFWnD/FegD3UcU1kz/pMxldHm7xZ7Ee7gAAo3E+BDT9d0MFMwdY6tuHquEtnUSwL4pbujq8PG9rGE/sA8jGcL+Wk6IC/cHSNlJCWcA3253wC4O0z/gXlixZnU93+COpmj7RuqztqewxZyZevtkH7PPi5uzw1IpDg8aYJPxY9ae1aPe/UunMRDzYIByoJxj4BmHZIkAsbMfJIPwo9ARx8vQpoVX3f6M1rYQ73flzLPnwBg/hPQecdYsomSkFsyE62rW+zUiMR5Xu+OYKaaAdrzI9CnaJrAnDNa4NXV51lr4jYklpXAkh4TzoMhL2m2PZJvv0Cd5jir3D191+beILvz1HkAHWY5C7yIDdZKzXs+bf/MNaOGLx99q6KH9dOYMAkzkLcX2NnDU92Kof7/QzMl8cRS0VuyzpsgoU+X2KmlNOpWslrFAMmh6JE155egZ3eX/gz7qa/J232pSGMsdo1geBrE2ZflDQxynY3+GPSBCnT0k9KsanmBuzSK5Xk1dpkeUZxS1lAZOZQ4fg76wsvZy6EuXlNrTJFmB+wi7U6tDz5BmnWxNb0fs4SxjLZDl4UOcWWLU5KNgN3lDsRNI8ZvQh/MgrzBgMfexoYDS4Ldxo95IC3Py7YsF/hFR091uNLYk8qIjnS74NcaOz1fbM8zm+wY8JOObsbJOh9Dp1gxgX1Kcl0D1wgsU1G7XKAWmImv708yn007kIq2x5I8gjP8E1+8MpfujqSRU5DA/OegZ0vRrH1UUUGxqQmW+91vY+e4sjPPljikrqLq9hy1bKB2sBfQoYS0mDJ/3D5fO217/4YWdW0phV51J2qkBIzLXN/l14yXHm1XNQrqlnuCp8qqB0yK8k2p6MdfrtxxH6M8XGeP81MmBlFRjV1mSLBrA/04/i51WnLtLF1y0afKlfP5Fju+gjUGJF46wn6molFYil70wodq8uVN7SruJh0s7g6OzzmwRXh+pBHGGkYx5VSJTyjmSwXRmnuN3V4mmw/4nUKSmoyl/HDevqX2+Sb1Yj92HSDbbXui7Em//ZqlStR5UVdrz+oq14sO3Eh/lY6uOyP/JHQoKcdymprLe9N6QKN4kXt095/ClY4Y3Pyi6TBInTGFyK9IdLGGgylyDa8zbxtPNZuNGisr62ol4Ylq9QHRoB0uwA9bToP50Nc3GlBXl3x6K87XiVIIvxmi15asqMAzTeJMnZgmecbP9SaZkKbu6GDEmYVdHLeNXqvXouKNFHseXWlC2pm7xrKS9PGWqw9w300Xuzb0dupty01cdduGpa7F7MRRS6M1o17h282zhbTTtgHUoXFDqPvYf7Er4FUriqmtEDJyfy8gdkobP164883EMTbLrs+61LkNKWFxo2rN6Mw9M4mA6Jvn6LJXzLwoTMP2Anpn7ptQb01SG3H4Er1kLW/duTdq4a6bNfB1dzGBKy8pezhTx6SMod6ZN6yu/7g3oq1dnddjGFeHK9CZrxnmfFnFN2anFLhQ0EL9XbIKKXd7deartkTkzv7sqymBBW1GnH1dvj5677pTbZGLWtNb/KH7jta6s+Zwp0yHvsNUZBqBTCHwkBDQtdeyzLFT32VV91BjMxNvSM2Jx6g3IBg69R3mZ7i8GVM1pPLGAVEvAL1lp75uaXKgc3agMZoWOiPJmNip77dq3SmmvTbCmSUDyVkvTcx36nsMF7hox24Mm3nHEFTgY6d+0HIzWLIqbvcPb3v7oEkZOrtT32XQgqd9vej1q9TTlLAY3alvmrNTsjxrtw5vCkzi+ga/uM9NV8zrVvf7qtdG1Ew8AedOfc0asWFrisoz2Pr8NNjbyXTqq1bvMKjknfvmRZkPWYkZjKt36kfNDJ3mauhoWRaOSuid+ivWqh7RwXrxjNWXTv01a+7z0hhSywpGp37M3PWPaykwEXbzLp36ITNbo0Un69tq3DXW++uOWsJpaXXITQrX5/bJ6WGjvJcTOHrq4opJl5iXrNqm3QXegt6pv2XbKzd8uJ36CZaKeVOn/llL0WwtyxW6IJsEdOonWeIc72RujGoOy4qYTv0US2subF2+TbcH7AetqJfi05Mhnp9tYO8B+3FLKjGTSI0fIjY0plP/qDXW7nbqnzVf2vtw+lnzpb1T/7C52Dv1T5s3ovbQ8ePmOXYfTj9tnsZ06h83B3un/nmrpb0Pp1+wCnKn/gWrNKZT/4aVGtNDx69YmZDpzv4VKzB36l+xQmM69e+Y1ZhO/UtmsPctHL5lxr+7s3/JjLN36t8ys/yx74b8LQPsXdi/Z6ArXWK+ZsksGuvYv2SKvUvMFy1BE2qn/jUT2F1ivmiiLF1ivmlwC/FO/XvG2LvEfNWSbB3bqX/P5H53Hfs3jarX3dm/a0nu2tupf9FS7M5+gaWAN7Dq9h3L9wRvrXnv9iHj+8t26l+1jv0SG7vEXGGpO/sF1p39EuvYL7GMvVP/snXsl1jq1C+w7uyX2Bg79QusY7/Eek3pEkvd2S+w7uyXWMd+iXXsl9jYqV9g3dkvsY79Eusac4V1Z7/Exj5XusC6s19iHfsl1jXmCus530usY7/EusZcYd3ZL7GO/RIbe8vABdY7NS6xjv0S69J+iXVpv8K6xlxiHfslNvbFBBdYX8NxiXWNucQ69kusY7/E+oh6hfUR9RLr2F+zfPtwvsVydVvrLbscO/+rPWu9pjgN36K6n33b0vGXyOtmZLx3Iz88Qn4F+7gCpA1n/v3Tnt+cT6NNPejfrZafCf4rzWuCXAZ6Zh/GJO9yiHvyePGTB8BTJFO/YGwA4T9QjuKLnKd8i/ms6L7L/BnIzzrc4ZcXB3hflj0YlXrYTT3Flo/yu8He92St68DuPtkTAHr9mgDoHeo7sGfqLeiDHKq5y2tqWrF5pLSEH5id2F0/tweVOr952/vdvK9QbxIM9KE2z+3FnqmvXVnh0nregSWesAUywZlpF/VV5nz8KPXqsFJfEasZvEt9D/YN6i3sa9TXD6olPG8X9S3og70B5D7qK7K+MURYJmdSb2BfB7tPZNDVhzTtVqR1FnhPk014/k6be6lbE4yb2D9EfR/2ZM7advZd0NH2UHcDxzepb2HfQd3HfgL1ZPV/09n5/AMR+Ra8cXKPvEgdosp17DFMH6G+B3sqztlw9iou3LYt6g3or1LfLe3L9GrrXA/7+9RT+Rbr1F+AvkW9Bf116jux/w/UOcBcl5jj+rJFvQn9Dep7se848x3qbeylwKw7+yuuvk69Df0d6vvmSp+ivunslauvOrucfSytuAJvXHmnM6ivYr+eOpzQdvbTqa9Bf4v6LuxXUa/G0uXJ7Q/GOdRX1IjqiN8AAARiSURBVAVf9xL1PRrzaeoHBGZFYl5z9Sb1DegnUV/Bfjl1c0LL2c+lvqou+LrXqO/AfoS699yL1F1Xbzq7ytEZ1Dehv0t9W2N2UP/E3NR39ZazvyjrPvVt6KdRb2L/MPUjY+lyYJ36wcqyQ31L0s3rXqW+rR7b53gCcxb1svDhS8x51Occo5aiPzA35Z/fpe5C35lzPDaWLkecl7wq6zX1ZQcH+XPbWbENaL551FuOvHWKD30f9UNhIx1ynP006gt0LPO30mIb0HwziDY8eeOMBvR9taTjru46+0nU57pRVpVR3rCRF4OPw9Sy6lUH6nmGen0GVW/q1owdddNmsbo5li4HP0V9BCEX7FvUX/b1dWm31O0LJ/4seq9bAbcuL6sC40rMKdRtrW59vHxf14fVfpeSuvkMtboyzHs2+mHWujLWBMZz9rep1614687+fgwzm/yrazFaVZiJR576V/jUuSVttRNmVWDmw+XT71Ovu+pWwZ5DfUVjNmOYxePrZseKHPYAHmiD8Q6fT/1gy8tJ1NvOvnuWFFdnSZNpvNxL3endnN/ldOpefn1NYk6i3pb2A9mv6OYcZ/mZQvHkPoHxodcNwZ+gvkr2LOpNjdlD3cvE4Awv1M/uGUtb4l9JzGeorzj7adRbGnOMusM3HEu7b0N3gscTs1/1wTf6HK2thnoW+y7qjrMr9dE98aV5qZzzFeptZz+PekNjDlIP9TPHcpHvUT8jv77j6InUfWffR7129hbdLWffITC1xJxbSyqPvti/XtnGSiLEfjb1LWff4+qVs3+IevMTdCZ1pQvYj1IP5RPHqO9y9TqMObszwx5eWSFzAnUvaD+d+jr2fa7epn5e79ew4uynUvc05v+kfpLEbHZSN+ieS93Bfj71tUM7BeYsiflPqNfh40XUN6D/nZiKx684+yb1xrU8m3rl7KfHMGvHdrv6vKTrBGffXiHj4z2beoX9E9SbLUi7Xf2k8XSbun8tX6K+WngqCL89N12j3gwr91BP5RPHSexYg+fyPZ964exv52HWegRCSyX2UG9mHs9d+fgd6gX2z1Ivju539Zlx+Rcfx753H4EvULca83Z+fbX3yxw94uqesx9PPR6gbs75BHXj7B/qX/cOHxhL89nNZoFVGIdWtPsS8xr1vdhpO58PUHed/Sj1+k/eITIHd29wCX+EernifYO6VzbdTR3WNR4SmIXe2uTW53F4pxLX2XdSD2YPqk3qWPQc9nRmFI4+bFN3HPuQqy/81jI5LpDju/L4Te7rbrhY3jVAT1g/ezHFHqtHxibX0Ydt6vV69WOuvpzvwkqxyb3cVGMf9drZoXvJeyX0BR+iXiR960lQNt73a3Xjr61fUVDfva2aLzH2vQwU2W6torcuFAecfSz3WztGXZgsQbtuC2ibhakryH+DtYN4hlB3e13altZOTvzHw96COTrwYpEN6o6zR59I3boj72JFvmX0ntsn/reWGBb7X7MStxGK7DztXPsHXd/bhVM9om0AAAAASUVORK5CYII=" alt="Bracken">
+    </a>
+    <a href="https://brackenads.com/contact-us" class="header-cta">Talk to us →</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="badge">Free Tool · Instant Results</div>
+    <h1>Free Media Mix &amp; ROAS Calculator</h1>
+    <p class="lead">See how to allocate your advertising budget across channels and get a realistic ROAS projection based on your industry and goal.</p>
+    <div class="hero-actions">
+      <a href="#calculator" class="btn btn-white">Use the Calculator</a>
+      <a href="#guide" class="btn btn-outline-white">Read the Guide</a>
+    </div>
+  </div>
+</section>
+
+<section class="calc-section" id="calculator">
+  <div class="container">
+    <div class="calc-card" id="formCard">
+      <h2>Get Your Recommended Media Mix</h2>
+      <p class="sub">Answer a few questions. We will return a practical budget allocation and a realistic ROAS range.</p>
+      <form id="calcForm">
+        <div class="form-group"><label for="industry">Industry / Vertical</label>
+          <select id="industry" required><option value="">Select your industry</option>
+            <option value="ecommerce">E-commerce / Fashion / Beauty</option>
+            <option value="fintech">Fintech / Banking / Insurance</option>
+            <option value="consumer">FMCG / Consumer Brands</option>
+            <option value="gaming">Gaming / Apps / Entertainment</option>
+            <option value="services">Professional / Local Services</option>
+            <option value="education">Education / EdTech</option>
+            <option value="other">Other</option></select></div>
+        <div class="row">
+          <div class="form-group"><label for="budget">Monthly Media Budget</label>
+            <select id="budget" required><option value="">Select range</option>
+              <option value="150000">Under ₦150,000</option><option value="300000">₦150,000 – ₦300,000</option>
+              <option value="750000">₦300,000 – ₦750,000</option><option value="1500000">₦750,000 – ₦1.5M</option>
+              <option value="3000000">₦1.5M – ₦3M</option><option value="5000000">₦3M+</option></select></div>
+          <div class="form-group"><label for="goal">Primary Goal</label>
+            <select id="goal" required><option value="">Select goal</option>
+              <option value="awareness">Brand Awareness / Reach</option><option value="leads">Lead Generation</option>
+              <option value="sales">Sales / Purchases</option><option value="app">App Installs / Engagement</option></select></div>
+        </div>
+        <div class="form-group"><label>Current Primary Channels</label>
+          <div class="check-row">
+            <label><input type="checkbox" name="channels" value="meta"> Meta (FB/IG)</label>
+            <label><input type="checkbox" name="channels" value="google"> Google Ads</label>
+            <label><input type="checkbox" name="channels" value="tiktok"> TikTok</label>
+            <label><input type="checkbox" name="channels" value="dsp"> Programmatic / DSP</label>
+            <label><input type="checkbox" name="channels" value="influencer"> Influencer / KOL</label>
+            <label><input type="checkbox" name="channels" value="none"> Mostly organic / none</label>
+          </div></div>
+        <div class="row">
+          <div class="form-group"><label for="currentRoas">Current Blended ROAS</label>
+            <select id="currentRoas"><option value="unknown">I don't know / Not tracking yet</option>
+              <option value="1.5">Under 2x</option><option value="2.5">2x – 3x</option><option value="3.5">3x – 4x</option>
+              <option value="5">4x – 6x</option><option value="7">6x+</option></select>
+            <div class="hint">ROAS = Revenue ÷ Ad Spend</div></div>
+          <div class="form-group"><label for="focus">Geographic Focus</label>
+            <select id="focus" required><option value="lagos">Lagos-focused</option>
+              <option value="multi">Multi-city</option><option value="nationwide">Nationwide</option></select></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="submitBtn">Generate My Recommendation →</button>
+      </form>
+      <div class="gate" id="emailGate">
+        <p style="margin-bottom:12px;font-weight:600;font-size:.95rem">Enter your details to unlock the full recommendation.</p>
+        <div class="form-group"><label for="name">Full Name</label><input type="text" id="name" placeholder="Ada Okafor"></div>
+        <div class="form-group"><label for="email">Work Email</label><input type="email" id="email" placeholder="ada@yourbrand.com"></div>
+        <div class="form-group"><label for="company">Company / Brand</label><input type="text" id="company" placeholder="Your Company Ltd"></div>
+        <button type="button" class="btn btn-primary btn-full" id="unlockBtn">Unlock Full Results</button>
+        <div class="status-msg" id="statusMsg"></div>
+      </div>
+    </div>
+
+    <div id="results">
+      <div class="calc-card">
+        <div class="result-header"><h2>Your Recommended Media Mix</h2>
+          <p id="resultSubtitle" style="color:var(--muted);font-size:.95rem"></p></div>
+        <div class="kpi-box">
+          <strong>How to read these numbers</strong><br>
+          <strong>Projected ROAS range</strong>: realistic revenue return per ₦1 of ad spend when the mix is executed well. Directional, not a guarantee.<br>
+          <strong>Efficiency gain</strong>: potential improvement versus typical single-channel or poorly tracked approaches.<br>
+          <strong>Percentages</strong>: suggested starting share of your monthly budget for each channel. Low-relevance channels are hidden automatically.
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><div class="value" id="projRoas">—</div><div class="label">Projected ROAS Range</div><div class="explain">Revenue expected per ₦1 spent</div></div>
+          <div class="metric"><div class="value" id="projCpa">—</div><div class="label">Est. Efficiency Gain</div><div class="explain">Vs typical single-channel approach</div></div>
+          <div class="metric"><div class="value" id="budgetDisplay">—</div><div class="label">Monthly Budget</div><div class="explain">Range you selected</div></div>
+        </div>
+        <h3 style="font-size:1.05rem;margin-bottom:8px">Recommended Budget Allocation</h3>
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:12px">Percentages show how to spread your budget. Channels with low relevance are hidden.</p>
+        <div id="mixBars"></div>
+        <div class="insights"><strong>Key insights for your situation</strong><ul id="insightsList"></ul></div>
+        <div class="cta-inline">
+          <h3>Want numbers based on your real campaigns?</h3>
+          <p>Book a free 20-minute Media Efficiency Review. We will model the mix against your actual data.</p>
+          <a href="https://brackenads.com/contact-us" class="btn" target="_blank" rel="noopener">Book Free Review →</a>
+        </div>
+      </div>
+      <p class="disclaimer">Directional estimates based on aggregated market patterns. Actual results depend on creative, offer, tracking and execution. Not a performance guarantee.</p>
+    </div>
+  </div>
+</section>
+
+<div class="content-wrap" id="guide">
+
+<section class="section-block">
+  <div class="container">
+    <h2>Why Most Advertising Budgets Underperform</h2>
+    <p>Advertising budget allocation is one of the highest-leverage decisions a growth team makes. Yet it is often treated casually.</p>
+    <div class="card-grid">
+      <div class="card"><h3>Single-channel concentration</h3><p>70 to 90 percent of spend sits on one platform because it worked last quarter. When costs rise or creative fatigues, performance collapses with no backup.</p></div>
+      <div class="card"><h3>Even or political splits</h3><p>Budget is divided so every stakeholder feels included. This usually starves the channels that could actually deliver results.</p></div>
+      <div class="card"><h3>No clear return target</h3><p>Teams celebrate reach and CTR while the real return on ad spend remains unknown or below break-even.</p></div>
+      <div class="card"><h3>No feedback loop</h3><p>Media and creative teams (or the same person) rarely review results together, so weak creative and weak allocation reinforce each other.</p></div>
+    </div>
+    <p>A thoughtful media mix answers one practical question: Given our budget, industry and primary goal, how should we split spend so the whole system works harder than any single channel alone?</p>
+  </div>
+</section>
+
+<section class="section-block alt">
+  <div class="container">
+    <h2>What a Media Mix Actually Is</h2>
+    <p>A media mix is the distribution of your advertising budget across different channels and formats. It is a working hypothesis about where your next unit of budget is most likely to produce results.</p>
+    <div class="card-grid">
+      <div class="card"><div class="num">1</div><h3>Intent capture</h3><p>Reaching people who are already looking (primarily Google Search and high-intent placements).</p></div>
+      <div class="card"><div class="num">2</div><h3>Demand creation</h3><p>Putting the brand in front of people who are not yet searching (Meta, short-form video, programmatic).</p></div>
+      <div class="card"><div class="num">3</div><h3>Amplification and trust</h3><p>Adding social proof or cultural relevance (influencers / KOLs, gaming moments, strategic partnerships).</p></div>
+      <div class="card"><div class="num">4</div><h3>Testing and learning</h3><p>A small protected share of budget for new creatives, audiences or channels so the mix stays current.</p></div>
+    </div>
+    <p>The right balance shifts with industry, growth stage and objective. The calculator applies observed patterns by industry and goal so you receive a practical starting allocation instead of a generic average.</p>
+  </div>
+</section>
+
+<section class="section-block">
+  <div class="container">
+    <h2>How to Interpret the Numbers</h2>
+    <div class="card-grid">
+      <div class="card"><h3>Projected ROAS range</h3><p>Revenue expected per ₦1 of ad spend when the mix is executed well. Always calculate your own break-even first (price ÷ gross profit), then aim above it.</p></div>
+      <div class="card"><h3>Efficiency gain</h3><p>Directional indication of how much better a structured multi-channel approach can perform versus typical single-channel or poorly tracked spend.</p></div>
+      <div class="card"><h3>Media mix percentages</h3><p>Suggested share of your monthly budget per channel. If Meta is 35% and budget is ₦1M, start with roughly ₦350,000 on Meta. Rebalance every 4 to 6 weeks.</p></div>
+      <div class="card"><h3>Hidden channels</h3><p>Channels under a relevance threshold for your industry and goal are hidden automatically so the recommendation stays focused.</p></div>
+    </div>
+    <div class="callout"><p><strong>Important:</strong> The output is a starting hypothesis, not a prescription. Real performance depends on creative quality, offer, landing page, tracking and execution.</p></div>
+  </div>
+</section>
+
+<section class="section-block green">
+  <div class="container">
+    <h2>A Practical Framework for Building Your Mix</h2>
+    <div class="card-grid">
+      <div class="card"><div class="num">1</div><h3>Assign a job to each channel</h3><p>Intent capture, demand creation, or amplification. Avoid treating every platform as pure direct response.</p></div>
+      <div class="card"><div class="num">2</div><h3>Start from the primary goal</h3><p>Sales and leads lean toward high-intent channels. Awareness needs more reach and cultural platforms.</p></div>
+      <div class="card"><div class="num">3</div><h3>Respect minimum viable spend</h3><p>Every channel has a learning threshold. Spreading a small budget too thinly produces noise.</p></div>
+      <div class="card"><div class="num">4</div><h3>Review every 4 to 6 weeks</h3><p>Judge on contribution to revenue or pipeline, not only platform-reported metrics. Protect 5 to 10% for experiments.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-block">
+  <div class="container">
+    <h2>Common Mistakes That Destroy Performance</h2>
+    <div class="card-grid">
+      <div class="card"><h3>Copying competitors</h3><p>You rarely know their margins or actual returns. Use them as inspiration, not a template.</p></div>
+      <div class="card"><h3>Chasing cheap CPC/CPM</h3><p>Low-cost traffic is often low-quality. Evaluate on contribution to business outcomes.</p></div>
+      <div class="card"><h3>Ignoring diminishing returns</h3><p>When ROAS falls or frequency rises, reallocate rather than simply increasing spend.</p></div>
+      <div class="card"><h3>No creative feedback loop</h3><p>Weak creative kills even a strong mix. Test and refresh on a fixed cadence.</p></div>
+      <div class="card"><h3>Untracked influencer spend</h3><p>With clear tracking, KOL activity can be performance. Without it, it becomes an expensive unknown.</p></div>
+      <div class="card"><h3>Changing the mix too often</h3><p>Constant small changes prevent platforms from learning and prevent you from reading clean results.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-block alt">
+  <div class="container">
+    <h2>How Allocation Differs by Industry</h2>
+    <div class="card-grid">
+      <div class="card"><h3>E-commerce / Fashion</h3><p>Heavier Meta and creative testing, meaningful KOL allocation, solid Google support, moderate programmatic for retargeting.</p></div>
+      <div class="card"><h3>Fintech / Financial</h3><p>Stronger Google Search weight, careful Meta creative, programmatic for efficient lookalike reach.</p></div>
+      <div class="card"><h3>FMCG / Consumer</h3><p>Broader reach mix, higher influencer and cultural or gaming moments, balanced performance and brand.</p></div>
+      <div class="card"><h3>Services / Education</h3><p>Google Search often dominates for services. Education balances Meta and Google, with educator voices performing well.</p></div>
+    </div>
+    <p style="margin-top:8px">The calculator adjusts recommendations by the industry and goal you select so you are not given a generic average.</p>
+  </div>
+</section>
+
+<section class="section-block">
+  <div class="container">
+    <h2>Measurement and the Creative Loop</h2>
+    <p>A media mix without measurement is just a spending plan. Confirm three foundations before scaling:</p>
+    <div class="card-grid">
+      <div class="card"><h3>Clean tracking</h3><p>Pixels, conversion APIs, UTMs and offline import where relevant. If you cannot see which channel produced a sale, you cannot optimise.</p></div>
+      <div class="card"><h3>Clear primary metric</h3><p>Blended ROAS is useful. Channel-level contribution to pipeline or revenue is more actionable.</p></div>
+      <div class="card"><h3>Fixed review cadence</h3><p>Every 4 to 6 weeks is enough for most accounts. Shorter cycles create noise. Longer cycles delay learning.</p></div>
+      <div class="card"><h3>Creative + media together</h3><p>Review creative by channel every two weeks. Kill weak variants, protect budget for new tests, keep messaging and targeting aligned.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-block green">
+  <div class="container">
+    <h2>From Results to a Working Plan</h2>
+    <div class="card-grid">
+      <div class="card"><div class="num">1</div><h3>Write a one-page plan</h3><p>Capture the allocation for the next 30 to 45 days with clear KPIs per channel.</p></div>
+      <div class="card"><div class="num">2</div><h3>Refresh creative</h3><p>Build or update assets for channels that received meaningful budget.</p></div>
+      <div class="card"><div class="num">3</div><h3>Confirm tracking</h3><p>Pixels, UTMs and conversion events must be working before you scale.</p></div>
+      <div class="card"><div class="num">4</div><h3>Review and reallocate</h3><p>After a full learning cycle, shift budget toward channels that beat targets.</p></div>
+    </div>
+    <p style="margin-top:18px;opacity:.95">If you want numbers based on your real campaign history, book a free Media Efficiency Review. We model the mix using your data rather than industry averages.</p>
+    <p style="margin-top:12px"><a href="https://brackenads.com/contact-us" class="btn btn-white">Book Free Review →</a></p>
+  </div>
+</section>
+
+<section class="section-block">
+  <div class="container">
+    <h2>Final Thought</h2>
+    <p>The brands that consistently extract more from their advertising budgets are rarely those with the largest spend. They are the ones that treat allocation as a hypothesis, measure honestly, and reallocate without ego.</p>
+    <p>Use the calculator above to get a clear starting point. Then run the experiment properly.</p>
+  </div>
+</section>
+
+</div>
+
+<section class="faq-section">
+  <div class="wide">
+    <h2>Frequently Asked Questions</h2>
+    <div class="accordion">
+      <div class="acc-item"><button class="acc-btn">What does the media mix percentage actually mean? <span class="icon">+</span></button>
+        <div class="acc-panel"><p>It is the suggested share of your monthly advertising budget for that channel. If Meta is shown at 35 percent and your budget is ₦1,000,000, start by allocating roughly ₦350,000 to Meta. Treat it as a hypothesis and adjust with real data.</p></div></div>
+      <div class="acc-item"><button class="acc-btn">Why are some channels missing from my results? <span class="icon">+</span></button>
+        <div class="acc-panel"><p>The calculator hides channels that fall below a relevance threshold for your industry and goal so the recommendation stays focused.</p></div></div>
+      <div class="acc-item"><button class="acc-btn">Is the projected ROAS range a guarantee? <span class="icon">+</span></button>
+        <div class="acc-panel"><p>No. It is a realistic directional range based on patterns for similar businesses. Your actual ROAS depends on creative, offer, landing page, tracking and execution.</p></div></div>
+      <div class="acc-item"><button class="acc-btn">What is a good ROAS? <span class="icon">+</span></button>
+        <div class="acc-panel"><p>It depends on your margins. Calculate break-even first (price ÷ gross profit). Many healthy programmes aim for 1.5x to 2x above break-even. A blended 3x to 5x is a common working target for mature e-commerce accounts, but not universal.</p></div></div>
+      <div class="acc-item"><button class="acc-btn">How often should I change my media mix? <span class="icon">+</span></button>
+        <div class="acc-panel"><p>Review every 4 to 6 weeks. Make meaningful shifts only when you have enough clean data.</p></div></div>
+      <div class="acc-item"><button class="acc-btn">Should every brand use influencers or KOLs? <span class="icon">+</span></button>
+        <div class="acc-panel"><p>No. Influencer activity works best when outcomes can be tracked and creators have genuine relevance. Forced or vanity spend is usually inefficient.</p></div></div>
+      <div class="acc-item"><button class="acc-btn">Is programmatic / DSP only for large budgets? <span class="icon">+</span></button>
+        <div class="acc-panel"><p>Not necessarily. Even mid-sized budgets can benefit from better frequency control and retargeting when goals and data are clear.</p></div></div>
+      <div class="acc-item"><button class="acc-btn">How is this different from a full media plan? <span class="icon">+</span></button>
+        <div class="acc-panel"><p>This tool gives a fast, data-informed starting allocation. A full media plan also covers creative strategy, audience architecture, testing roadmap and measurement framework.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built by <strong>Bracken Media Solutions</strong></p>
+  <p style="margin-top:6px">Performance Marketing · DSP · Influencer / KOL · Gaming</p>
+  <p style="margin-top:10px"><a href="https://brackenads.com">brackenads.com</a> · <a href="https://brackenads.com/contact-us">Contact us</a></p>
+</footer>
+
+<script>
+const WEBHOOK_URL='https://script.google.com/macros/s/AKfycbxaCXDZQktQk8GDcS_bWZ3VCCj2H5mVYCAEqGNlCYIKWo0mbYZhFBNqg_Tyfxk04yQWhQ/exec';
+const benchmarks={
+ecommerce:{baseRoas:{low:2.5,mid:3.8,high:5.5},mix:{dsp:15,meta:40,google:20,kol:18,gaming:2,other:5},notes:["E-commerce responds strongly to Meta + continuous creative testing.","Micro and mid-tier KOLs often outperform pure celebrity spend on ROAS.","Programmatic improves frequency control and retargeting efficiency."]},
+fintech:{baseRoas:{low:2.0,mid:3.2,high:4.5},mix:{dsp:20,meta:28,google:35,kol:10,gaming:2,other:5},notes:["Fintech benefits from higher-intent Google Search plus strong Meta creative.","Trust signals matter: pair performance with clear brand messaging.","DSP is effective for reaching lookalikes of high-value users."]},
+consumer:{baseRoas:{low:2.2,mid:3.5,high:5.0},mix:{dsp:15,meta:32,google:15,kol:25,gaming:8,other:5},notes:["Consumer brands win with broad reach plus authentic KOL voices.","Short-form and cultural moments can deliver efficient reach.","Balance always-on performance with timed campaign spikes."]},
+gaming:{baseRoas:{low:1.8,mid:3.0,high:4.5},mix:{dsp:12,meta:25,google:12,kol:15,gaming:30,other:6},notes:["Gaming events and tech partnerships create high-intent windows.","TikTok and Reels perform especially well for this vertical.","Combine paid acquisition with community and creator-led growth."]},
+services:{baseRoas:{low:2.5,mid:4.0,high:6.0},mix:{dsp:8,meta:25,google:45,kol:12,gaming:0,other:10},notes:["High-intent Google Search is usually the efficiency engine for services.","Meta works well for local awareness and remarketing.","Local KOLs and community voices amplify trust and conversion."]},
+education:{baseRoas:{low:2.0,mid:3.5,high:5.0},mix:{dsp:10,meta:35,google:30,kol:15,gaming:3,other:7},notes:["Education converts well when the offer and landing page are clear.","Meta + Google combination typically outperforms single-channel.","Educator influencers and alumni voices build credibility fast."]},
+other:{baseRoas:{low:2.0,mid:3.2,high:4.8},mix:{dsp:15,meta:35,google:25,kol:15,gaming:3,other:7},notes:["A balanced multi-channel approach usually beats over-reliance on one platform.","Creative quality remains one of the highest-leverage variables.","Proper tracking is essential before scaling spend."]}
+};
+const goalAdjust={awareness:{dsp:5,meta:5,google:-8,kol:5,gaming:5},leads:{dsp:0,meta:0,google:12,kol:0,gaming:-3},sales:{dsp:5,meta:5,google:5,kol:0,gaming:-3},app:{dsp:5,meta:5,google:-5,kol:0,gaming:10}};
+function formatNaira(n){if(n>=1e6)return"₦"+(n/1e6).toFixed(1)+"M";if(n>=1e3)return"₦"+Math.round(n/1e3)+"k";return"₦"+n}
+document.getElementById("calcForm").addEventListener("submit",function(e){e.preventDefault();document.getElementById("emailGate").classList.add("active");document.getElementById("submitBtn").style.display="none";document.getElementById("emailGate").scrollIntoView({behavior:"smooth",block:"center"})});
+document.getElementById("unlockBtn").addEventListener("click",async function(){
+const name=document.getElementById("name").value.trim(),email=document.getElementById("email").value.trim(),statusEl=document.getElementById("statusMsg");
+statusEl.textContent="";statusEl.className="status-msg";
+if(!name||!email||!email.includes("@")){statusEl.textContent="Please enter your name and a valid work email.";statusEl.classList.add("error");return}
+const leadData={timestamp:new Date().toISOString(),name,email,company:document.getElementById("company").value.trim(),industry:document.getElementById("industry").value,budget:document.getElementById("budget").value,goal:document.getElementById("goal").value,currentRoas:document.getElementById("currentRoas").value,focus:document.getElementById("focus").value,channels:Array.from(document.querySelectorAll('input[name="channels"]:checked')).map(c=>c.value).join(", ")};
+const btn=document.getElementById("unlockBtn");btn.disabled=true;btn.textContent="Unlocking…";
+try{await fetch(WEBHOOK_URL,{method:"POST",mode:"no-cors",cache:"no-cache",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(leadData)})}catch(err){console.error(err)}
+statusEl.textContent="Details sent. Loading results…";statusEl.classList.add("success");setTimeout(()=>renderResults(leadData),400)
+});
+function renderResults(data){
+const ind=data.industry||"other",bench=benchmarks[ind]||benchmarks.other,budget=parseInt(data.budget)||5e5,goal=data.goal||"sales";
+let mix={...bench.mix};const adj=goalAdjust[goal]||{};Object.keys(adj).forEach(k=>{if(mix[k]!==undefined)mix[k]=Math.max(0,mix[k]+adj[k])});
+let total=Object.values(mix).reduce((a,b)=>a+b,0);Object.keys(mix).forEach(k=>{mix[k]=Math.round(mix[k]/total*100);if(mix[k]<4)mix[k]=0});
+total=Object.values(mix).reduce((a,b)=>a+b,0)||1;Object.keys(mix).forEach(k=>{if(mix[k]>0)mix[k]=Math.round(mix[k]/total*100)});
+let roasLow=bench.baseRoas.low,roasHigh=bench.baseRoas.high;
+if(data.currentRoas==="unknown"||parseFloat(data.currentRoas)<2.5){roasLow=+(roasLow*1.08).toFixed(1);roasHigh=+(roasHigh*1.12).toFixed(1)}
+document.getElementById("projRoas").textContent=roasLow+"x – "+roasHigh+"x";
+document.getElementById("projCpa").textContent="15–35%";
+document.getElementById("budgetDisplay").textContent=formatNaira(budget);
+document.getElementById("resultSubtitle").textContent=ind.charAt(0).toUpperCase()+ind.slice(1)+" · "+(data.focus==="lagos"?"Lagos focus":data.focus==="multi"?"Multi-city":"Nationwide")+" · "+goal+" goal";
+const labels={dsp:"Programmatic / DSP",meta:"Meta (Facebook & Instagram)",google:"Google Ads (Search + Display)",kol:"Influencer / KOL",gaming:"Gaming Events & Tech",other:"Testing / Other"};
+const colors={dsp:"bar-dsp",meta:"bar-meta",google:"bar-google",kol:"bar-kol",gaming:"bar-gaming",other:"bar-other"};
+let html="";Object.keys(mix).forEach(k=>{if(mix[k]>0)html+=`<div class="mix-bar"><div class="mix-label"><span>${labels[k]}</span><span>${mix[k]}%</span></div><div class="bar-track"><div class="bar-fill ${colors[k]}" style="width:${mix[k]}%"></div></div></div>`});
+document.getElementById("mixBars").innerHTML=html;
+let insights=[...bench.notes];
+if(!data.channels||data.channels.includes("none"))insights.unshift("You are starting mostly from organic: a structured paid mix can unlock faster measurable growth.");
+if(data.currentRoas==="unknown")insights.push("Proper conversion tracking (pixel + UTMs) is the highest-ROI setup step before scaling.");
+document.getElementById("insightsList").innerHTML=insights.map(i=>`<li>${i}</li>`).join("");
+document.getElementById("formCard").style.display="none";document.getElementById("results").style.display="block";
+document.getElementById("results").scrollIntoView({behavior:"smooth"})
+}
+document.querySelectorAll(".acc-btn").forEach(btn=>{btn.addEventListener("click",()=>{const item=btn.parentElement,isOpen=item.classList.contains("open");document.querySelectorAll(".acc-item").forEach(i=>i.classList.remove("open"));if(!isOpen)item.classList.add("open")})});
+</script>
+</body>
+</html>
