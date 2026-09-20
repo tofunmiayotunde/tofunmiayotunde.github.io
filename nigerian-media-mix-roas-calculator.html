@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nigerian Media Mix & ROAS Estimator | Bracken Media Solutions</title>
+  <meta name="description" content="Free Nigeria-specific media mix and ROAS estimator. Get a personalised channel recommendation and projected returns for e-commerce, fintech, consumer brands and more — in under 60 seconds.">
+  <style>
+    :root {
+      --primary: #0B3D91;
+      --primary-dark: #082C6B;
+      --accent: #00A3E0;
+      --success: #00A86B;
+      --bg: #F7F9FC;
+      --card: #FFFFFF;
+      --text: #1A1A2E;
+      --muted: #5A6A7A;
+      --border: #E2E8F0;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px 16px;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 32px; }
+    header h1 { font-size: 1.75rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    header p { color: var(--muted); font-size: 1rem; }
+    .badge {
+      display: inline-block; background: #E8F4FD; color: var(--primary);
+      font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; margin-bottom: 12px;
+    }
+    .card {
+      background: var(--card); border-radius: var(--radius);
+      box-shadow: 0 4px 20px rgba(11, 61, 145, 0.08);
+      padding: 28px 24px; margin-bottom: 24px; border: 1px solid var(--border);
+    }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; color: var(--text); }
+    .hint { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+    select, input[type="text"], input[type="email"] {
+      width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: 1rem; background: #fff; transition: border-color 0.2s;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,163,224,0.15); }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 14px 24px; background: var(--primary); color: white;
+      font-weight: 600; font-size: 1.05rem; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s;
+    }
+    .btn:hover { background: var(--primary-dark); }
+    .btn:disabled { opacity: 0.65; cursor: not-allowed; }
+    #results { display: none; }
+    .result-header { text-align: center; margin-bottom: 24px; }
+    .result-header h2 { font-size: 1.4rem; color: var(--primary); margin-bottom: 4px; }
+    .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
+    .metric { background: #F0F7FF; border-radius: 10px; padding: 16px 12px; text-align: center; }
+    .metric .value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    .metric .label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.03em; }
+    .mix-section h3 { font-size: 1.1rem; margin-bottom: 12px; }
+    .mix-bar { margin-bottom: 14px; }
+    .mix-label { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 4px; }
+    .bar-track { height: 10px; background: #E8EEF5; border-radius: 5px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 5px; transition: width 0.6s ease; }
+    .bar-dsp { background: var(--primary); }
+    .bar-meta { background: #1877F2; }
+    .bar-google { background: #EA4335; }
+    .bar-kol { background: #00A86B; }
+    .bar-gaming { background: #7C3AED; }
+    .bar-other { background: #64748B; }
+    .insights { background: #F8FAFC; border-left: 4px solid var(--accent); padding: 16px; border-radius: 0 8px 8px 0; margin: 24px 0; font-size: 0.95rem; }
+    .insights ul { padding-left: 18px; margin-top: 8px; }
+    .insights li { margin-bottom: 6px; }
+    .cta-box {
+      background: linear-gradient(135deg, var(--primary) 0%, #0A4BA8 100%);
+      color: white; border-radius: var(--radius); padding: 24px; text-align: center; margin-top: 28px;
+    }
+    .cta-box h3 { font-size: 1.25rem; margin-bottom: 8px; }
+    .cta-box p { opacity: 0.9; margin-bottom: 16px; font-size: 0.95rem; }
+    .cta-box .btn { background: white; color: var(--primary); max-width: 320px; margin: 0 auto; }
+    .cta-box .btn:hover { background: #F0F7FF; }
+    .disclaimer { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 24px; line-height: 1.4; }
+    .gate { display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .gate.active { display: block; }
+    .logo-text { font-weight: 700; color: var(--primary); font-size: 0.9rem; }
+    .status-msg { font-size: 0.85rem; margin-top: 10px; text-align: center; }
+    .status-msg.error { color: #c53030; }
+    .status-msg.success { color: var(--success); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">FREE TOOL · NIGERIA-SPECIFIC</div>
+      <h1>Nigerian Media Mix &amp; ROAS Estimator</h1>
+      <p>Get a data-informed media mix and projected returns tailored to the Nigerian market — in under 60 seconds.</p>
+    </header>
+
+    <div class="card" id="formCard">
+      <form id="calcForm">
+        <div class="form-group">
+          <label for="industry">Industry / Vertical</label>
+          <select id="industry" required>
+            <option value="">Select your industry</option>
+            <option value="ecommerce">E-commerce / Fashion / Beauty</option>
+            <option value="fintech">Fintech / Banking / Insurance</option>
+            <option value="consumer">FMCG / Consumer Brands</option>
+            <option value="gaming">Gaming / Apps / Entertainment</option>
+            <option value="services">Professional / Local Services</option>
+            <option value="education">Education / EdTech</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="budget">Monthly Media Budget (₦)</label>
+            <select id="budget" required>
+              <option value="">Select range</option>
+              <option value="150000">Under ₦150,000</option>
+              <option value="300000">₦150,000 – ₦300,000</option>
+              <option value="750000">₦300,000 – ₦750,000</option>
+              <option value="1500000">₦750,000 – ₦1.5M</option>
+              <option value="3000000">₦1.5M – ₦3M</option>
+              <option value="5000000">₦3M+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="goal">Primary Goal</label>
+            <select id="goal" required>
+              <option value="">Select goal</option>
+              <option value="awareness">Brand Awareness / Reach</option>
+              <option value="leads">Lead Generation</option>
+              <option value="sales">Sales / Purchases</option>
+              <option value="app">App Installs / Engagement</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Current Primary Channels (select all that apply)</label>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">
+            <label style="font-weight:400;display:flex;align-items:center;gap:6px;"><input type="checkbox" name="channels" value="meta"> Meta (FB/IG)</label>
+            <label style="font-weight:400;display:flex;align-items:center;gap:6px;"><input type="checkbox" name="channels" value="google"> Google Ads</label>
+            <label style="font-weight:400;display:flex;align-items:center;gap:6px;"><input type="checkbox" name="channels" value="tiktok"> TikTok</label>
+            <label style="font-weight:400;display:flex;align-items:center;gap:6px;"><input type="checkbox" name="channels" value="dsp"> Programmatic / DSP</label>
+            <label style="font-weight:400;display:flex;align-items:center;gap:6px;"><input type="checkbox" name="channels" value="influencer"> Influencer / KOL</label>
+            <label style="font-weight:400;display:flex;align-items:center;gap:6px;"><input type="checkbox" name="channels" value="none"> Mostly organic / none</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="currentRoas">Current Blended ROAS (approx)</label>
+            <select id="currentRoas">
+              <option value="unknown">I don't know / Not tracking yet</option>
+              <option value="1.5">Under 2x</option>
+              <option value="2.5">2x – 3x</option>
+              <option value="3.5">3x – 4x</option>
+              <option value="5">4x – 6x</option>
+              <option value="7">6x+</option>
+            </select>
+            <div class="hint">ROAS = Revenue ÷ Ad Spend. Leave if unsure.</div>
+          </div>
+          <div class="form-group">
+            <label for="focus">Geographic Focus</label>
+            <select id="focus" required>
+              <option value="lagos">Lagos-focused</option>
+              <option value="multi">Multi-city (Lagos + Abuja/PH etc.)</option>
+              <option value="nationwide">Nationwide</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn" id="submitBtn">Generate My Media Mix &amp; Projection →</button>
+      </form>
+
+      <div class="gate" id="emailGate">
+        <p style="margin-bottom:12px;font-weight:600;">Almost there — enter your details to unlock the full projection + recommended mix.</p>
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" placeholder="Ada Okafor" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Work Email</label>
+          <input type="email" id="email" placeholder="ada@yourbrand.com" required>
+        </div>
+        <div class="form-group">
+          <label for="company">Company / Brand</label>
+          <input type="text" id="company" placeholder="Your Company Ltd">
+        </div>
+        <button type="button" class="btn" id="unlockBtn">Unlock Full Results</button>
+        <div class="status-msg" id="statusMsg"></div>
+      </div>
+    </div>
+
+    <div id="results">
+      <div class="card">
+        <div class="result-header">
+          <h2>Your Personalised Projection</h2>
+          <p id="resultSubtitle" style="color:var(--muted);"></p>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="value" id="projRoas">—</div>
+            <div class="label">Projected ROAS Range</div>
+          </div>
+          <div class="metric">
+            <div class="value" id="projCpa">—</div>
+            <div class="label">Est. Efficiency Gain</div>
+          </div>
+          <div class="metric">
+            <div class="value" id="budgetDisplay">—</div>
+            <div class="label">Monthly Budget</div>
+          </div>
+        </div>
+
+        <div class="mix-section">
+          <h3>Recommended Media Mix</h3>
+          <div id="mixBars"></div>
+        </div>
+
+        <div class="insights" id="insightsBox">
+          <strong>Key Insights for Your Situation</strong>
+          <ul id="insightsList"></ul>
+        </div>
+
+        <div class="cta-box">
+          <h3>Want us to model this against your real numbers?</h3>
+          <p>Book a free 20-minute Media Efficiency Review. We’ll plug in your actual campaign data and show you the precise upside.</p>
+          <a href="https://brackenads.com/contact" class="btn" target="_blank" rel="noopener">Book Free Review →</a>
+        </div>
+      </div>
+
+      <p class="disclaimer">
+        Directional estimates based on aggregated Nigerian market observations (Meta CPMs typically ₦450–₦3,500, Google CPC ranges, influencer/KOL performance patterns, and DSP efficiency). Actual results depend on creative, offer, tracking and execution. Not a performance guarantee. Built by Bracken Media Solutions.
+      </p>
+    </div>
+
+    <p style="text-align:center;margin-top:32px;font-size:0.85rem;color:var(--muted);">
+      Powered by <span class="logo-text">Bracken Media Solutions</span> · Performance Marketing · DSP · Influencer/KOL · Gaming
+    </p>
+  </div>
+
+  <script>
+    /* ============================================================
+       CONFIG — change only these two lines when going live
+       ============================================================ */
+    // 1. Paste your Google Apps Script Web App URL here (ends with /exec)
+    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxaCXDZQktQk8GDcS_bWZ3VCCj2H5mVYCAEqGNlCYIKWo0mbYZhFBNqg_Tyfxk04yQWhQ/exec';
+
+    // 2. Set to true only while testing (shows results even if webhook fails)
+    const ALLOW_OFFLINE_DEMO = true;
+
+    /* ============================================================
+       REFINED NIGERIAN BENCHMARKS (Q3 2025 – mid 2026 directional)
+       Sources: public Nigerian campaign reports, Meta/Google local
+       cost indices, influencer performance observations.
+       Research Analyst: replace numbers here when internal data is ready.
+       ============================================================ */
+    const benchmarks = {
+      ecommerce: {
+        // Healthy blended ROAS for structured Nigerian e-comm accounts
+        baseRoas: { low: 2.5, mid: 3.8, high: 5.5 },
+        // Typical recommended mix for growth-stage brands
+        mix: { dsp: 15, meta: 38, google: 18, kol: 18, gaming: 6, other: 5 },
+        notes: [
+          "E-commerce in Nigeria responds strongly to Meta + continuous creative testing.",
+          "Micro and mid-tier KOLs frequently outperform pure celebrity spend on ROAS.",
+          "Programmatic/DSP improves frequency control and retargeting efficiency at scale."
+        ]
+      },
+      fintech: {
+        baseRoas: { low: 2.0, mid: 3.2, high: 4.5 },
+        mix: { dsp: 20, meta: 28, google: 32, kol: 10, gaming: 5, other: 5 },
+        notes: [
+          "Fintech benefits from higher-intent Google Search combined with strong Meta creative.",
+          "Trust and compliance signals matter — pair performance with brand/PR support.",
+          "DSP is effective for reaching lookalikes of high-value users at controlled CPMs."
+        ]
+      },
+      consumer: {
+        baseRoas: { low: 2.2, mid: 3.5, high: 5.0 },
+        mix: { dsp: 18, meta: 32, google: 15, kol: 22, gaming: 8, other: 5 },
+        notes: [
+          "FMCG and consumer brands win with broad reach plus authentic KOL voices.",
+          "Gaming and short-form formats can create cultural moments at efficient CPMs.",
+          "Balance always-on performance with timed campaign spikes around key moments."
+        ]
+      },
+      gaming: {
+        baseRoas: { low: 1.8, mid: 3.0, high: 4.5 },
+        mix: { dsp: 15, meta: 25, google: 12, kol: 15, gaming: 28, other: 5 },
+        notes: [
+          "Gaming events and tech partnerships create high-intent acquisition windows.",
+          "TikTok and Reels perform especially well for this vertical in Nigeria.",
+          "Combine paid acquisition with community and creator-led growth loops."
+        ]
+      },
+      services: {
+        baseRoas: { low: 2.5, mid: 4.0, high: 6.0 },
+        mix: { dsp: 10, meta: 25, google: 40, kol: 15, gaming: 0, other: 10 },
+        notes: [
+          "High-intent Google Search is usually the efficiency engine for professional services.",
+          "Meta works well for local awareness, remarketing and community groups.",
+          "Local KOLs and trusted community voices amplify conversion rates."
+        ]
+      },
+      education: {
+        baseRoas: { low: 2.0, mid: 3.5, high: 5.0 },
+        mix: { dsp: 12, meta: 35, google: 28, kol: 15, gaming: 5, other: 5 },
+        notes: [
+          "Education converts well when the offer and landing page are clear and friction-low.",
+          "Meta + Google combination typically outperforms single-channel approaches.",
+          "Educator influencers and alumni voices build credibility faster than pure ads."
+        ]
+      },
+      other: {
+        baseRoas: { low: 2.0, mid: 3.2, high: 4.8 },
+        mix: { dsp: 15, meta: 35, google: 25, kol: 15, gaming: 5, other: 5 },
+        notes: [
+          "A balanced multi-channel approach usually beats over-reliance on one platform.",
+          "Creative quality remains the #1 performance lever in the Nigerian market.",
+          "Proper tracking (pixel + UTMs + offline) is essential before scaling spend."
+        ]
+      }
+    };
+
+    const goalAdjust = {
+      awareness: { dsp: +5, meta: +5, google: -8, kol: +5, gaming: +5 },
+      leads:     { dsp: 0,  meta: 0,  google: +12, kol: 0,  gaming: -5 },
+      sales:     { dsp: +5, meta: +5, google: +5,  kol: 0,  gaming: -5 },
+      app:       { dsp: +5, meta: +5, google: -5,  kol: 0,  gaming: +10 }
+    };
+
+    function formatNaira(n) {
+      if (n >= 1000000) return '₦' + (n / 1000000).toFixed(1) + 'M';
+      if (n >= 1000) return '₦' + Math.round(n / 1000) + 'k';
+      return '₦' + n;
+    }
+
+    document.getElementById('calcForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('emailGate').classList.add('active');
+      document.getElementById('submitBtn').style.display = 'none';
+      document.getElementById('emailGate').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    document.getElementById('unlockBtn').addEventListener('click', async function() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const statusEl = document.getElementById('statusMsg');
+      statusEl.textContent = '';
+      statusEl.className = 'status-msg';
+
+      if (!name || !email || !email.includes('@')) {
+        statusEl.textContent = 'Please enter your name and a valid work email.';
+        statusEl.classList.add('error');
+        return;
+      }
+
+      const leadData = {
+        timestamp: new Date().toISOString(),
+        name: name,
+        email: email,
+        company: document.getElementById('company').value.trim(),
+        industry: document.getElementById('industry').value,
+        budget: document.getElementById('budget').value,
+        goal: document.getElementById('goal').value,
+        currentRoas: document.getElementById('currentRoas').value,
+        focus: document.getElementById('focus').value,
+        channels: Array.from(document.querySelectorAll('input[name="channels"]:checked')).map(c => c.value).join(', ')
+      };
+
+      const btn = document.getElementById('unlockBtn');
+      btn.disabled = true;
+      btn.textContent = 'Unlocking…';
+
+      let saved = false;
+
+      // Attempt to send to Google Sheet / webhook
+      if (WEBHOOK_URL && !WEBHOOK_URL.includes('YOUR_GOOGLE')) {
+        try {
+          await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            mode: 'no-cors',          // Apps Script web apps often need no-cors
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(leadData)
+          });
+          saved = true;
+        } catch (err) {
+          console.warn('Webhook error (continuing in demo mode):', err);
+        }
+      } else {
+        // Demo / offline mode — still log so you can see the payload
+        console.log('Lead payload (set WEBHOOK_URL to capture):', leadData);
+        saved = ALLOW_OFFLINE_DEMO;
+      }
+
+      if (saved || ALLOW_OFFLINE_DEMO) {
+        statusEl.textContent = saved ? 'Details saved. Loading your results…' : 'Demo mode — results unlocked.';
+        statusEl.classList.add('success');
+        setTimeout(() => renderResults(leadData), 400);
+      } else {
+        statusEl.textContent = 'Could not save details. Please try again or contact us.';
+        statusEl.classList.add('error');
+        btn.disabled = false;
+        btn.textContent = 'Unlock Full Results';
+      }
+    });
+
+    function renderResults(data) {
+      const ind = data.industry || 'other';
+      const bench = benchmarks[ind] || benchmarks.other;
+      const budget = parseInt(data.budget) || 500000;
+      const goal = data.goal || 'sales';
+
+      let mix = { ...bench.mix };
+      const adj = goalAdjust[goal] || {};
+      Object.keys(adj).forEach(k => {
+        if (mix[k] !== undefined) mix[k] = Math.max(0, mix[k] + adj[k]);
+      });
+      const total = Object.values(mix).reduce((a, b) => a + b, 0);
+      Object.keys(mix).forEach(k => mix[k] = Math.round((mix[k] / total) * 100));
+
+      let roasLow = bench.baseRoas.low;
+      let roasHigh = bench.baseRoas.high;
+      if (data.currentRoas === 'unknown' || parseFloat(data.currentRoas) < 2.5) {
+        roasLow = +(roasLow * 1.08).toFixed(1);
+        roasHigh = +(roasHigh * 1.12).toFixed(1);
+      }
+
+      document.getElementById('projRoas').textContent = roasLow + 'x – ' + roasHigh + 'x';
+      document.getElementById('projCpa').textContent = '15–35%';
+      document.getElementById('budgetDisplay').textContent = formatNaira(budget);
+      document.getElementById('resultSubtitle').textContent =
+        `Based on ${ind} benchmarks · ${data.focus === 'lagos' ? 'Lagos focus' : data.focus === 'multi' ? 'Multi-city' : 'Nationwide'} · ${goal} goal`;
+
+      const labels = {
+        dsp: 'Programmatic / DSP',
+        meta: 'Meta (Facebook & Instagram)',
+        google: 'Google Ads (Search + Display)',
+        kol: 'Influencer / KOL',
+        gaming: 'Gaming Events & Tech',
+        other: 'Other / Testing'
+      };
+      const colors = { dsp: 'bar-dsp', meta: 'bar-meta', google: 'bar-google', kol: 'bar-kol', gaming: 'bar-gaming', other: 'bar-other' };
+
+      let barsHtml = '';
+      Object.keys(mix).forEach(k => {
+        if (mix[k] > 0) {
+          barsHtml += `
+            <div class="mix-bar">
+              <div class="mix-label"><span>${labels[k]}</span><span>${mix[k]}%</span></div>
+              <div class="bar-track"><div class="bar-fill ${colors[k]}" style="width:${mix[k]}%"></div></div>
+            </div>`;
+        }
+      });
+      document.getElementById('mixBars').innerHTML = barsHtml;
+
+      let insights = [...bench.notes];
+      if (data.channels.includes('none') || !data.channels) {
+        insights.unshift('You are starting mostly from organic — a structured paid mix can unlock faster, measurable growth.');
+      }
+      if (data.currentRoas === 'unknown') {
+        insights.push('Proper conversion tracking (pixel + UTMs + offline) is the single highest-ROI setup step before scaling.');
+      }
+      document.getElementById('insightsList').innerHTML = insights.map(i => `<li>${i}</li>`).join('');
+
+      document.getElementById('formCard').style.display = 'none';
+      document.getElementById('results').style.display = 'block';
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
